@@ -22,9 +22,9 @@ python3 tools/build_layout.py --migrate    # one-time: wrap legacy chrome in mar
 
 Hooks in `.claude/settings.json`: **Stop** → `tools/auto_commit.sh` auto-commits every finished request, but only while `development` is checked out (it silently no-ops on `main` or mid-merge/rebase; it never pushes); **SessionStart** → `tools/session_context.sh` injects SESSION.md into context; **PreToolUse** (Edit/Write/NotebookEdit) → `tools/guard_paths.sh` enforces the write scope below.
 
-There is no test suite. `--check` is the only automated gate: run the build and then `--check` after any change to pages, partials, data or site.js. Merge `development` into `main` only when it reports 0 problems.
+There is no test suite. `--check` is the only automated gate: run the build and then `--check` after any change to pages, partials, data or site.js, and finish a request only when it reports 0 problems, because what is committed on `development` goes live (next paragraph).
 
-**Cache busting / deploy.** GitHub Pages (built from `main`) serves every file with `max-age=600`, so pages reference `assets/{styles.css,scenes.js,data.js,site.js}` (English pages: `data.en.js`, `site.en.js`) as `…?v=<sha1[:10]>`. After editing any asset, run `build_layout.py` (never hand-edit the `?v=`); `--check` fails on a stale hash. `development` auto-commits are not live until merged into `main`.
+**Cache busting / deploy.** GitHub Pages is built from `development` (confirmed by the user 2026-09-28). Every Stop-hook auto-commit reaches `origin/development` about a minute later (pushed by something outside the repo, not by the hook), so each finished request, and any mid-task snapshot, goes live. `main` is unused (initial commit). Pages serves every file with `max-age=600`, so pages reference `assets/{styles.css,scenes.js,data.js,site.js}` (English pages: `data.en.js`, `site.en.js`) as `…?v=<sha1[:10]>`. After editing any asset, run `build_layout.py` (never hand-edit the `?v=`); `--check` fails on a stale hash.
 
 ## Architecture
 
