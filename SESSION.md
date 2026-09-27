@@ -9,6 +9,7 @@ Update at the end of every request (newest first, keep under ~80 lines; git log 
 - Work happens on local branch `development`; the Stop hook auto-commits every finished request there. Nothing is pushed; `main` = initial commit only.
 
 ## Recent changes (newest first)
+- 2026-09-27: CLAUDE.md tidied (/init review): directory→section map, palette/override wording de-historied, VI/EN details condensed (full notes stay in site.js).
 - 2026-09-27: restored `.claude/settings.json` (SessionStart/PreToolUse/Stop hooks, sudo denied) in the `website_new` checkout; `guard_paths.sh` derives the memory dir from the repo path; working on `development`.
 - 2026-09-27 — VI/EN switch fix: explicit localStorage choice (en|vi) wins over the googtrans cookie (switching back to VI used to stay EN); cookie cleared on /, page dir and /<repo>/ paths + host/.host; stale cookie cleared on VI pages.
 - 2026-09-27 — Home: "Ba năng lực cốt lõi" section removed (web + mobile).

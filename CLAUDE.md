@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A static, multi-page prototype website for **Khoa Quản trị (Faculty of Management), Trường Đại học Luật TP. Hồ Chí Minh (ULAW)**. All content is in Vietnamese. There is no framework, bundler or package manager: plain HTML + one CSS file + vanilla ES5-style JS (IIFEs, `var`, no modules).
 
-The original requirements spec is [Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md](Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md). Read it before changing design, navigation or content — but the user's later edit requests override it (the spec itself ranks them first); [SESSION.md](SESSION.md) lists those changes. [README.md](README.md) lists what is illustrative and what ULAW still has to supply.
+The original requirements spec is [Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md](Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md). Read it before changing design, navigation or content — but later user edit requests override it wherever they differ (the spec itself ranks them first; the rules below already reflect them); [SESSION.md](SESSION.md) lists those changes. [README.md](README.md) lists what is illustrative and what ULAW still has to supply.
 
 ## Commands
 
@@ -30,6 +30,8 @@ There is no test suite. `--check` is the only automated gate: run it after any c
 - **Exact-page links** get `aria-current="page"`.
 - **`404.html`** gets an empty prefix; an inline script in its `<head>` writes a `<base>` (site root, or `/<repo>/` on `*.github.io`).
 - **New page:** copy the skeleton of an existing page with empty markers, then run the script.
+
+**Directories → sections** (`SECTION_BY_DIR` in `build_layout.py`): `gioi-thieu` Giới thiệu · `dao-tao` Đào tạo · `nghien-cuu` Nghiên cứu · `doi-ngu` Đội ngũ · `sinh-vien` + `hoc-lieu` Sinh viên · `doanh-nghiep` Đối tác · `alumni` · `tin-tuc` + `su-kien` Tin tức & Sự kiện · `bieu-mau` Biểu mẫu · `search`. A new top-level directory must be added there.
 
 **Script load order.**
 - `assets/scenes.js` (SVG illustrations, `ULAW_sceneSvg`, `ULAW_heroSvg`) and `assets/data.js` (all content globals) load in `<head>`.
@@ -56,7 +58,7 @@ There is no test suite. `--check` is the only automated gate: run it after any c
 
 **Styling.** Design tokens are on `:root` in `assets/styles.css`:
 - Filled primary buttons (`.btn-primary`) use ULAW logo green `--ulaw-green-deep #2C7564` (hover #1F5C4F); links and headings stay blue.
-- Main palette: `--primary #2D55A8`, `--primary-deep #2B6595`, `--utility #1C56AE`, and `--cta #D91E36` (red, restored) for admissions CTAs and urgent labels (New tag, deadlines, pins, language menu); `--accent` is now the same red, used for tab-title H1s, section bars and the alumni network. Round chevron buttons use `--ulaw-green #43937F` (the ULAW logo ring).
+- Main palette: `--primary #2D55A8`, `--primary-deep #2B6595`, `--utility #1C56AE`, and `--cta` and `--accent` = red #D91E36: `--cta` for admissions CTAs and urgent labels (New tag, deadlines, pins, language menu), `--accent` for tab-title H1s, section bars and the alumni network. Round chevron buttons use `--ulaw-green #43937F` (the ULAW logo ring).
 - Editorial headings (user request):
   - `--accent` (red #D91E36) for tab-title H1s (`.hero h1`, `.section > .max-w-wide > h1`), with a bold navy `.lede`.
   - Section intros are minimal: eyebrow, then a navy 800 h2, then the text below. There is no bar, underline, card or badge.
@@ -79,15 +81,11 @@ There is no test suite. `--check` is the only automated gate: run it after any c
 - No `href="#"` or dead links. Items without a real target are plain text labelled "Đang cập nhật".
 - Forms without a backend say "Biểu mẫu minh họa, chưa gửi dữ liệu" and use `data-demo-form` (validated, never sent). Never build forms that collect student passwords.
 - Restricted Học liệu access goes only through official ULAW SSO/OIDC with server-side checks. Nothing restricted goes in this repo.
-- Home H1 slogan is "Tư duy Quản trị – Bản lĩnh pháp lý". This user change overrides the spec's "Tinh thông Quản trị – Am tường pháp lý".
+- Home H1 slogan is "Tư duy Quản trị – Bản lĩnh pháp lý".
 - Never use assets, logos, rankings or content from other universities (Văn Lang, RMIT, UEH).
 - Utility bar: E-Learning (↗ `https://lms.hcmulaw.edu.vn/`, chosen by the user although it returned 500 when checked) · Biểu mẫu · Liên hệ · round search button at the far right (visible at every width).
-- Main nav: Giới thiệu · Đào tạo · Nghiên cứu · Đội ngũ · Sinh viên · Đối tác · Alumni · Tin tức & Sự kiện + "Tư vấn tuyển sinh" dropdown. These user requests override the spec.
-- VI/EN switch: a flag dropdown at the far right of the utility bar (🇻🇳 VN / 🇬🇧 ENG; the active row is red). Markup is in `tools/layout/utility.html`, logic in `site.js`.
-  - EN is stored in `localStorage['ulaw-lang']`, plus the `googtrans=/vi/en` cookie on http(s). The page reloads, then loads Google Website Translator and picks EN in its hidden `<select>`. The script is never loaded for VI visitors.
-  - While EN is active, the switch shows "Bản dịch tự động" (spec §7).
-  - Brand, university name and form fields are marked `notranslate`.
-  - It is also attempted on `file://`. After ~10 s without a translation the menu says it is unavailable.
+- Main nav: Giới thiệu · Đào tạo · Nghiên cứu · Đội ngũ · Sinh viên · Đối tác · Alumni · Tin tức & Sự kiện + "Tư vấn tuyển sinh" dropdown.
+- VI/EN switch: flag dropdown at the far right of the utility bar (markup `tools/layout/utility.html`). EN = Google Website Translator, loaded only after EN is chosen; the choice lives in `localStorage['ulaw-lang']` (wins over the `googtrans` cookie). Mechanics are commented at the top of the switch block in `site.js`; mark non-translatable text `notranslate`.
 - The header only just fits at 1280px, so check fit at 1280–1920px when adding items.
 - Keep one H1 per page and visible focus states, respect `prefers-reduced-motion`, and allow no horizontal overflow at 1440/1024/768/390px.
 
