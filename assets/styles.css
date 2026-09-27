@@ -2139,6 +2139,8 @@ a.nl-item:hover strong{color:var(--primary)}
   background:var(--utility);color:#fff;font:inherit;font-weight:600;cursor:pointer;transition:background var(--motion)}
 .lang-toggle:hover,.lang-dd.is-open .lang-toggle{background:rgba(255,255,255,.12)}
 .lang-toggle [data-lang-current]{display:flex;align-items:center;gap:10px}
+html[lang=en] [data-lang-current=vi],html:not([lang=en]) [data-lang-current=en],
+html[lang=en] [data-lang-item=en],html:not([lang=en]) [data-lang-item=vi]{display:none}
 .lang-toggle b{font-size:.9375rem;font-weight:600;letter-spacing:.04em}
 .lang-toggle .nav-caret{width:7px;height:7px;opacity:.75}
 .lang-dd.is-open .lang-toggle .nav-caret{transform:rotate(-135deg);margin-top:4px}
@@ -2146,14 +2148,10 @@ a.nl-item:hover strong{color:var(--primary)}
 .lang-menu{position:absolute;right:0;top:100%;z-index:80;min-width:170px;margin:0;padding:0;list-style:none;overflow:hidden;
   background:#fff;border-radius:0 0 10px 10px;box-shadow:0 18px 36px -12px rgba(16,32,61,.45);border:1px solid var(--line)}
 .lang-opt{display:flex;align-items:center;gap:14px;width:100%;min-height:52px;padding:10px 20px;border:0;background:#fff;color:var(--ink);
-  font:inherit;font-size:1rem;cursor:pointer;text-align:left;transition:background var(--motion)}
+  font:inherit;font-size:1rem;cursor:pointer;text-align:left;text-decoration:none;transition:background var(--motion)}
 .lang-opt b{font-weight:500;letter-spacing:.06em}
-.lang-opt.is-active{background:var(--cta);color:#fff}
-.lang-menu li:has(.lang-opt.is-active){display:none}
 .lang-opt:hover{background:var(--cta);color:#fff}
-.lang-opt.is-active .flag{box-shadow:0 0 0 1px rgba(255,255,255,.35)}
 .lang-opt:focus-visible{outline:3px solid var(--focus);outline-offset:-3px}
-.lang-note{padding:8px 14px;font-size:.75rem;font-weight:700;color:var(--cta-ink);background:#FDECEE}
 .utility-bar .lang-dd :focus-visible{outline-color:#fff}
 @media(max-width:519px){.lang-toggle{padding:0 8px 0 10px;gap:6px}.lang-toggle [data-lang-current]{gap:6px}}
 /* Never let the utility bar squeeze the switch: the caret used to slide over "VN" on phones */
@@ -2165,10 +2163,6 @@ a.nl-item:hover strong{color:var(--primary)}
 .utility-right{flex:none}
 @media(max-width:399px){.lang-toggle{padding:0 6px 0 8px;gap:7px}.lang-toggle .flag{width:26px;height:17px}}
 @media print{.lang-dd{display:none}}
-/* Hide Google's own toolbar, balloons and body offset */
-.goog-te-banner-frame,.skiptranslate > iframe,#goog-gt-tt,.goog-te-balloon-frame,.VIpgJd-ZVi9od-ORHb-OEVmcd,.VIpgJd-ZVi9od-aZ2wEe-wOHMyf{display:none!important}
-body{top:0!important}
-.goog-text-highlight{background:none!important;box-shadow:none!important}
 @media(prefers-reduced-motion: reduce){.lang-opt,.lang-toggle{transition:none}}
 
 /* Alumni — success-story mosaic (editorial tiles with tinted photos) */
@@ -2684,11 +2678,10 @@ a.nb-row:hover strong{color:var(--primary)}
 /* Phones without JS sizing yet: slider fills the first screen minus bars and the ~320px hero banner */
 @media(max-width:599px){.hl-track{aspect-ratio:auto;height:max(75vw,calc(100svh - var(--utility-h) - var(--header-h) - 300px))}}
 
-/* ---------- VI/EN brand swap (html.is-translated is set by site.js in EN mode) ---------- */
-[data-lang-en]{display:none}
-html.is-translated [data-lang-vi]{display:none}
-html.is-translated span[data-lang-en]{display:inline}
-html.is-translated .brand-text[data-lang-en]{display:flex}
-/* The EN wordmark is ~60px wider than the VI one; on desktop (sub-line hidden) it stacks on two lines so the header still fits */
+/* ---------- English pages (generated under en/ by tools/build_layout.py) ---------- */
+/* The English wordmark (FACULTY OF MANAGEMENT) is ~60px wider than KHOA QUẢN TRỊ: on desktop, where the
+   sub-line is hidden, it stacks on two lines so the header still fits. */
 .brand-br{display:none}
-@media(min-width:1280px){.brand-br{display:inline}html.is-translated .brand-text[data-lang-en] .brand-main{line-height:1.1;font-size:1rem}}
+@media(min-width:1280px){.site-header .brand-br{display:inline}html[lang=en] .site-header .brand-main{line-height:1.1;font-size:1rem}}
+html:not([lang=en]) [data-lang-only=en]{display:none}
+.footer-lang-note{display:block;margin-top:6px}

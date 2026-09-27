@@ -1,14 +1,4 @@
 // Auto-generated flat-style brand illustrations (no external image dependency)
-window.ULAW_categoryScene = function(category){
-  var map = {
-    "Đào tạo": {scene:"laptop_tech", bg:"green", cls:"c-green"},
-    "Sinh viên": {scene:"study_group", bg:"navy", cls:""},
-    "Nghiên cứu": {scene:"research_books", bg:"purple", cls:"c-purple"},
-    "Doanh nghiệp": {scene:"handshake_business", bg:"navy", cls:""},
-    "Khoa": {scene:"campus_building", bg:"navy", cls:""},
-  };
-  return map[category] || map["Khoa"];
-};
 window.ULAW_groupScene = function(group){
   var map = {
     business: {scene:"study_group", bg:"navy"},

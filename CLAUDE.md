@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A static, multi-page prototype website for **Khoa Quản trị (Faculty of Management), Trường Đại học Luật TP. Hồ Chí Minh (ULAW)**. All content is in Vietnamese. There is no framework, bundler or package manager: plain HTML + one CSS file + vanilla ES5-style JS (IIFEs, `var`, no modules).
+A static, multi-page prototype website for **Khoa Quản trị (Faculty of Management), Trường Đại học Luật TP. Hồ Chí Minh (ULAW)**. The Vietnamese pages are the source; an English copy under `en/` is generated from them (see **English site**). There is no framework, bundler or package manager: plain HTML + one CSS file + vanilla ES5-style JS (IIFEs, `var`, no modules).
 
 The original requirements spec (removed from the repo on 2026-09-27; recoverable from git history) has been reshaped by many user edit requests, which [SESSION.md](SESSION.md) lists; the rules below are the current source of truth.
 
@@ -12,23 +12,26 @@ The original requirements spec (removed from the repo on 2026-09-27; recoverable
 
 ```
 python3 -m http.server 8000             # serve; file:// also works except 404.html
-python3 tools/build_layout.py           # re-render shared chrome into every page + stamp ?v=<hash> on shared assets
-python3 tools/build_layout.py --check   # lint (exits 1 on problems): dead links/anchors, href="#", one <h1>, title/description, img alt+size, stale asset ?v=
-python3 tools/build_layout.py --migrate # one-time: wrap legacy chrome in markers (new pages: add markers by hand)
+python3 tools/build_layout.py              # re-render shared chrome + stamp ?v=<hash> + regenerate the English site (en/, *.en.js)
+python3 tools/build_layout.py --check      # lint both languages (exits 1): dead links/anchors, href="#", one <h1>, title/description,
+                                           #   img alt+size, stale ?v=, tag balance, English out of date / missing translations
+python3 tools/build_layout.py --i18n-todo  # missing English -> tools/i18n/todo/*.json (fill every "en")
+python3 tools/build_layout.py --i18n-merge # filled todo entries -> tools/i18n/en.json (validated), then rebuild
+python3 tools/build_layout.py --migrate    # one-time: wrap legacy chrome in markers (new pages: add markers by hand)
 ```
 
 Hooks in `.claude/settings.json`: **Stop** → `tools/auto_commit.sh` auto-commits every finished request, but only while `development` is checked out (it silently no-ops on `main` or mid-merge/rebase; it never pushes); **SessionStart** → `tools/session_context.sh` injects SESSION.md into context; **PreToolUse** (Edit/Write/NotebookEdit) → `tools/guard_paths.sh` enforces the write scope below.
 
-There is no test suite. `--check` is the only automated gate: run it after any change to pages, partials or data.
+There is no test suite. `--check` is the only automated gate: run the build and then `--check` after any change to pages, partials, data or site.js, and finish a request only when it reports 0 problems, because what is committed on `development` goes live (next paragraph).
 
-**Cache busting / deploy.** GitHub Pages (built from `main`) serves every file with `max-age=600`, so pages reference `assets/{styles.css,scenes.js,data.js,site.js}` as `…?v=<sha1[:10]>`. After editing any of those four files, run `build_layout.py` (never hand-edit the `?v=`); `--check` fails on a stale hash. `development` auto-commits are not live until merged into `main`.
+**Cache busting / deploy.** GitHub Pages is built from `development` (confirmed by the user 2026-09-28). Every Stop-hook auto-commit reaches `origin/development` about a minute later (pushed by something outside the repo, not by the hook), so each finished request, and any mid-task snapshot, goes live. `main` is unused (initial commit). Pages serves every file with `max-age=600`, so pages reference `assets/{styles.css,scenes.js,data.js,site.js}` (English pages: `data.en.js`, `site.en.js`) as `…?v=<sha1[:10]>`. After editing any asset, run `build_layout.py` (never hand-edit the `?v=`); `--check` fails on a stale hash.
 
 ## Architecture
 
 **Shared chrome is generated.** The utility bar, header with mega menus, mobile menu, search dialog and footer live in `tools/layout/*.html`. `build_layout.py` writes them into every page between `<!-- layout:chrome -->…<!-- /layout:chrome -->` and `<!-- layout:footer -->…<!-- /layout:footer -->`. Never edit chrome inside a page, because it is overwritten on the next run.
-- **Placeholders:** `{{R}}` is the relative root prefix. `{{C:key}}`, `{{A:key}}`, `{{U:key}}`, `{{O:key}}` and `{{S:key}}` set current/open state from `<body data-section="…">`, which the script derives from the page's directory (`SECTION_BY_DIR`).
+- **Placeholders:** `{{R}}` is the relative root prefix; `{{L:vi}}`/`{{L:en}}` are the language-switch targets. `{{C:key}}`, `{{A:key}}`, `{{U:key}}`, `{{O:key}}` and `{{S:key}}` set current/open state from `<body data-section="…">`, which the script derives from the page's directory (`SECTION_BY_DIR`).
 - **Exact-page links** get `aria-current="page"`.
-- **`404.html`** gets an empty prefix; an inline script in its `<head>` writes a `<base>` (site root, or `/<repo>/` on `*.github.io`).
+- **`404.html`** gets an empty prefix; an inline script in its `<head>` writes a `<base>` (site root, or `/<repo>/` on `*.github.io`; `…/en/` on the English copy). GitHub Pages only serves the root 404, so it forwards missing `en/…` addresses to `en/404.html`.
 - **New page:** copy the skeleton of an existing page with empty markers, then run the script.
 
 **Directories → sections** (`SECTION_BY_DIR` in `build_layout.py`): `gioi-thieu` Giới thiệu · `dao-tao` Đào tạo · `nghien-cuu` Nghiên cứu · `doi-ngu` Đội ngũ · `sinh-vien` + `hoc-lieu` Sinh viên · `doanh-nghiep` Đối tác · `alumni` · `tin-tuc` + `su-kien` Tin tức & Sự kiện · `bieu-mau` Biểu mẫu · `search`. A new top-level directory must be added there.
@@ -46,7 +49,7 @@ There is no test suite. `--check` is the only automated gate: run it after any c
 - Items carry `status: verified|illustrative|pending`, `sourceUrl` and `updatedAt`.
 - Always read collections through `ULAW_published(list)`, which filters to `verified` when `ULAW_PUBLISH_MODE === "production"` (set at the top of `data.js`; currently `"prototype"`).
 - Many collections are intentionally empty arrays (e.g. `ULAW_EVENTS`, `ULAW_GUEST_EXPERTS`, `ULAW_FACULTY_MOMENTS`). `site.js` then renders template cards or a "Thông tin đang cập nhật" state, so fill real data there instead of hard-coding it in HTML.
-- URLs in data are relative to the site root without a leading slash. `site.js` prefixes them with `body[data-root]` via `url()`.
+- URLs in data are relative to the site root without a leading slash. `url()` in `site.js` prefixes page links (path ending in `.html` or `/`) with `body[data-page-root]` and everything else (assets, files) with `body[data-root]`; the two differ only on English pages.
 - `image` is either a scene key from `scenes.js` or an image path.
 - Student-only Học liệu items never get file URLs and are never added to `ULAW_SEARCH_INDEX`.
 - Admissions is external: `ULAW_ADMISSIONS_URL` (đại học) and `ULAW_ADMISSIONS_POSTGRAD_URL` (sau đại học). There is no internal Tuyển sinh page.
@@ -55,6 +58,13 @@ There is no test suite. `--check` is the only automated gate: run it after any c
 1. Add the data entry.
 2. Copy a program page with the new slug.
 3. Add it to the mega menu and mobile partials.
+
+**English site (generated; never edit `en/`, `assets/data.en.js`, `assets/site.en.js`).** `build_layout.py` calls `tools/i18n_build.py`, which copies every Vietnamese page to `en/<same path>` (one level deeper, sharing `assets/`) and writes `data.en.js`/`site.en.js`, replacing Vietnamese text from `tools/i18n/en.json`, a flat `{Vietnamese: English}` catalog. Terms and style (UK English) are in `tools/i18n/GLOSSARY.md`.
+- Units: block-level text with inline tags as slots (`<1>…</1>`), text attributes (`alt`, `title`, `aria-label`, `placeholder`, `data-alt`, `data-msg`, meta description), `|` lists in `data-types/-only/-type/-slots/-rotator`, and every JS string literal found in the catalog. The same Vietnamese string always gets the same English, so filters keep matching.
+- **Any Vietnamese text you add or change needs English**: rebuild, then either add the pair to `en.json` directly or use `--i18n-todo` → fill → `--i18n-merge`. Until then the English page shows the Vietnamese text and `--check` fails.
+- Write whole sentences as one literal: `fill('Quan tâm ngành {name}?', {name: …})`, and counts as `nOf('{n} tin', n)` (English may be `"{n} listing|{n} listings"`); both helpers live at the top of `data.js`.
+- Code that must differ by logic rather than wording (dates, month tables) sits between `/* i18n:off */` and `/* i18n:on */` and tests `EN` (`<html lang="en">`). `data-i18n="off"` or `lang="vi"` keeps a page element untranslated; `data-i18n-ctx="name"` gives it its own catalog key (`ctx:name:…`); `?q=` values of links to the search page use `q:…` keys.
+- Relative `href`/`src` asset URLs get `../` on English pages; `srcset`, inline-style `url()` and root-absolute links are not allowed (`--check`).
 
 **Styling.** Design tokens are on `:root` in `assets/styles.css`:
 - Filled primary buttons (`.btn-primary`) use ULAW logo green `--ulaw-green-deep #2C7564` (hover #1F5C4F); links and headings stay blue.
@@ -85,7 +95,7 @@ There is no test suite. `--check` is the only automated gate: run it after any c
 - Never use assets, logos, rankings or content from other universities (Văn Lang, RMIT, UEH).
 - Utility bar: E-Learning (↗ `https://lms.hcmulaw.edu.vn/`, chosen by the user although it returned 500 when checked) · Biểu mẫu · Liên hệ · round search button at the far right (visible at every width).
 - Main nav: Giới thiệu · Đào tạo · Nghiên cứu · Đội ngũ · Sinh viên · Đối tác · Alumni · Tin tức & Sự kiện + "Tư vấn tuyển sinh" dropdown.
-- VI/EN switch: flag dropdown at the far right of the utility bar (🇻🇳 VN / 🇬🇧 EN; markup `tools/layout/utility.html`). EN = Google Website Translator, loaded only after EN is chosen; the choice lives in `localStorage['ulaw-lang']` (wins over the `googtrans` cookie). Google never re-translates text `site.js` writes later (calendars, search, validation, counters, pause buttons) and never touches `placeholder`/`aria-label`/`<title>`, so `site.js` sets a global `EN` flag and writes those in English itself: `vi2en(vi, en)`, `fmtDate`/`fmtNum`, `MONTHS`/`MONTH_NAMES`/`WEEK_SHORT`, and the `EN_ATTR`/`EN_TITLE` maps at the end of the file. **Any new UI string that `site.js` writes after page load needs a `vi2en()`.** The brand is `notranslate` with separate `data-lang-vi`/`data-lang-en` spans (EN: "Faculty of Management" / "Ho Chi Minh City University of Law"). Only `input`/`textarea` are `notranslate`; labels and `<select>` options are translated.
+- VI/EN switch: flag dropdown at the far right of the utility bar (🇻🇳 VN / 🇬🇧 EN; markup `tools/layout/utility.html`). Its two options are plain links to the same page in the other language (the static English copy, no machine translation, no redirect, no stored preference); `site.js` carries `?query`/`#hash` over. CSS on `html[lang]` shows the current language. English pages carry a footer note that the Vietnamese version prevails. The English wordmark is "FACULTY OF MANAGEMENT", stacked on two lines at ≥1280px.
 - The header only just fits at 1280px, so check fit at 1280–1920px when adding items.
 - Keep one H1 per page and visible focus states, respect `prefers-reduced-motion`, and allow no horizontal overflow at 1440/1024/768/390px.
 

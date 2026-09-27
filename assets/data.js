@@ -16,6 +16,18 @@ window.ULAW_ADMISSIONS_URL = "https://tuyensinh.hcmulaw.edu.vn/";
 // Official postgraduate admissions page (Cổng tuyển sinh → Sau đại học).
 window.ULAW_ADMISSIONS_POSTGRAD_URL = "https://ts.hcmulaw.edu.vn/sau-dai-hoc";
 
+// Text helpers shared by site.js and inline page scripts. Keep whole sentences in one literal so the
+// generated English site (tools/i18n/en.json) can translate them as a unit.
+// ULAW_nOf('{n} tin', 3) → "3 tin". The English text may be "singular|plural": "{n} listing|{n} listings".
+window.ULAW_nOf = function(tpl, n){
+  var p = String(tpl).split('|'), t = p.length > 1 && n !== 1 ? p[1] : p[0];
+  return t.replace('{n}', n);
+};
+// ULAW_fill('Quan tâm ngành {name}?', {name: …}) → fills the named slots.
+window.ULAW_fill = function(tpl, vals){
+  return String(tpl).replace(/\{(\w+)\}/g, function(m, k){ return vals && vals[k] != null ? vals[k] : m; });
+};
+
 window.ULAW_published = function(list){
   list = list || [];
   if(window.ULAW_PUBLISH_MODE !== "production") return list.slice();
@@ -278,16 +290,16 @@ window.ULAW_LEADERSHIP = [
 // head / lecturers: { name, degree, email, photo (image path), cv (URL or path to CV/profile) }.
 // Lecturers render only when listed; a CV link appears only when `cv` is set.
 window.ULAW_DEPARTMENTS = [  // A→Z
-  { id: "cong-nghe-quan-ly", name: "Bộ môn Công nghệ quản lý", tone: "#0E9A9A", status: "pending", intro: null,
+  { id: "cong-nghe-quan-ly", name: "Bộ môn Công nghệ quản lý", short: "Công nghệ quản lý", tone: "#0E9A9A", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] },
-  { id: "kinh-doanh", name: "Bộ môn Kinh doanh", tone: "#2D55A8", status: "pending", intro: null,
+  { id: "kinh-doanh", name: "Bộ môn Kinh doanh", short: "Kinh doanh", tone: "#2D55A8", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] },
-  { id: "kinh-te-doi-ngoai", name: "Bộ môn Kinh tế đối ngoại", tone: "#9B57A0", status: "pending", intro: null,
+  { id: "kinh-te-doi-ngoai", name: "Bộ môn Kinh tế đối ngoại", short: "Kinh tế đối ngoại", tone: "#9B57A0", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] },
-  { id: "quan-tri-tai-chinh-ke-toan", name: "Bộ môn Quản trị tài chính kế toán", tone: "#169C83", status: "pending", intro: null,
+  { id: "quan-tri-tai-chinh-ke-toan", name: "Bộ môn Quản trị tài chính kế toán", short: "Quản trị tài chính kế toán", tone: "#169C83", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] }
 ];
