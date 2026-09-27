@@ -9,6 +9,7 @@ Update at the end of every request (newest first, keep under ~80 lines; git log 
 - Work happens on local branch `development`; the Stop hook auto-commits every finished request there. Nothing is pushed; `main` = initial commit only.
 
 ## Recent changes (newest first)
+- 2026-09-27 — EN-mode language audit + fix. Causes: over-broad notranslate (labels/selects), text site.js rewrites after Google's pass, vi-VN dates, untranslated attributes/<title>, lang never set. Fix: global `EN` + `vi2en()`/`fmtDate`/`fmtNum`; EN months/weekdays; calendars, search, validation (generic fallback if a label is still VI), pause/counters, SSO, rotator (`data-rotator-en`) in English; `EN_ATTR`/`EN_TITLE` maps; `<html lang=en>`; brand shows official EN names (stacked 2-line wordmark ≥1280 so header fits); switch label ENG→EN, note EN-only. Headless Chrome: no JS errors, no overflow 390–1920 in EN and VN.
 - 2026-09-27: user trimmed README.md to Running + view-on-other-devices (Editing, Routes, QA, ULAW-to-supply sections removed); CLAUDE.md pointer to README's to-supply list dropped.
 - 2026-09-27: removed personal GitHub account names/Pages URLs from CLAUDE.md, README.md, SESSION.md (generic `<owner>/<repo>` wording).
 - 2026-09-27: removed `Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md` (spec; in git history); CLAUDE.md/README references updated — CLAUDE.md rules are now the source of truth.

@@ -11,6 +11,22 @@
   var ROOT = body.getAttribute('data-root') || '';
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // ---------- language (VI original, EN via Google Website Translator) ----------
+  // Text written by this script after Google's first pass (timers, calendars, search, validation…)
+  // would fall back to Vietnamese, so in EN mode it is produced in English here: vi2en(vi, en).
+  // The explicit choice (localStorage) wins; the googtrans cookie is only a fallback.
+  var EN = (function(){
+    var s = null; try { s = localStorage.getItem('ulaw-lang'); } catch(e){}
+    if(s === 'en' || s === 'vi') return s === 'en';
+    return /(?:^|;\s*)googtrans=\/vi\/en/.test(document.cookie);
+  })();
+  if(EN) document.documentElement.lang = 'en';
+  function vi2en(vi, en){ return EN ? en : vi; }
+  function fmtDate(d){
+    return new Date(d).toLocaleDateString(EN ? 'en-GB' : 'vi-VN', EN ? {day:'numeric', month:'short', year:'numeric'} : undefined);
+  }
+  function fmtNum(n){ return Number(n).toLocaleString(EN ? 'en-US' : 'vi-VN'); }  // 12500 → 12.500 / 12,500
+
   // ---------- helpers ----------
   function url(path){
     if(!path) return '';
@@ -55,8 +71,14 @@
       '<h3>' + esc(o.title) + '</h3><p>' + esc(o.text) + '</p>' +
       (actions ? '<div class="hero-ctas">' + actions + '</div>' : '') + '</div>';
   }
-  var MONTHS = ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
+  var MONTHS = EN ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    : ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10','Th11','Th12'];
+  var MONTH_NAMES = EN ? ['January','February','March','April','May','June','July','August','September','October','November','December']
+    : ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
+  var WEEK_SHORT = EN ? ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] : ['T2','T3','T4','T5','T6','T7','CN'];
   function pad(n){ return (n < 10 ? '0' : '') + n; }
+  var KIND_EN = {'Ngành học':'Programme', 'Sau đại học':'Postgraduate', 'Tin tức':'News', 'Học liệu':'Learning materials', 'Biểu mẫu':'Form', 'Trang':'Page'};
+  function kindLabel(item){ return EN && KIND_EN[item.kindLabel] ? KIND_EN[item.kindLabel] : item.kindLabel; }
   function upcoming(list, limit){
     var now = Date.now();
     return published(list)
@@ -73,10 +95,10 @@
     return '<li class="event-row">' +
       '<div class="event-date" aria-hidden="true"><span class="d">' + pad(d.getDate()) + '</span><span class="m">' + MONTHS[d.getMonth()] + '</span></div>' +
       '<div><h4>' + title + '</h4>' +
-      '<p class="event-info"><span class="visually-hidden">Ngày ' + d.toLocaleDateString('vi-VN') + ', </span>' +
+      '<p class="event-info"><span class="visually-hidden">' + vi2en('Ngày ', '') + fmtDate(d) + ', </span>' +
       pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' · ' + esc(e.place || e.mode || 'Địa điểm đang cập nhật') + reg + '</p></div></li>';
   }
-  function newsDate(n){ return n.date ? new Date(n.date).toLocaleDateString('vi-VN') : 'Ngày: chưa xác thực'; }
+  function newsDate(n){ return n.date ? fmtDate(n.date) : vi2en('Ngày: chưa xác thực', 'Date: not yet verified'); }
 
   // External links (http/https) open in a new tab.
   function ext(href){ return /^https?:/.test(href || '') ? ' target="_blank" rel="noopener"' : ''; }
@@ -246,7 +268,9 @@
   // Vietnamese is the original. The choice is kept in localStorage (works on http(s) and file://)
   // plus the `googtrans` cookie on http(s); after a reload the translator script is loaded and EN is
   // picked in its hidden <select>, and the switch shows "Bản dịch tự động".
-  // Elements with class="notranslate" / translate="no" (brand, form fields) stay as they are.
+  // Elements with class="notranslate" / translate="no" stay as they are: the VI brand spans (EN spans
+  // show instead), the switch itself and what visitors type (input/textarea). Labels and <select>
+  // options are translated.
   (function(){
     var box = document.querySelector('[data-lang-switch]');
     if(!box) return;
@@ -286,9 +310,11 @@
     var cur = box.querySelector('[data-lang-current]'), act = box.querySelector('.lang-opt[data-lang="' + lang + '"]');
     if(cur && act) cur.innerHTML = act.innerHTML.replace(/id="ukc"/, 'id="ukc2"').replace(/url\(#ukc\)/, 'url(#ukc2)');
     if(lang !== 'en'){ if(location.protocol !== 'file:' && /googtrans=/.test(document.cookie)) setCookie(null); return; }
-    box.querySelector('[data-lang-note]').hidden = false;
+    var note = box.querySelector('[data-lang-note]');
+    note.textContent = 'Automatic translation';
+    note.hidden = false;
     document.documentElement.classList.add('is-translated');
-    document.querySelectorAll('input, textarea, select, [data-demo-form] .field').forEach(function(el){ el.classList.add('notranslate'); });
+    document.querySelectorAll('input:not([type=submit]):not([type=button]):not([type=reset]), textarea').forEach(function(el){ el.classList.add('notranslate'); });
     window.googleTranslateElementInit = function(){
       if(!(window.google && google.translate)) return;
       new google.translate.TranslateElement({pageLanguage:'vi', includedLanguages:'en,vi', autoDisplay:false}, 'google_translate_element');
@@ -299,7 +325,7 @@
         if(++tries > 40){
           clearInterval(t);
           var n = box.querySelector('[data-lang-note]');
-          if(n) n.textContent = 'Chưa tải được bản dịch tự động (kiểm tra kết nối mạng). · Automatic translation unavailable.';
+          if(n) n.textContent = 'Automatic translation unavailable (check your connection).';
           return;
         }
         if(combo && combo.querySelector('option[value="en"]')){
@@ -491,7 +517,7 @@
   function resultsHtml(items){
     return items.map(function(item){
       return '<a class="search-result" href="' + esc(url(item.url)) + '"' + ext(item.url) + '>' +
-        '<span class="kind">' + esc(item.kindLabel) + '</span>' +
+        '<span class="kind">' + esc(kindLabel(item)) + '</span>' +
         '<h3>' + esc(item.title) + '</h3><p>' + esc(item.desc) + '</p></a>';
     }).join('');
   }
@@ -514,12 +540,12 @@
     function render(){
       var q = input.value;
       if(!q.trim() && kind === 'all'){
-        results.innerHTML = '<p class="search-empty">Nhập từ khóa để tìm ngành học, tin tức, học liệu hoặc biểu mẫu.</p>';
+        results.innerHTML = '<p class="search-empty' + (EN ? ' notranslate' : '') + '">' + vi2en('Nhập từ khóa để tìm ngành học, tin tức, học liệu hoặc biểu mẫu.', 'Type a keyword to find programmes, news, learning materials or forms.') + '</p>';
         return;
       }
       var items = searchIndex(q, kind);
       results.innerHTML = items.length ? resultsHtml(items)
-        : '<p class="search-empty">Không tìm thấy kết quả phù hợp. Thử một từ khóa khác (có dấu hoặc không dấu đều được).</p>';
+        : '<p class="search-empty' + (EN ? ' notranslate' : '') + '">' + vi2en('Không tìm thấy kết quả phù hợp. Thử một từ khóa khác (có dấu hoặc không dấu đều được).', 'No matching results. Try another keyword (Vietnamese with or without accents).') + '</p>';
     }
     input.addEventListener('input', render);
     bindChips(Array.prototype.slice.call(searchOverlay.querySelectorAll('.tab-chip')), 'data-kind', function(k){ kind = k; render(); });
@@ -534,15 +560,15 @@
     function render(){
       var q = input.value;
       if(!q.trim()){
-        results.innerHTML = '<p class="search-empty">Nhập từ khóa để bắt đầu tìm kiếm.</p>';
+        results.innerHTML = '<p class="search-empty' + (EN ? ' notranslate' : '') + '">' + vi2en('Nhập từ khóa để bắt đầu tìm kiếm.', 'Type a keyword to start searching.') + '</p>';
         return;
       }
       var items = searchIndex(q, kind);
       results.innerHTML = items.length
-        ? '<p class="result-count">' + items.length + ' kết quả cho “' + esc(q) + '”</p>' + resultsHtml(items)
-        : emptyState({title:'Không có kết quả', icon:'⌕',
-            text:'Không tìm thấy nội dung khớp với “' + q + '”. Thử kiểm tra chính tả hoặc dùng từ khóa khác.',
-            actions:[{label:'Xem ngành đào tạo', href:'dao-tao/index.html'}, {label:'Mở Học liệu', href:'hoc-lieu/index.html'}]});
+        ? '<p class="result-count' + (EN ? ' notranslate' : '') + '">' + items.length + vi2en(' kết quả cho “', (items.length === 1 ? ' result' : ' results') + ' for “') + esc(q) + '”</p>' + resultsHtml(items)
+        : emptyState({title:vi2en('Không có kết quả', 'No results'), icon:'⌕',
+            text:vi2en('Không tìm thấy nội dung khớp với “' + q + '”. Thử kiểm tra chính tả hoặc dùng từ khóa khác.', 'Nothing matches “' + q + '”. Check the spelling or try another keyword.'),
+            actions:[{label:vi2en('Xem ngành đào tạo', 'View programmes'), href:'dao-tao/index.html'}, {label:vi2en('Mở Học liệu', 'Open learning materials'), href:'hoc-lieu/index.html'}]});
     }
     input.value = new URLSearchParams(window.location.search).get('q') || '';
     input.addEventListener('input', render);
@@ -556,7 +582,7 @@
   (function(){
     var grid = document.getElementById('stats');
     if(!grid) return;
-    function fmt(n){ return Number(n).toLocaleString('vi-VN'); }  // 12500 → 12.500
+    var fmt = fmtNum;
     var stats = window.ULAW_STATS || [];
     if(window.ULAW_PUBLISH_MODE === 'production') stats = stats.filter(function(x){ return x.status === 'verified'; });
     grid.innerHTML = stats.map(function(st){
@@ -649,7 +675,7 @@
       for(var k = 7; k >= 0; k--){ var d = new Date(now.getFullYear(), now.getMonth() - k * 3, 1); var key = quarter(d); if(qs.indexOf(key) < 0) qs.push(key); }
       var counts = qs.map(function(q){ return pubs.filter(function(p){ return quarter(p.date) === q; }).length; });
       var max = Math.max.apply(null, counts.concat([1]));
-      total.textContent = pubs.length + ' công bố';
+      total.textContent = pubs.length + vi2en(' công bố', pubs.length === 1 ? ' publication' : ' publications');
       chart.innerHTML = '<div class="pub-bars" role="img" aria-label="Số công bố theo quý: ' + qs.map(function(q, i){ return q.replace('-', ' ') + ' ' + counts[i]; }).join(', ') + '">' +
         qs.map(function(q, i){
           return '<div class="pub-bar-col" tabindex="0"><span class="pub-bar-tip">' + counts[i] + ' công bố · ' + q.replace('-', ' ') + '</span>' +
@@ -787,7 +813,7 @@
     var id = new URLSearchParams(window.location.search).get('id');
     var d = depts.filter(function(x){ return x.id === id; })[0] || depts[0];
     if(!d) return;
-    document.title = d.name + ' — Khoa Quản trị ULAW';
+    document.title = d.name + ' — Khoa Quản trị ULAW';  // EN suffix: see the title pass in the VI/EN block
     titleEl.textContent = d.name;
     document.getElementById('dept-crumb').textContent = d.name;
     document.getElementById('dept-hero').style.setProperty('--tone', d.tone);
@@ -813,7 +839,7 @@
         cvLink(h) + '</div></article>';
 
     var lecs = d.lecturers || [];
-    document.getElementById('dept-count').textContent = lecs.length ? lecs.length + ' giảng viên' : '';
+    document.getElementById('dept-count').textContent = lecs.length ? lecs.length + vi2en(' giảng viên', lecs.length === 1 ? ' lecturer' : ' lecturers') : '';
     document.getElementById('dept-lecturers').innerHTML = lecs.length
       ? '<ul class="lec-grid">' + lecs.map(function(m){
           return '<li class="lec-card" style="--tone:' + esc(d.tone) + '"><div class="lec-photo">' + avatar(m) + '</div><div class="lec-body"><h3>' + esc(m.name) + '</h3>' +
@@ -921,7 +947,7 @@
             var d = p.date ? new Date(p.date) : null;
             var img = p.image ? media(p.image, p.title, {w:800, h:533, noLabel:!/__|^hero-/.test(p.image)}) : media('study_group__navy', 'Ảnh minh họa', {w:800, h:533});
             var body = '<div class="post-media">' + img + '<span class="post-type is-' + esc(p.type || 'news') + '">' + (p.type === 'event' ? 'Sự kiện' : 'Tin tức') + '</span></div>' +
-              '<div class="post-body">' + (d ? '<span class="post-date">' + d.toLocaleDateString('vi-VN') + '</span>' : '') +
+              '<div class="post-body">' + (d ? '<span class="post-date">' + fmtDate(d) + '</span>' : '') +
               '<h3>' + esc(p.title) + '</h3>' + (p.excerpt ? '<p>' + esc(p.excerpt) + '</p>' : '') + (p.url ? '<span class="link-arrow">Đọc tiếp →</span>' : '') + '</div>';
             return p.url ? '<a class="post-card' + (i === 0 && kind === 'all' ? ' is-feature' : '') + '" href="' + esc(url(p.url)) + '"' + ext(p.url) + '>' + body + '</a>'
                          : '<article class="post-card' + (i === 0 && kind === 'all' ? ' is-feature' : '') + '">' + body + '</article>';
@@ -939,6 +965,14 @@
   document.querySelectorAll('[data-rotator]').forEach(function(el){
     var words = el.getAttribute('data-rotator').split('|'), i = 0;
     var word = el.querySelector('.sh-word');
+    if(EN && el.getAttribute('data-rotator-en') && word){
+      // The word changes every few seconds, after Google's pass: write the whole line in English instead.
+      var line = el.parentNode;
+      line.classList.add('notranslate');
+      if(line.firstChild && line.firstChild.nodeType === 3) line.firstChild.nodeValue = 'Looking for ';
+      words = el.getAttribute('data-rotator-en').split('|');
+      word.textContent = words[0];
+    }
     if(words.length < 2 || !word) return;
     window.setInterval(function(){
       if(document.hidden) return;
@@ -964,9 +998,9 @@
       if(q.length < 2){ close(); return; }
       var items = searchIndex(q, 'all').slice(0, 6);
       box.innerHTML = (items.length ? items.map(function(item){
-          return '<a href="' + esc(url(item.url)) + '"' + ext(item.url) + '><span class="kind">' + esc(item.kindLabel) + '</span>' + esc(item.title) + '</a>';
-        }).join('') : '<p class="search-empty" style="padding:12px;margin:0">Không có gợi ý phù hợp — nhấn Enter để tìm đầy đủ.</p>') +
-        '<a class="all" href="' + esc(url('search/index.html?q=' + encodeURIComponent(q))) + '">Xem tất cả kết quả cho “' + esc(q) + '” →</a>';
+          return '<a href="' + esc(url(item.url)) + '"' + ext(item.url) + '><span class="kind">' + esc(kindLabel(item)) + '</span>' + esc(item.title) + '</a>';
+        }).join('') : '<p class="search-empty' + (EN ? ' notranslate' : '') + '" style="padding:12px;margin:0">' + vi2en('Không có gợi ý phù hợp — nhấn Enter để tìm đầy đủ.', 'No suggestions — press Enter for a full search.') + '</p>') +
+        '<a class="all" href="' + esc(url('search/index.html?q=' + encodeURIComponent(q))) + '">' + vi2en('Xem tất cả kết quả cho “', 'See all results for “') + esc(q) + '” →</a>';
       box.hidden = false;
       input.setAttribute('aria-expanded', 'true');
     });
@@ -999,22 +1033,28 @@
     }
     function validate(field){
       var msg = '';
-      var label = (form.querySelector('label[for="' + field.id + '"]') || {}).textContent || 'trường này';
+      var label = (form.querySelector('label[for="' + field.id + '"]') || {}).textContent || vi2en('trường này', 'this field');
       label = label.replace('*', '').trim();
+      // EN: the label is read after Google translated it; if it is still Vietnamese, use a generic phrase instead of mixing languages.
+      var VI_CHARS = /[ăâđêôơưàáạảãèéẹẻẽìíịỉĩòóọỏõùúụủũỳýỵỷỹ]/i;
+      var generic = EN && VI_CHARS.test(label);
       if(field.type === 'radio'){
         var group = form.querySelectorAll('input[type=radio][name="' + field.name + '"]');
         var legend = field.closest('fieldset') && field.closest('fieldset').querySelector('legend');
         if(field.required && !Array.prototype.some.call(group, function(r){ return r.checked; }))
-          msg = 'Vui lòng chọn ' + (legend ? legend.textContent.replace('*', '').trim().toLowerCase() : 'một mục') + '.';
+          var lg = legend ? legend.textContent.replace('*', '').trim().toLowerCase() : '';
+          if(!lg || (EN && VI_CHARS.test(lg))) lg = vi2en('một mục', 'an option');
+          msg = vi2en('Vui lòng chọn ', 'Please choose ') + lg + '.';
       } else if(field.type === 'checkbox'){
-        if(field.required && !field.checked) msg = field.getAttribute('data-msg') || 'Vui lòng xác nhận để tiếp tục.';
+        if(field.required && !field.checked) msg = field.getAttribute(EN ? 'data-msg-en' : 'data-msg') || vi2en('Vui lòng xác nhận để tiếp tục.', 'Please confirm to continue.');
       } else if(field.required && !field.value.trim()){
-        msg = 'Vui lòng nhập ' + label.toLowerCase() + '.';
-        if(field.tagName === 'SELECT') msg = 'Vui lòng chọn ' + label.toLowerCase() + '.';
+        msg = vi2en('Vui lòng nhập ', 'Please enter ') + label.toLowerCase() + '.';
+        if(field.tagName === 'SELECT') msg = vi2en('Vui lòng chọn ', 'Please choose ') + label.toLowerCase() + '.';
+        if(generic) msg = 'This field is required.';
       } else if(field.value && field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)){
-        msg = 'Email chưa đúng định dạng (ví dụ: ten@email.com).';
+        msg = vi2en('Email chưa đúng định dạng (ví dụ: ten@email.com).', 'Invalid email format (e.g. name@email.com).');
       } else if(field.value && field.type === 'tel' && !/^[0-9+\s.-]{8,15}$/.test(field.value)){
-        msg = 'Số điện thoại chưa đúng định dạng (8–15 chữ số).';
+        msg = vi2en('Số điện thoại chưa đúng định dạng (8–15 chữ số).', 'Invalid phone number (8–15 digits).');
       }
       var el = errorEl(field);
       el.textContent = msg;
@@ -1039,7 +1079,7 @@
       var pct = req.length ? Math.round(done / req.length * 100) : 0;
       bar.style.setProperty('--p', pct + '%');
       var out = bar.querySelector('[data-form-progress-label]');
-      if(out) out.textContent = done + '/' + req.length + ' mục bắt buộc';
+      if(out) out.textContent = done + '/' + req.length + vi2en(' mục bắt buộc', ' required fields');
     }
     form.addEventListener('input', progress);
     form.addEventListener('change', progress);
@@ -1152,7 +1192,7 @@
     btn.addEventListener('click', function(){
       var p = box.classList.toggle('is-paused');
       btn.setAttribute('aria-pressed', p ? 'true' : 'false');
-      btn.setAttribute('aria-label', p ? 'Tiếp tục dải tin' : 'Tạm dừng dải tin');
+      btn.setAttribute('aria-label', p ? vi2en('Tiếp tục dải tin', 'Resume news ticker') : vi2en('Tạm dừng dải tin', 'Pause news ticker'));
       btn.firstElementChild.textContent = p ? '▶' : '❚❚';
     });
   })();
@@ -1175,7 +1215,7 @@
     box.innerHTML = '<div class="hl-track">' + items.map(function(s, i){
         return '<article class="hl-slide' + (i ? '' : ' is-active') + '" role="group" aria-roledescription="slide" aria-label="' + (i + 1) + ' / ' + n + '"' + (i ? ' aria-hidden="true"' : '') + '>' +
           '<div class="hl-media">' + (window.ULAW_HL_SCENES && window.ULAW_HL_SCENES[s.image] ? '<span role="img" aria-label="' + esc(s.alt || s.title) + '">' + window.ULAW_HL_SCENES[s.image] + '</span>' : media(s.image, s.alt || s.title, {eager: !i, w:1920, h:1080, noLabel:true})) + '</div>' +
-          '<div class="hl-cap"><p class="hl-meta"><span class="hl-cat">' + esc(s.category || 'Nổi bật') + '</span>' + (s.date ? '<span>' + esc(new Date(s.date).toLocaleDateString('vi-VN')) + '</span>' : '') + statusBadge(s.status) + '</p>' +
+          '<div class="hl-cap"><p class="hl-meta"><span class="hl-cat">' + esc(s.category || 'Nổi bật') + '</span>' + (s.date ? '<span>' + esc(fmtDate(s.date)) + '</span>' : '') + statusBadge(s.status) + '</p>' +
           '<p class="hl-title">' + (s.url ? '<a href="' + esc(url(s.url)) + '"' + ext(s.url) + (i ? ' tabindex="-1"' : '') + '>' + esc(s.title) + '</a>' : esc(s.title)) + '</p>' +
           (s.url ? '<span class="hl-more" aria-hidden="true">' + esc(s.ctaLabel || 'Xem chi tiết') + ' →</span>' : '') + '</div></article>';
       }).join('') + '</div>' +
@@ -1205,7 +1245,7 @@
     }
     function renderPause(){
       pause.setAttribute('aria-pressed', st.user ? 'true' : 'false');
-      pause.setAttribute('aria-label', st.user ? 'Tiếp tục tự động chuyển ảnh' : 'Tạm dừng tự động chuyển ảnh');
+      pause.setAttribute('aria-label', st.user ? vi2en('Tiếp tục tự động chuyển ảnh', 'Resume slideshow') : vi2en('Tạm dừng tự động chuyển ảnh', 'Pause slideshow'));
       pause.innerHTML = '<span aria-hidden="true">' + (st.user ? '▶' : '❚❚') + '</span>';
     }
     function go(i){ show(i); schedule(); }
@@ -1318,9 +1358,9 @@
     function renderPause(){
       pauseBtn.setAttribute('aria-pressed', state.user ? 'true' : 'false');
       pauseBtn.innerHTML = state.user
-        ? '<span aria-hidden="true">▶</span> Tiếp tục'
-        : '<span aria-hidden="true">❚❚</span> Tạm dừng';
-      pauseBtn.setAttribute('aria-label', state.user ? 'Tiếp tục tự động chuyển slide' : 'Tạm dừng tự động chuyển slide');
+        ? '<span aria-hidden="true">▶</span> ' + vi2en('Tiếp tục', 'Resume')
+        : '<span aria-hidden="true">❚❚</span> ' + vi2en('Tạm dừng', 'Pause');
+      pauseBtn.setAttribute('aria-label', state.user ? vi2en('Tiếp tục tự động chuyển slide', 'Resume slideshow') : vi2en('Tạm dừng tự động chuyển slide', 'Pause slideshow'));
     }
 
     prevBtn.addEventListener('click', function(){ show(current - 1); schedule(); });
@@ -1373,7 +1413,7 @@
   // [data-sv-photos="cat"] data-slots="caption|…" — one frame per slot, filled in order
   // [data-sv-clubs] data-slots="field|…" — template cards until clubs are added
   var PH_ICON = '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>';
-  function viDate(d){ return new Date(d).toLocaleDateString('vi-VN'); }
+  var viDate = fmtDate;
   function svPost(p){
     var tag = p.href ? 'a' : 'article';
     var meta = [p.date ? viDate(p.date) : '', p.org || ''].filter(Boolean).join(' · ');
@@ -1497,7 +1537,7 @@
     if(btn) btn.addEventListener('click', function(){
       var paused = el.classList.toggle('is-paused');
       btn.setAttribute('aria-pressed', paused ? 'true' : 'false');
-      btn.textContent = paused ? 'Tiếp tục trượt' : 'Tạm dừng';
+      btn.textContent = paused ? vi2en('Tiếp tục trượt', 'Resume') : vi2en('Tạm dừng', 'Pause');
     });
   });
 
@@ -1541,7 +1581,7 @@
       return '<li aria-hidden="true"><div class="in-upd is-template"><span class="job-logo">?</span><span class="in-upd-txt"><strong>Tên doanh nghiệp' + (n < 3 ? ' <span class="new-tag">New</span>' : '') + '</strong><span>Vị trí thực tập</span><small>Ngày cập nhật · Hạn nộp</small></span></div></li>';
     }).join('') + '<li class="sv-note">Thông tin đang cập nhật.</li>';
     var count = el.querySelector('[data-in-count]');
-    if(count) count.textContent = list.length ? list.length + ' tin' : '0 tin';
+    if(count) count.textContent = list.length + vi2en(' tin', list.length === 1 ? ' listing' : ' listings');
   });
 
   // ---------- /doanh-nghiep: job board ([data-jobs], chips filter by type) ----------
@@ -1741,54 +1781,53 @@
     var view = next ? new Date(next.startAt) : new Date(today);
     view.setDate(1);
     var selected = null;
-    var MONTH_NAMES = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
 
-    calEl.innerHTML = '<div class="cal" role="group" aria-labelledby="cal-title"><div class="cal-head"><button type="button" class="cal-nav" data-step="-1" aria-label="Tháng trước">‹</button>' +
-      '<h4 id="cal-title" aria-live="polite"></h4><button type="button" class="cal-nav" data-step="1" aria-label="Tháng sau">›</button></div>' +
-      '<table class="cal-grid"><thead><tr>' + ['T2','T3','T4','T5','T6','T7','CN'].map(function(d){ return '<th scope="col">' + d + '</th>'; }).join('') + '</tr></thead><tbody></tbody></table>' +
-      '<p class="cal-legend"><span class="cal-dot" aria-hidden="true"></span> Ngày có sự kiện <span class="cal-today-key" aria-hidden="true"></span> Hôm nay</p></div>' +
-      '<div class="ev-panel"><div class="ev-panel-head"><h4 id="ev-panel-title"></h4><button type="button" class="ev-all" hidden>Cả tháng</button></div><div class="ev-list" aria-live="polite"></div></div>';
+    calEl.innerHTML = '<div class="cal" role="group" aria-labelledby="cal-title"><div class="cal-head"><button type="button" class="cal-nav" data-step="-1" aria-label="' + vi2en('Tháng trước', 'Previous month') + '">‹</button>' +
+      '<h4 id="cal-title" aria-live="polite"></h4><button type="button" class="cal-nav" data-step="1" aria-label="' + vi2en('Tháng sau', 'Next month') + '">›</button></div>' +
+      '<table class="cal-grid"><thead><tr>' + WEEK_SHORT.map(function(d){ return '<th scope="col">' + d + '</th>'; }).join('') + '</tr></thead><tbody></tbody></table>' +
+      '<p class="cal-legend"><span class="cal-dot" aria-hidden="true"></span> ' + vi2en('Ngày có sự kiện', 'Event day') + ' <span class="cal-today-key" aria-hidden="true"></span> ' + vi2en('Hôm nay', 'Today') + '</p></div>' +
+      '<div class="ev-panel"><div class="ev-panel-head"><h4 id="ev-panel-title"></h4><button type="button" class="ev-all" hidden>' + vi2en('Cả tháng', 'Whole month') + '</button></div><div class="ev-list" aria-live="polite"></div></div>';
     var title = calEl.querySelector('#cal-title'), body = calEl.querySelector('tbody');
     var pTitle = calEl.querySelector('#ev-panel-title'), pList = calEl.querySelector('.ev-list'), allBtn = calEl.querySelector('.ev-all');
 
     function info(e){
       var s = new Date(e.startAt), en = e.endAt ? new Date(e.endAt) : null;
       var time = pad(s.getHours()) + ':' + pad(s.getMinutes()) + (en && key(en) === key(s) ? '–' + pad(en.getHours()) + ':' + pad(en.getMinutes()) : '');
-      var span = en && key(en) !== key(s) ? s.toLocaleDateString('vi-VN') + ' – ' + en.toLocaleDateString('vi-VN') : s.toLocaleDateString('vi-VN');
+      var span = en && key(en) !== key(s) ? fmtDate(s) + ' – ' + fmtDate(en) : fmtDate(s);
       var t = e.url ? '<a href="' + esc(url(e.url)) + '">' + esc(e.title) + '</a>' : esc(e.title);
       return '<article class="ev-item"><div class="ev-date" aria-hidden="true"><b>' + pad(s.getDate()) + '</b>' + MONTHS[s.getMonth()] + '</div><div class="ev-body">' +
         (e.category ? '<span class="ev-cat">' + esc(e.category) + '</span>' : '') + '<h5>' + t + '</h5>' +
-        '<ul class="ev-meta"><li><span>Ngày</span>' + esc(span) + '</li><li><span>Giờ</span>' + esc(time) + '</li><li><span>Địa điểm</span>' + esc(e.place || e.mode || 'Đang cập nhật') + '</li></ul>' +
+        '<ul class="ev-meta"><li><span>' + vi2en('Ngày', 'Date') + '</span>' + esc(span) + '</li><li><span>' + vi2en('Giờ', 'Time') + '</span>' + esc(time) + '</li><li><span>' + vi2en('Địa điểm', 'Venue') + '</span>' + esc(e.place || e.mode || vi2en('Đang cập nhật', 'To be announced')) + '</li></ul>' +
         (e.excerpt ? '<p>' + esc(e.excerpt) + '</p>' : '') +
-        '<div class="ev-actions">' + (e.registerUrl ? '<a class="btn btn-primary" href="' + esc(url(e.registerUrl)) + '"' + ext(e.registerUrl) + '>Đăng ký tham dự</a>' : '') + statusBadge(e.status) + '</div></div></article>';
+        '<div class="ev-actions">' + (e.registerUrl ? '<a class="btn btn-primary" href="' + esc(url(e.registerUrl)) + '"' + ext(e.registerUrl) + '>' + vi2en('Đăng ký tham dự', 'Register') + '</a>' : '') + statusBadge(e.status) + '</div></div></article>';
     }
     function panel(){
       var list, label;
       if(selected){
         list = byDay[selected] || [];
         var p = selected.split('-');
-        label = 'Sự kiện ngày ' + p[2] + '/' + p[1];
+        label = EN ? 'Events on ' + (+p[2]) + ' ' + MONTH_NAMES[+p[1] - 1] : 'Sự kiện ngày ' + p[2] + '/' + p[1];
       } else {
         var y = view.getFullYear(), m = view.getMonth();
         list = events.filter(function(e){ return daysOf(e).some(function(k){ var q = k.split('-'); return +q[0] === y && +q[1] === m + 1; }); });
-        label = 'Sự kiện ' + MONTH_NAMES[m].toLowerCase() + '/' + y;
+        label = EN ? 'Events in ' + MONTH_NAMES[m] + ' ' + y : 'Sự kiện ' + MONTH_NAMES[m].toLowerCase() + '/' + y;
       }
       pTitle.textContent = label;
       allBtn.hidden = !selected;
       pList.innerHTML = list.length ? list.map(info).join('')
-        : '<div class="ev-empty"><strong>Chưa có sự kiện</strong><p>' + (events.length ? 'Không có sự kiện trong khoảng thời gian này. Chọn tháng khác trên lịch.' : 'Lịch sự kiện sẽ được cập nhật khi Khoa công bố chính thức.') + '</p>' +
-          '<a class="link-arrow" href="' + esc(url('tin-tuc/index.html')) + '">Xem tin tức →</a></div>';
+        : '<div class="ev-empty"><strong>' + vi2en('Chưa có sự kiện', 'No events yet') + '</strong><p>' + (events.length ? vi2en('Không có sự kiện trong khoảng thời gian này. Chọn tháng khác trên lịch.', 'No events in this period. Pick another month on the calendar.') : vi2en('Lịch sự kiện sẽ được cập nhật khi Khoa công bố chính thức.', 'The event schedule will be published once the Faculty confirms it.')) + '</p>' +
+          '<a class="link-arrow" href="' + esc(url('tin-tuc/index.html')) + '">' + vi2en('Xem tin tức →', 'View news →') + '</a></div>';
     }
     function render(){
       var y = view.getFullYear(), m = view.getMonth();
-      title.textContent = MONTH_NAMES[m] + ' · ' + y;
+      title.textContent = MONTH_NAMES[m] + (EN ? ' ' : ' · ') + y;
       var first = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate(), html = '<tr>', col = 0;
       for(var i = 0; i < first; i++, col++) html += '<td></td>';
       for(var d = 1; d <= days; d++){
         var k = y + '-' + pad(m + 1) + '-' + pad(d), has = byDay[k], isToday = k === key(today);
         var cls = 'cal-day' + (has ? ' has-ev' : '') + (isToday ? ' is-today' : '') + (k === selected ? ' is-sel' : '');
         html += '<td>' + (has
-          ? '<button type="button" class="' + cls + '" data-day="' + k + '" aria-pressed="' + (k === selected) + '" aria-label="' + d + ' ' + MONTH_NAMES[m].toLowerCase() + ', ' + has.length + ' sự kiện">' + d + '</button>'
+          ? '<button type="button" class="' + cls + '" data-day="' + k + '" aria-pressed="' + (k === selected) + '" aria-label="' + (EN ? d + ' ' + MONTH_NAMES[m] + ', ' + has.length + (has.length === 1 ? ' event' : ' events') : d + ' ' + MONTH_NAMES[m].toLowerCase() + ', ' + has.length + ' sự kiện') + '">' + d + '</button>'
           : '<span class="' + cls + '"' + (isToday ? ' aria-current="date"' : '') + '>' + d + '</span>') + '</td>';
         if(++col % 7 === 0 && d < days) html += '</tr><tr>';
       }
@@ -1809,9 +1848,9 @@
   (function(){
     var root = document.querySelector('[data-duty-cal]');
     if(!root) return;
-    var SHIFTS = [{id:'sang', label:'Sáng', full:'Buổi sáng'}, {id:'chieu', label:'Chiều', full:'Buổi chiều'}];
-    var MN = ['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
-    var WD = ['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+    var SHIFTS = [{id:'sang', label:vi2en('Sáng', 'AM'), full:vi2en('Buổi sáng', 'Morning')}, {id:'chieu', label:vi2en('Chiều', 'PM'), full:vi2en('Buổi chiều', 'Afternoon')}];
+    var MN = MONTH_NAMES;
+    var WD = EN ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] : ['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
     var list = published(window.ULAW_DUTY).filter(function(d){ return d.date && d.shift; });
     var by = {};
     list.forEach(function(d){ (by[d.date] = by[d.date] || {})[d.shift] = d; });
@@ -1824,15 +1863,15 @@
       '<aside class="duty-spot" aria-live="polite"></aside>' +
       '<div class="duty-main">' +
         '<div class="duty-bar">' +
-          '<div class="duty-month"><button type="button" class="cal-nav" data-step="-1" aria-label="Tháng trước">‹</button>' +
+          '<div class="duty-month"><button type="button" class="cal-nav" data-step="-1" aria-label="' + vi2en('Tháng trước', 'Previous month') + '">‹</button>' +
           '<h3 class="duty-title" aria-live="polite"></h3>' +
-          '<button type="button" class="cal-nav" data-step="1" aria-label="Tháng sau">›</button>' +
-          '<button type="button" class="duty-today">Hôm nay</button></div>' +
-          '<div class="field duty-find"><label for="duty-q">Tìm cán bộ trực</label><input type="search" id="duty-q" placeholder="Nhập tên…" autocomplete="off"></div>' +
+          '<button type="button" class="cal-nav" data-step="1" aria-label="' + vi2en('Tháng sau', 'Next month') + '">›</button>' +
+          '<button type="button" class="duty-today">' + vi2en('Hôm nay', 'Today') + '</button></div>' +
+          '<div class="field duty-find"><label for="duty-q">' + vi2en('Tìm cán bộ trực', 'Find staff on duty') + '</label><input type="search" id="duty-q" placeholder="' + vi2en('Nhập tên…', 'Type a name…') + '" autocomplete="off"></div>' +
         '</div>' +
-        '<div class="duty-grid" role="group" aria-label="Lịch trực theo tháng"></div>' +
-        '<p class="duty-legend"><span class="dl dl-on"></span>Đã phân công <span class="dl dl-off"></span>Chưa phân công <span class="dl dl-now"></span>Hôm nay' +
-        (list.length ? '' : ' · <span class="badge badge-pending">Đang cập nhật</span>') + '</p>' +
+        '<div class="duty-grid" role="group" aria-label="' + vi2en('Lịch trực theo tháng', 'Monthly duty roster') + '"></div>' +
+        '<p class="duty-legend"><span class="dl dl-on"></span>' + vi2en('Đã phân công', 'Assigned') + ' <span class="dl dl-off"></span>' + vi2en('Chưa phân công', 'Unassigned') + ' <span class="dl dl-now"></span>' + vi2en('Hôm nay', 'Today') + '' +
+        (list.length ? '' : ' · <span class="badge badge-pending">' + vi2en('Đang cập nhật', 'Being updated') + '</span>') + '</p>' +
       '</div>';
     var spot = root.querySelector('.duty-spot'), grid = root.querySelector('.duty-grid'), title = root.querySelector('.duty-title'), input = root.querySelector('#duty-q');
 
@@ -1840,36 +1879,36 @@
     function slot(k, s){
       var d = (by[k] || {})[s.id];
       return '<span class="duty-slot ' + (d ? 'is-on' : 'is-off') + (match(d) ? ' is-hit' : '') + '"><b>' + s.label + '</b>' +
-        (d ? '<i class="duty-ava" aria-hidden="true">' + esc(initials(d.person)) + '</i><em>' + esc(d.person) + '</em>' : '<em>Chưa phân công</em>') + '</span>';
+        (d ? '<i class="duty-ava" aria-hidden="true">' + esc(initials(d.person)) + '</i><em>' + esc(d.person) + '</em>' : '<em>' + vi2en('Chưa phân công', 'Unassigned') + '</em>') + '</span>';
     }
     function renderSpot(){
       var p = selected.split('-'), date = new Date(+p[0], +p[1] - 1, +p[2]), isT = selected === tKey, row = by[selected] || {};
       var weekend = date.getDay() === 0 || date.getDay() === 6;
       var nowShift = isT ? (today.getHours() < 12 ? 'sang' : today.getHours() < 18 ? 'chieu' : '') : '';
-      spot.innerHTML = '<p class="duty-kicker">' + (isT ? '<span class="duty-pulse" aria-hidden="true"></span>Hôm nay' : 'Ngày đã chọn') + '</p>' +
-        '<p class="duty-date"><b>' + pad(date.getDate()) + '</b><span>' + WD[date.getDay()] + '<br>' + MN[date.getMonth()].toLowerCase() + ' ' + date.getFullYear() + '</span></p>' +
-        (weekend && !row.sang && !row.chieu ? '<p class="duty-note">Cuối tuần — văn phòng Khoa không trực.</p>' :
+      spot.innerHTML = '<p class="duty-kicker">' + (isT ? '<span class="duty-pulse" aria-hidden="true"></span>' + vi2en('Hôm nay', 'Today') : vi2en('Ngày đã chọn', 'Selected day')) + '</p>' +
+        '<p class="duty-date"><b>' + pad(date.getDate()) + '</b><span>' + WD[date.getDay()] + '<br>' + (EN ? MN[date.getMonth()] : MN[date.getMonth()].toLowerCase()) + ' ' + date.getFullYear() + '</span></p>' +
+        (weekend && !row.sang && !row.chieu ? '<p class="duty-note">' + vi2en('Cuối tuần — văn phòng Khoa không trực.', 'Weekend — the Faculty office is closed.') + '</p>' :
         SHIFTS.map(function(s){
           var d = row[s.id];
           return '<div class="duty-card' + (s.id === nowShift ? ' is-now' : '') + '"><p class="duty-shift">' + s.full + (d && d.time ? ' · ' + esc(d.time) : '') +
-            (s.id === nowShift && d ? '<span class="duty-live">Đang trực</span>' : '') + '</p>' +
+            (s.id === nowShift && d ? '<span class="duty-live">' + vi2en('Đang trực', 'On duty') + '</span>' : '') + '</p>' +
             (d ? '<p class="duty-who"><i class="duty-ava" aria-hidden="true">' + esc(initials(d.person)) + '</i><span><strong>' + esc(d.person) + '</strong>' + (d.role ? '<small>' + esc(d.role) + '</small>' : '') + '</span></p>' +
-                 '<ul class="duty-meta">' + (d.room ? '<li>Phòng ' + esc(d.room) + '</li>' : '') + (d.phone ? '<li><a href="tel:' + esc(d.phone.replace(/\s/g, '')) + '">' + esc(d.phone) + '</a></li>' : '') + (d.note ? '<li>' + esc(d.note) + '</li>' : '') + '</ul>' + statusBadge(d.status)
-               : '<p class="duty-empty">Thông tin đang cập nhật</p>') + '</div>';
+                 '<ul class="duty-meta">' + (d.room ? '<li>' + vi2en('Phòng ', 'Room ') + esc(d.room) + '</li>' : '') + (d.phone ? '<li><a href="tel:' + esc(d.phone.replace(/\s/g, '')) + '">' + esc(d.phone) + '</a></li>' : '') + (d.note ? '<li>' + esc(d.note) + '</li>' : '') + '</ul>' + statusBadge(d.status)
+               : '<p class="duty-empty">' + vi2en('Thông tin đang cập nhật', 'Information being updated') + '</p>') + '</div>';
         }).join(''));
     }
     function render(){
       var y = view.getFullYear(), m = view.getMonth();
-      title.textContent = MN[m] + ' · ' + y;
+      title.textContent = MN[m] + (EN ? ' ' : ' · ') + y;
       var first = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
-      var html = ['T2','T3','T4','T5','T6','T7','CN'].map(function(d, i){ return '<span class="duty-wd' + (i > 4 ? ' is-we' : '') + '" aria-hidden="true">' + d + '</span>'; }).join('');
+      var html = WEEK_SHORT.map(function(d, i){ return '<span class="duty-wd' + (i > 4 ? ' is-we' : '') + '" aria-hidden="true">' + d + '</span>'; }).join('');
       for(var i = 0; i < first; i++) html += '<span class="duty-pad" aria-hidden="true"></span>';
       for(var d = 1; d <= days; d++){
         var k = y + '-' + pad(m + 1) + '-' + pad(d), wd = new Date(y, m, d).getDay(), we = wd === 0 || wd === 6, row = by[k] || {};
         var hit = match(row.sang) || match(row.chieu), dim = q && !hit;
         html += '<button type="button" class="duty-day' + (we ? ' is-we' : '') + (k === tKey ? ' is-today' : '') + (k === selected ? ' is-sel' : '') + (hit ? ' is-hit' : '') + (dim ? ' is-dim' : '') + (k < tKey ? ' is-past' : '') +
           '" data-day="' + k + '" aria-pressed="' + (k === selected) + '"' + (k === tKey ? ' aria-current="date"' : '') + '>' +
-          '<span class="visually-hidden">' + WD[wd] + ' </span><span class="duty-n">' + d + '</span><span class="visually-hidden"> ' + MN[m].toLowerCase() + ': </span>' + (we && !row.sang && !row.chieu ? '<span class="duty-off">Nghỉ</span>' : SHIFTS.map(function(s){ return slot(k, s); }).join('')) + '</button>';
+          '<span class="visually-hidden">' + WD[wd] + ' </span><span class="duty-n">' + d + '</span><span class="visually-hidden"> ' + (EN ? MN[m] : MN[m].toLowerCase()) + ': </span>' + (we && !row.sang && !row.chieu ? '<span class="duty-off">' + vi2en('Nghỉ', 'Off') + '</span>' : SHIFTS.map(function(s){ return slot(k, s); }).join('')) + '</button>';
       }
       grid.innerHTML = html;
       renderSpot();
@@ -1917,7 +1956,7 @@
       var items = all.filter(function(n){
         return (c === 'all' || n.category === c) && (!qn || norm(n.title + ' ' + n.excerpt).indexOf(qn) > -1);
       });
-      if(count) count.textContent = items.length + ' bài viết';
+      if(count) count.textContent = items.length + vi2en(' bài viết', items.length === 1 ? ' post' : ' posts');
       var empty = document.getElementById('news-empty');
       if(empty) empty.hidden = items.length > 0 || !all.length;
       box.hidden = !items.length && all.length > 0;
@@ -1964,7 +2003,7 @@
     } else {
       a.addEventListener('click', function(e){
         e.preventDefault();
-        if(st){ st.textContent = 'Hệ thống đăng nhập (SSO) của Trường chưa được kết nối. Vui lòng quay lại sau hoặc liên hệ Khoa.'; st.classList.add('is-alert'); }
+        if(st){ st.textContent = vi2en('Hệ thống đăng nhập (SSO) của Trường chưa được kết nối. Vui lòng quay lại sau hoặc liên hệ Khoa.', 'The University sign-in (SSO) is not connected yet. Please come back later or contact the Faculty.'); st.classList.add('is-alert'); }
       });
     }
   });
@@ -2022,7 +2061,7 @@
       var meta = [
         ['Loại', typeLabel[r.type]], ['Ngành', r.programName], ['Học phần', r.course], ['Khóa', r.cohort],
         ['Học kỳ', r.semester], ['Phiên bản', r.version], ['Nguồn', r.source],
-        ['Cập nhật', r.updatedAt ? new Date(r.updatedAt).toLocaleDateString('vi-VN') : 'chưa xác thực'],
+        ['Cập nhật', r.updatedAt ? fmtDate(r.updatedAt) : 'chưa xác thực'],
       ].filter(function(m){ return m[1]; }).map(function(m){ return '<span>' + m[0] + ': <b>' + esc(m[1]) + '</b></span>'; }).join('');
       return '<li class="resource-card"><div><div class="news-meta">' + access + statusBadge(r.status) + '</div>' +
         '<h3>' + esc(r.title) + '</h3><p class="resource-meta">' + meta + '</p></div>' +
@@ -2041,7 +2080,7 @@
           (val(f.access) === 'all' || r.access === val(f.access)) &&
           (!qn || norm(r.title + ' ' + r.programName + ' ' + (r.course || '')).indexOf(qn) > -1);
       });
-      count.textContent = items.length + ' / ' + data.length + ' mục học liệu';
+      count.textContent = items.length + ' / ' + data.length + vi2en(' mục học liệu', ' items');
       results.innerHTML = items.length ? '<ul class="resource-list">' + items.map(card).join('') + '</ul>'
         : emptyState({title:'Không có học liệu phù hợp', icon:'⌕', text:'Thử bỏ bớt bộ lọc hoặc dùng từ khóa khác.'});
     }
@@ -2102,9 +2141,57 @@
       n.parentNode.replaceChild(frag, n);
     });
   }
+
+  // ---------- EN mode: text Google Website Translator never touches ----------
+  // placeholder / aria-label / title attributes and <title> are not translated by Google, so the
+  // repeated interface strings are mapped here (exact match); anything unmapped stays Vietnamese.
+  var EN_ATTR = {
+    'Từ khóa tìm kiếm':'Search keywords', 'Tìm kiếm':'Search', 'Lọc theo loại nội dung':'Filter by content type',
+    'Bạn đang tìm kiếm điều gì?':'What are you looking for?', 'Đóng tìm kiếm':'Close search', 'Đóng menu':'Close menu',
+    'Điều hướng chính':'Main navigation', 'Điều hướng chính (di động)':'Main navigation (mobile)', 'Ngôn ngữ / Language':'Language',
+    'Mở menu':'Open menu', 'Menu điều hướng':'Navigation menu', 'Liên kết tiện ích':'Utility links', 'Trong trang này':'On this page',
+    'Các mục Sinh viên':'Student sections', 'Các mục dành cho sinh viên':'Student sections', 'Chú giải':'Legend', 'Mục lục trang':'Page contents',
+    'Thông tin nổi bật':'Highlights', 'Giới thiệu nổi bật':'Highlights', 'Những con số của Khoa Quản trị':'The Faculty of Management in numbers',
+    'Nhóm biểu mẫu':'Form groups', 'Danh sách biểu mẫu theo nhóm':'Forms by group', 'Lọc theo khối ngành':'Filter by field',
+    'Lọc theo hình thức':'Filter by format', 'Lọc theo loại':'Filter by type', 'Lọc thông báo':'Filter notices', 'Chọn bộ môn':'Choose a department',
+    'Chủ đề hội thảo':'Seminar topics', 'Cách học qua tình huống':'Learning through case studies',
+    'Danh sách chuyên gia và giảng viên thỉnh giảng':'Experts and visiting lecturers', 'Ảnh trước':'Previous photo', 'Ảnh sau':'Next photo',
+    'Tất cả tin theo thời gian':'All news by date', 'Tìm ngành học, tin tức, học liệu…':'Search programmes, news, learning materials…',
+    'Tìm ngành học, học liệu, học bổng, biểu mẫu…':'Search programmes, learning materials, scholarships, forms…',
+    'Tên học phần, ngành, tài liệu…':'Course, programme or document…', 'Nhập từ khóa…':'Type a keyword…',
+    'Nhập từ khóa (có dấu hoặc không dấu)…':'Type a keyword (Vietnamese with or without accents)…', 'Ví dụ: 2020':'e.g. 2020',
+    'Ví dụ: 0912 345 678':'e.g. 0912 345 678',
+    'Ví dụ: nhu cầu tuyển 5 thực tập sinh marketing trong học kỳ tới…':'e.g. we need 5 marketing interns next semester…'
+  };
+  var EN_TITLE = {
+    'Khoa Quản trị ULAW':'Faculty of Management, ULAW', 'Tư duy Quản trị – Bản lĩnh pháp lý':'Management Thinking – Legal Confidence',
+    'Không tìm thấy trang':'Page not found', 'Đối tác & Doanh nghiệp':'Partners & Businesses', 'Tin tức & Sự kiện':'News & Events',
+    'Nghiên cứu':'Research', 'Biểu mẫu':'Forms', '[Minh họa] Bài viết mẫu':'[Illustrative] Sample article', 'Tin tức Khoa Quản trị ULAW':'News, Faculty of Management, ULAW',
+    'Tài chính – Ngân hàng':'Finance – Banking', 'Thạc sĩ Quản trị kinh doanh':'Master of Business Administration', 'Đào tạo':'Programmes',
+    '07 ngành đại học':'7 undergraduate programmes', 'Quản trị – Luật':'Management – Law', 'Thương mại điện tử':'E-commerce',
+    'Công nghệ tài chính':'Financial Technology', 'Quản trị kinh doanh':'Business Administration', 'Kinh tế số':'Digital Economy',
+    'Kinh doanh quốc tế':'International Business', 'Mẫu bố cục hồ sơ giảng viên':'Lecturer profile layout sample', 'Tìm kiếm':'Search',
+    'Bộ môn':'Department', 'Lịch sự kiện':'Event calendar', 'Đội ngũ':'People', 'Thực tập & Tuyển dụng':'Internships & Jobs', 'Sinh viên':'Students',
+    'Học tập':'Studies', 'Alumni':'Alumni', 'Cuộc sống sinh viên':'Student life', 'Học bổng':'Scholarships', 'Học liệu':'Learning materials', 'Giới thiệu':'About'
+  };
+  function enAttrs(root){
+    if(!EN || !root.querySelectorAll) return;
+    [root].concat(Array.prototype.slice.call(root.querySelectorAll('[placeholder], [aria-label], [title]'))).forEach(function(el){
+      ['placeholder', 'aria-label', 'title'].forEach(function(a){
+        var v = el.getAttribute && el.getAttribute(a);
+        if(v && EN_ATTR[v.trim()]) el.setAttribute(a, EN_ATTR[v.trim()]);
+      });
+    });
+  }
+  function enTitle(){
+    // Segments are separated by " — " or " | "; unmapped segments (e.g. a department name) are left to the reader.
+    var out = document.title.split(/( — | \| )/).map(function(part){ return EN_TITLE[part] || part; }).join('');
+    if(out !== document.title) document.title = out;
+  }
+  if(EN){ enAttrs(document.body); enTitle(); }
   xmarkify(document.body);
   if(window.MutationObserver){
-    new MutationObserver(function(ms){ ms.forEach(function(m){ m.addedNodes.forEach(function(n){ if(n.nodeType === 1 && !n.classList.contains('x-mark')){ chevronize(n); xmarkify(n); } }); }); })
+    new MutationObserver(function(ms){ ms.forEach(function(m){ m.addedNodes.forEach(function(n){ if(n.nodeType === 1 && !n.classList.contains('x-mark')){ chevronize(n); xmarkify(n); enAttrs(n); } }); }); })
       .observe(document.body, {childList:true, subtree:true});
   }
 })();
