@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A static, multi-page prototype website for **Khoa Quản trị (Faculty of Management), Trường Đại học Luật TP. Hồ Chí Minh (ULAW)**. All content is in Vietnamese. There is no framework, bundler or package manager: plain HTML + one CSS file + vanilla ES5-style JS (IIFEs, `var`, no modules).
 
-The original requirements spec is [Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md](Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md). Read it before changing design, navigation or content — but later user edit requests override it wherever they differ (the spec itself ranks them first; the rules below already reflect them); [SESSION.md](SESSION.md) lists those changes. [README.md](README.md) lists what is illustrative and what ULAW still has to supply.
+The original requirements spec (removed from the repo on 2026-09-27; recoverable from git history) has been reshaped by many user edit requests, which [SESSION.md](SESSION.md) lists; the rules below are the current source of truth. [README.md](README.md) lists what is illustrative and what ULAW still has to supply.
 
 ## Commands
 
@@ -75,7 +75,7 @@ There is no test suite. `--check` is the only automated gate: run it after any c
   - The Bash sandbox limits shell writes to the repo plus the memory and plans dirs; running unsandboxed always prompts.
   - `sudo` is denied.
 
-## Content rules (from the spec)
+## Content rules
 
 - Never invent official data: names, achievements, tuition, admission figures, program codes, dates or events. Unverified content shows an "illustrative" badge or a designed "Thông tin đang cập nhật" empty state.
 - No `href="#"` or dead links. Items without a real target are plain text labelled "Đang cập nhật".

@@ -4,11 +4,12 @@ Where the work stands, so a new session can pick up without the old transcript.
 Update at the end of every request (newest first, keep under ~80 lines; git log holds the detail).
 
 ## Current state (2026-09-26)
-- Static prototype of Khoa Quản trị ULAW, built from `Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md` then reshaped by many user requests (user edits override the spec).
+- Static prototype of Khoa Quản trị ULAW, built from an original spec (now removed, in git history) then reshaped by many user requests; CLAUDE.md rules are the source of truth.
 - All pages pass `python3 tools/build_layout.py --check`; headless-Chrome QA passed at 1440/1024/768/390.
 - Work happens on local branch `development`; the Stop hook auto-commits every finished request there. Nothing is pushed; `main` = initial commit only.
 
 ## Recent changes (newest first)
+- 2026-09-27: removed `Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md` (spec; in git history); CLAUDE.md/README references updated — CLAUDE.md rules are now the source of truth.
 - 2026-09-27: CLAUDE.md tidied (/init review): directory→section map, palette/override wording de-historied, VI/EN details condensed (full notes stay in site.js).
 - 2026-09-27: restored `.claude/settings.json` (SessionStart/PreToolUse/Stop hooks, sudo denied) in the `website_new` checkout; `guard_paths.sh` derives the memory dir from the repo path; working on `development`.
 - 2026-09-27 — VI/EN switch fix: explicit localStorage choice (en|vi) wins over the googtrans cookie (switching back to VI used to stay EN); cookie cleared on /, page dir and /<repo>/ paths + host/.host; stale cookie cleared on VI pages.

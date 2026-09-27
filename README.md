@@ -1,6 +1,6 @@
 # Website Khoa Quản trị — ULAW (prototype)
 
-Static multi-page prototype for Khoa Quản trị, Trường Đại học Luật TP. Hồ Chí Minh, built from `Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md`. Plain HTML + CSS + vanilla JS. No build step is needed to view it.
+Static multi-page prototype for Khoa Quản trị, Trường Đại học Luật TP. Hồ Chí Minh. Plain HTML + CSS + vanilla JS. No build step is needed to view it.
 
 ## Running
 
