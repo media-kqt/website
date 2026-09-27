@@ -2,6 +2,8 @@
 
 Static multi-page prototype for Khoa Quản trị, Trường Đại học Luật TP. Hồ Chí Minh. Plain HTML + CSS + vanilla JS. No build step is needed to view it.
 
+The English version lives under `en/` (e.g. `http://localhost:8000/en/`); the flag switch in the top bar links each page to its counterpart. It is generated from the Vietnamese pages by `python3 tools/build_layout.py` using the translations in `tools/i18n/en.json`, so edit only the Vietnamese pages and the catalog.
+
 ## Running
 
 ```bash
