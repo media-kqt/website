@@ -48,21 +48,21 @@ window.ULAW_PROGRAMS = [
     name: "Business Administration",
     // Two tracks (same keys/anchors as Quản trị – Luật); Hội nhập quốc tế details await official confirmation.
     tracks: [
-      { key: "chinh-quy", label: "Thường", status: "pending",
-        summary: "Thông tin chương trình hệ thường đang chờ nguồn chính thức xác nhận." },
-      { key: "tich-hop", label: "Hội nhập quốc tế", status: "pending",
-        summary: "Thông tin chương trình Hội nhập quốc tế đang chờ nguồn chính thức xác nhận." },
+      { key: "chinh-quy", label: "Standard", status: "pending",
+        summary: "Details of the Standard track are awaiting confirmation from an official source." },
+      { key: "tich-hop", label: "International Integration", status: "pending",
+        summary: "Details of the International Integration track are awaiting confirmation from an official source." },
     ],
-    short: "Xây nền tảng quản trị tổng quát: vận hành, marketing, nhân sự và chiến lược cho môi trường kinh doanh nhiều biến động.",
-    keywords: ["Quản trị", "Marketing", "Vận hành"],
-    focus: ["Ra quyết định quản trị", "Marketing & thương hiệu", "Vận hành & chiến lược"],
+    short: "Builds a broad management foundation in operations, marketing, human resources and strategy for a fast-changing business environment.",
+    keywords: ["Management", "Marketing", "Operations"],
+    focus: ["Managerial decision-making", "Marketing & branding", "Operations & strategy"],
     curriculum: [
-      {title:"Nền tảng quản trị", desc:"Nguyên lý quản trị, hành vi tổ chức, kinh tế học ứng dụng."},
-      {title:"Chức năng doanh nghiệp", desc:"Marketing, nhân sự, tài chính doanh nghiệp, vận hành."},
-      {title:"Tư duy pháp lý trong kinh doanh", desc:"Pháp luật doanh nghiệp, hợp đồng thương mại, quản trị rủi ro pháp lý."},
-      {title:"Ứng dụng & dự án", desc:"Case study doanh nghiệp, dự án tốt nghiệp, thực tập."},
+      {title:"Foundations of management", desc:"Principles of management, organisational behaviour, applied economics."},
+      {title:"Business functions", desc:"Marketing, human resources, corporate finance, operations."},
+      {title:"Legal thinking in business", desc:"Company law, commercial contracts, legal risk management."},
+      {title:"Applied learning & projects", desc:"Business case studies, graduation projects, internships."},
     ],
-    careers: ["Chuyên viên/Quản lý vận hành", "Chuyên viên marketing – thương hiệu", "Chuyên viên phát triển kinh doanh"],
+    careers: ["Operations specialist/manager", "Marketing and branding specialist", "Business development specialist"],
   },
   {
     slug: "quan-tri-luat",
@@ -75,21 +75,21 @@ window.ULAW_PROGRAMS = [
     name: "Management and Law",
     // Two tracks; Hội nhập quốc tế details await official confirmation.
     tracks: [
-      { key: "chinh-quy", label: "Thường", status: "illustrative",
-        summary: "Chương trình chuẩn kết hợp quản trị doanh nghiệp với nền tảng pháp lý kinh doanh." },
-      { key: "tich-hop", label: "Hội nhập quốc tế", status: "pending",
-        summary: "Thông tin chương trình Hội nhập quốc tế đang chờ nguồn chính thức xác nhận." },
+      { key: "chinh-quy", label: "Standard", status: "illustrative",
+        summary: "A standard programme combining business management with a grounding in business law." },
+      { key: "tich-hop", label: "International Integration", status: "pending",
+        summary: "Details of the International Integration track are awaiting confirmation from an official source." },
     ],
-    short: "Kết hợp tư duy quản trị với nền tảng pháp lý kinh doanh — thế mạnh đặc trưng của một khoa thuộc trường luật.",
-    keywords: ["Quản trị", "Pháp lý", "Compliance"],
-    focus: ["Quản trị doanh nghiệp", "Pháp lý kinh doanh", "Tuân thủ & quản trị rủi ro"],
+    short: "Combines managerial thinking with a grounding in business law — the distinctive strength of a faculty within a law university.",
+    keywords: ["Management", "Law", "Compliance"],
+    focus: ["Business management", "Business law", "Compliance & risk management"],
     curriculum: [
-      {title:"Nền tảng quản trị & pháp luật", desc:"Quản trị học, luật kinh tế đại cương."},
-      {title:"Quản trị doanh nghiệp & Governance", desc:"Cơ cấu quản trị công ty, trách nhiệm giải trình."},
-      {title:"Pháp lý kinh doanh chuyên sâu", desc:"Hợp đồng, sở hữu trí tuệ, giải quyết tranh chấp thương mại."},
-      {title:"Ứng dụng thực tiễn", desc:"Mô phỏng tình huống pháp lý – quản trị, dự án tốt nghiệp."},
+      {title:"Foundations of management & law", desc:"Management studies, introduction to economic law."},
+      {title:"Business management & governance", desc:"Corporate governance structures, accountability."},
+      {title:"Advanced business law", desc:"Contracts, intellectual property, commercial dispute resolution."},
+      {title:"Practical application", desc:"Simulated legal and management cases, graduation projects."},
     ],
-    careers: ["Chuyên viên quản trị & tuân thủ (compliance)", "Chuyên viên pháp chế doanh nghiệp", "Tư vấn quản trị rủi ro"],
+    careers: ["Governance and compliance specialist", "In-house legal specialist", "Risk management consultant"],
   },
   {
     slug: "kinh-doanh-quoc-te",
@@ -100,16 +100,16 @@ window.ULAW_PROGRAMS = [
     // `luat` = credits of law courses inside the programme (highlighted separately).
     credits: { coSo: null, chuyenNganh: null, thucTap: null, khoaLuan: null, luat: null },
     name: "International Business",
-    short: "Trang bị năng lực vận hành doanh nghiệp trong môi trường toàn cầu: thương mại quốc tế, chuỗi cung ứng và văn hóa kinh doanh đa quốc gia.",
-    keywords: ["Toàn cầu hóa", "Thương mại quốc tế", "Chuỗi cung ứng"],
-    focus: ["Thương mại & đầu tư quốc tế", "Quản trị chuỗi cung ứng", "Văn hóa kinh doanh đa quốc gia"],
+    short: "Equips students to run businesses in a global environment: international trade, supply chains and multinational business culture.",
+    keywords: ["Globalisation", "International trade", "Supply chains"],
+    focus: ["International trade & investment", "Supply chain management", "Multinational business culture"],
     curriculum: [
-      {title:"Nền tảng kinh doanh quốc tế", desc:"Kinh tế quốc tế, thương mại toàn cầu."},
-      {title:"Vận hành xuyên biên giới", desc:"Logistics, chuỗi cung ứng, thanh toán quốc tế."},
-      {title:"Pháp lý thương mại quốc tế", desc:"Hợp đồng ngoại thương, giải quyết tranh chấp quốc tế."},
-      {title:"Ứng dụng & dự án", desc:"Case study doanh nghiệp đa quốc gia, thực tập."},
+      {title:"Foundations of international business", desc:"International economics, global trade."},
+      {title:"Cross-border operations", desc:"Logistics, supply chains, international payments."},
+      {title:"International trade law", desc:"Foreign trade contracts, international dispute resolution."},
+      {title:"Applied learning & projects", desc:"Multinational company case studies, internships."},
     ],
-    careers: ["Chuyên viên xuất nhập khẩu", "Chuyên viên phát triển thị trường quốc tế", "Chuyên viên logistics & chuỗi cung ứng"],
+    careers: ["Import-export specialist", "International market development specialist", "Logistics & supply chain specialist"],
   },
   {
     slug: "tai-chinh-ngan-hang",
@@ -120,16 +120,16 @@ window.ULAW_PROGRAMS = [
     // `luat` = credits of law courses inside the programme (highlighted separately).
     credits: { coSo: null, chuyenNganh: null, thucTap: null, khoaLuan: null, luat: null },
     name: "Finance and Banking",
-    short: "Nền tảng phân tích tài chính, quản trị rủi ro và hiểu biết pháp lý trong lĩnh vực tài chính – ngân hàng.",
-    keywords: ["Tài chính doanh nghiệp", "Ngân hàng", "Quản trị rủi ro"],
-    focus: ["Phân tích & định giá tài chính", "Nghiệp vụ ngân hàng", "Pháp lý tài chính – tín dụng"],
+    short: "A foundation in financial analysis, risk management and legal knowledge for the finance and banking sector.",
+    keywords: ["Corporate finance", "Banking", "Risk management"],
+    focus: ["Financial analysis & valuation", "Banking operations", "Financial and credit law"],
     curriculum: [
-      {title:"Nền tảng tài chính", desc:"Tài chính doanh nghiệp, thị trường tài chính."},
-      {title:"Nghiệp vụ ngân hàng", desc:"Tín dụng, thanh toán, quản trị rủi ro ngân hàng."},
-      {title:"Pháp lý tài chính", desc:"Quy định tín dụng, chứng khoán, phòng chống rửa tiền."},
-      {title:"Ứng dụng & dự án", desc:"Mô hình tài chính, thực tập tại tổ chức tín dụng."},
+      {title:"Foundations of finance", desc:"Corporate finance, financial markets."},
+      {title:"Banking operations", desc:"Credit, payments, bank risk management."},
+      {title:"Financial law", desc:"Credit and securities regulation, anti-money laundering."},
+      {title:"Applied learning & projects", desc:"Financial modelling, internships at credit institutions."},
     ],
-    careers: ["Chuyên viên tín dụng/ngân hàng", "Chuyên viên phân tích tài chính", "Chuyên viên quản trị rủi ro"],
+    careers: ["Credit/banking specialist", "Financial analyst", "Risk management specialist"],
   },
   {
     slug: "kinh-te-so",
@@ -140,16 +140,16 @@ window.ULAW_PROGRAMS = [
     // `luat` = credits of law courses inside the programme (highlighted separately).
     credits: { coSo: null, chuyenNganh: null, thucTap: null, khoaLuan: null, luat: null },
     name: "Digital Economy",
-    short: "Hiểu và vận dụng dữ liệu, nền tảng số và mô hình kinh doanh mới trong nền kinh tế số.",
-    keywords: ["Dữ liệu", "Mô hình số", "Đổi mới sáng tạo"],
-    focus: ["Phân tích dữ liệu kinh doanh", "Mô hình kinh doanh số", "Chính sách & pháp lý kinh tế số"],
+    short: "Understanding and applying data, digital platforms and new business models in the digital economy.",
+    keywords: ["Data", "Digital models", "Innovation"],
+    focus: ["Business data analytics", "Digital business models", "Digital economy policy & law"],
     curriculum: [
-      {title:"Nền tảng kinh tế số", desc:"Kinh tế học số, chuyển đổi số doanh nghiệp."},
-      {title:"Dữ liệu & công nghệ", desc:"Phân tích dữ liệu, nền tảng số, tự động hóa."},
-      {title:"Pháp lý kinh tế số", desc:"Bảo vệ dữ liệu cá nhân, quy định nền tảng số."},
-      {title:"Ứng dụng & dự án", desc:"Dự án chuyển đổi số thực tế, thực tập doanh nghiệp công nghệ."},
+      {title:"Foundations of the digital economy", desc:"Digital economics, digital transformation in business."},
+      {title:"Data & technology", desc:"Data analytics, digital platforms, automation."},
+      {title:"Digital economy law", desc:"Personal data protection, digital platform regulation."},
+      {title:"Applied learning & projects", desc:"Real-world digital transformation projects, internships at technology companies."},
     ],
-    careers: ["Chuyên viên phân tích dữ liệu kinh doanh", "Chuyên viên chuyển đổi số", "Chuyên viên vận hành nền tảng số"],
+    careers: ["Business data analyst", "Digital transformation specialist", "Digital platform operations specialist"],
   },
   {
     slug: "thuong-mai-dien-tu",
@@ -160,16 +160,16 @@ window.ULAW_PROGRAMS = [
     // `luat` = credits of law courses inside the programme (highlighted separately).
     credits: { coSo: null, chuyenNganh: null, thucTap: null, khoaLuan: null, luat: null },
     name: "E-Commerce",
-    short: "Từ vận hành sàn thương mại điện tử đến pháp lý giao dịch số — chuẩn bị cho môi trường bán lẻ và giao dịch trực tuyến.",
-    keywords: ["E-commerce", "Vận hành số", "Giao dịch điện tử"],
-    focus: ["Vận hành thương mại điện tử", "Marketing số", "Pháp lý giao dịch điện tử"],
+    short: "From running e-commerce marketplaces to the law of digital transactions — preparing students for online retail and trading.",
+    keywords: ["E-commerce", "Digital operations", "Electronic transactions"],
+    focus: ["E-commerce operations", "Digital marketing", "Electronic transactions law"],
     curriculum: [
-      {title:"Nền tảng thương mại điện tử", desc:"Mô hình TMĐT, hành vi người tiêu dùng số."},
-      {title:"Vận hành & marketing số", desc:"Quản trị sàn TMĐT, digital marketing, logistics chặng cuối."},
-      {title:"Pháp lý giao dịch điện tử", desc:"Hợp đồng điện tử, bảo vệ người tiêu dùng trực tuyến."},
-      {title:"Ứng dụng & dự án", desc:"Dự án vận hành gian hàng/case TMĐT thực tế."},
+      {title:"Foundations of e-commerce", desc:"E-commerce models, digital consumer behaviour."},
+      {title:"Operations & digital marketing", desc:"E-commerce marketplace management, digital marketing, last-mile logistics."},
+      {title:"Electronic transactions law", desc:"Electronic contracts, online consumer protection."},
+      {title:"Applied learning & projects", desc:"Projects running real online stores or e-commerce cases."},
     ],
-    careers: ["Chuyên viên vận hành sàn TMĐT", "Chuyên viên digital marketing", "Chuyên viên pháp lý giao dịch số"],
+    careers: ["E-commerce marketplace operations specialist", "Digital marketing specialist", "Digital transactions legal specialist"],
   },
   {
     slug: "cong-nghe-tai-chinh",
@@ -180,23 +180,23 @@ window.ULAW_PROGRAMS = [
     // `luat` = credits of law courses inside the programme (highlighted separately).
     credits: { coSo: null, chuyenNganh: null, thucTap: null, khoaLuan: null, luat: null },
     name: "Financial Technology",
-    short: "Giao điểm giữa tài chính, công nghệ và pháp lý — chuẩn bị năng lực cho lĩnh vực FinTech đang phát triển nhanh.",
-    keywords: ["FinTech", "Đổi mới tài chính", "Pháp lý công nghệ"],
-    focus: ["Công nghệ trong tài chính", "Đổi mới mô hình FinTech", "Pháp lý & quản trị rủi ro công nghệ tài chính"],
+    short: "Where finance, technology and law meet — building capabilities for the fast-growing FinTech sector.",
+    keywords: ["FinTech", "Financial innovation", "Technology law"],
+    focus: ["Technology in finance", "FinTech model innovation", "FinTech law & risk management"],
     curriculum: [
-      {title:"Nền tảng FinTech", desc:"Tổng quan công nghệ tài chính, thanh toán số."},
-      {title:"Công nghệ & dữ liệu tài chính", desc:"Phân tích dữ liệu tài chính, nền tảng thanh toán."},
-      {title:"Pháp lý FinTech", desc:"Quy định về công nghệ tài chính, an toàn dữ liệu tài chính."},
-      {title:"Ứng dụng & dự án", desc:"Dự án mô phỏng sản phẩm FinTech, thực tập."},
+      {title:"Foundations of FinTech", desc:"Overview of financial technology, digital payments."},
+      {title:"Technology & financial data", desc:"Financial data analytics, payment platforms."},
+      {title:"FinTech law", desc:"Financial technology regulation, financial data security."},
+      {title:"Applied learning & projects", desc:"FinTech product simulation projects, internships."},
     ],
-    careers: ["Chuyên viên sản phẩm FinTech", "Chuyên viên phân tích dữ liệu tài chính", "Chuyên viên tuân thủ công nghệ tài chính"],
+    careers: ["FinTech product specialist", "Financial data analyst", "FinTech compliance specialist"],
   },
 ];
 
 window.ULAW_FAQ_GENERIC = [
-  {q:"Chương trình có được kiểm định chính thức không?", a:"Thông tin đang cập nhật. ULAW sẽ công bố khi có văn bản/kết quả kiểm định chính thức.", status:"pending"},
-  {q:"Học phí và học bổng của ngành này ra sao?", a:"Thông tin đang cập nhật — vui lòng tham khảo cổng tuyển sinh chính thức của Trường khi được công bố.", status:"pending"},
-  {q:"Sinh viên có cơ hội thực tập tại doanh nghiệp không?", a:"Chương trình định hướng có hoạt động trải nghiệm thực tiễn/doanh nghiệp; số lượng và hình thức cụ thể sẽ được cập nhật theo từng khóa.", status:"illustrative"},
+  {q:"Is the programme officially accredited?", a:"Information coming soon. ULAW will announce it once the official accreditation documents or results are available.", status:"pending"},
+  {q:"What are the tuition fees and scholarships for this programme?", a:"Information coming soon — please refer to the University’s official admissions portal once details are announced.", status:"pending"},
+  {q:"Do students have opportunities to intern at companies?", a:"The programme is designed to include practical and industry experience; the specific number and format will be updated for each cohort.", status:"illustrative"},
 ];
 
 // News — all items link to the single sample article until real posts exist.
@@ -206,33 +206,33 @@ window.ULAW_NEWS = [
   {
     url: "tin-tuc/mau-bai-viet.html",
     category: "Programmes",
-    title: "[Minh họa] Khoa Quản trị định hướng phát triển chương trình theo hướng liên ngành Quản trị – Luật – Công nghệ",
-    excerpt: "Bài viết minh họa mô tả định hướng phát triển chương trình đào tạo; nội dung sẽ được thay bằng tin chính thức khi có nguồn xác thực.",
-    image: "hero-programs", alt: "Ảnh minh họa: toà nhà giảng đường và sinh viên",
+    title: "[Illustrative] Faculty of Management shapes its programmes around an interdisciplinary Management – Law – Technology approach",
+    excerpt: "An illustrative article describing the direction of curriculum development; the content will be replaced with official news once a verified source is available.",
+    image: "hero-programs", alt: "Illustration: a lecture building and students",
     date: null, status: "illustrative", sourceUrl: null, updatedAt: null,
   },
   {
     url: "tin-tuc/mau-bai-viet.html",
     category: "Students",
-    title: "[Minh họa] Hoạt động trải nghiệm thực tế dành cho sinh viên năm cuối",
-    excerpt: "Nội dung minh họa về hình thức tổ chức hoạt động kết nối sinh viên với môi trường doanh nghiệp.",
-    image: "study_group__navy", alt: "Ảnh minh họa: nhóm sinh viên thảo luận",
+    title: "[Illustrative] Real-world experience activities for final-year students",
+    excerpt: "Illustrative content on how activities connecting students with the business world are organised.",
+    image: "study_group__navy", alt: "Illustration: a group of students in discussion",
     date: null, status: "illustrative", sourceUrl: null, updatedAt: null,
   },
   {
     url: "tin-tuc/mau-bai-viet.html",
     category: "Research",
-    title: "[Minh họa] Hướng nghiên cứu liên ngành giữa quản trị và pháp lý kinh doanh",
-    excerpt: "Bài viết minh họa giới thiệu cách trình bày một tin nghiên cứu; số liệu và tên tác giả sẽ được cập nhật khi có dữ liệu thật.",
-    image: "research_books__purple", alt: "Ảnh minh họa: sách và tài liệu nghiên cứu",
+    title: "[Illustrative] Interdisciplinary research linking management and business law",
+    excerpt: "An illustrative article showing how a research news item is presented; figures and author names will be updated once real data is available.",
+    image: "research_books__purple", alt: "Illustration: books and research materials",
     date: null, status: "illustrative", sourceUrl: null, updatedAt: null,
   },
   {
     url: "tin-tuc/mau-bai-viet.html",
-    category: "Doanh nghiệp",
-    title: "[Minh họa] Mô hình hợp tác đào tạo giữa Khoa và doanh nghiệp",
-    excerpt: "Minh họa cách trình bày tin hợp tác doanh nghiệp trên trang chủ và trang tin tức.",
-    image: "handshake_business__purple", alt: "Ảnh minh họa: hai người bắt tay hợp tác",
+    category: "Industry",
+    title: "[Illustrative] A model for education partnerships between the Faculty and industry",
+    excerpt: "Illustrates how industry partnership news is presented on the home page and the news page.",
+    image: "handshake_business__purple", alt: "Illustration: two people shaking hands in partnership",
     date: null, status: "illustrative", sourceUrl: null, updatedAt: null,
   },
 ];
@@ -257,14 +257,14 @@ window.ULAW_DUTY = [];
 // `sourceUrl`, and set status "verified". `value: null` renders "Đang cập nhật"
 // — never put an estimated number here.
 window.ULAW_STATS = [
-  { value: null, suffix: "+", label: "Sinh viên đã nhập học", note: "Tổng số sinh viên qua các khóa", tone: "#2D55A8", status: "pending", sourceUrl: null },
-  { value: null, suffix: "",  label: "Khóa đã tuyển sinh", note: "Tính đến năm học hiện tại", tone: "#169C83", status: "pending", sourceUrl: null },
-  { value: null, suffix: "+", label: "Cử nhân đã tốt nghiệp", note: "Cựu sinh viên Khoa Quản trị", tone: "#9B57A0", status: "pending", sourceUrl: null },
-  { value: null, suffix: "+", label: "Sinh viên đang theo học", note: "Năm học hiện tại", tone: "#E08A2E", status: "pending", sourceUrl: null },
-  { value: null, suffix: "+", label: "Giảng viên & chuyên gia", note: "Cơ hữu và thỉnh giảng", tone: "#1C5E97", status: "pending", sourceUrl: null },
-  { value: null, suffix: "+", label: "Đối tác doanh nghiệp", note: "Thực tập, tuyển dụng, học bổng", tone: "#0E9A9A", status: "pending", sourceUrl: null },
-  { value: null, suffix: "",  label: "Năm hình thành & phát triển", note: "Kể từ khi thành lập Khoa", tone: "#9B57A0", status: "pending", sourceUrl: null },
-  { value: 7,    suffix: "",  label: "Ngành đào tạo đại học", note: "Cùng 1 chương trình thạc sĩ", tone: "#2D55A8", status: "verified" }
+  { value: null, suffix: "+", label: "Students enrolled", note: "Total students across all cohorts", tone: "#2D55A8", status: "pending", sourceUrl: null },
+  { value: null, suffix: "",  label: "Cohorts admitted", note: "As of the current academic year", tone: "#169C83", status: "pending", sourceUrl: null },
+  { value: null, suffix: "+", label: "Bachelor’s graduates", note: "Faculty of Management alumni", tone: "#9B57A0", status: "pending", sourceUrl: null },
+  { value: null, suffix: "+", label: "Current students", note: "This academic year", tone: "#E08A2E", status: "pending", sourceUrl: null },
+  { value: null, suffix: "+", label: "Lecturers & experts", note: "Full-time and visiting", tone: "#1C5E97", status: "pending", sourceUrl: null },
+  { value: null, suffix: "+", label: "Industry partners", note: "Internships, recruitment, scholarships", tone: "#0E9A9A", status: "pending", sourceUrl: null },
+  { value: null, suffix: "",  label: "Years of growth & development", note: "Since the Faculty was founded", tone: "#9B57A0", status: "pending", sourceUrl: null },
+  { value: 7,    suffix: "",  label: "Undergraduate programmes", note: "Plus 1 Master’s programme", tone: "#2D55A8", status: "verified" }
 ];
 
 // Research — all empty until Khoa supplies verified records (never invent entries).
@@ -282,25 +282,25 @@ window.ULAW_CASES = [];
 // Ban Chủ nhiệm Khoa — fill with verified, consented details. null = "Đang cập nhật".
 // photo: image path (e.g. "assets/images/truong-khoa.jpg"); intro: short introduction paragraph.
 window.ULAW_LEADERSHIP = [
-  { role: "Trưởng Khoa",      name: null, degree: null, field: null, email: null, photo: null, intro: null },
-  { role: "Phó Trưởng Khoa",  name: null, degree: null, field: null, email: null, photo: null, intro: null },
-  { role: "Phó Trưởng Khoa",  name: null, degree: null, field: null, email: null, photo: null, intro: null }
+  { role: "Dean",      name: null, degree: null, field: null, email: null, photo: null, intro: null },
+  { role: "Vice Dean",  name: null, degree: null, field: null, email: null, photo: null, intro: null },
+  { role: "Vice Dean",  name: null, degree: null, field: null, email: null, photo: null, intro: null }
 ];
 
 // Bộ môn (departments) — names per the site's illustrative structure; confirm with the official org chart.
 // head / lecturers: { name, degree, email, photo (image path), cv (URL or path to CV/profile) }.
 // Lecturers render only when listed; a CV link appears only when `cv` is set.
 window.ULAW_DEPARTMENTS = [  // A→Z
-  { id: "cong-nghe-quan-ly", name: "Bộ môn Công nghệ quản lý", short: "Công nghệ quản lý", tone: "#0E9A9A", status: "pending", intro: null,
+  { id: "cong-nghe-quan-ly", name: "Department of Management Technology", short: "Management Technology", tone: "#0E9A9A", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] },
-  { id: "kinh-doanh", name: "Bộ môn Kinh doanh", short: "Kinh doanh", tone: "#2D55A8", status: "pending", intro: null,
+  { id: "kinh-doanh", name: "Department of Business", short: "Kinh doanh", tone: "#2D55A8", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] },
-  { id: "kinh-te-doi-ngoai", name: "Bộ môn Kinh tế đối ngoại", short: "Kinh tế đối ngoại", tone: "#9B57A0", status: "pending", intro: null,
+  { id: "kinh-te-doi-ngoai", name: "Department of International Economic Relations", short: "International Economic Relations", tone: "#9B57A0", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] },
-  { id: "quan-tri-tai-chinh-ke-toan", name: "Bộ môn Quản trị tài chính kế toán", short: "Quản trị tài chính kế toán", tone: "#169C83", status: "pending", intro: null,
+  { id: "quan-tri-tai-chinh-ke-toan", name: "Department of Financial Management and Accounting", short: "Financial Management and Accounting", tone: "#169C83", status: "pending", intro: null,
     head: { name: null, degree: null, email: null, photo: null, cv: null },
     lecturers: [] }
 ];
@@ -326,23 +326,23 @@ window.ULAW_THS_POSTS = [];
 // Biểu mẫu grouped for bieu-mau/index.html. `group` must be one of ULAW_FORM_GROUPS[].key.
 // File names are generic placeholders; attach `file` only when the Faculty supplies the official form.
 window.ULAW_FORM_GROUPS = [
-  { key:"hoc-tap",   label:"Biểu mẫu học tập",          desc:"Học vụ, đăng ký học phần, bảo lưu, nghiên cứu khoa học sinh viên." },
-  { key:"tot-nghiep",label:"Biểu mẫu tốt nghiệp",       desc:"Khóa luận, xét và công nhận tốt nghiệp." },
-  { key:"thuc-tap",  label:"Biểu mẫu thực tập",         desc:"Giới thiệu thực tập, báo cáo và đánh giá thực tập." },
-  { key:"hoc-phi",   label:"Biểu mẫu học phí & hỗ trợ", desc:"Học phí, miễn giảm, học bổng và hỗ trợ sinh viên." }
+  { key:"hoc-tap",   label:"Academic forms",          desc:"Academic affairs, module registration, deferral of studies and student research." },
+  { key:"tot-nghiep",label:"Graduation forms",       desc:"Theses, graduation review and confirmation." },
+  { key:"thuc-tap",  label:"Internship forms",         desc:"Internship referrals, reports and evaluations." },
+  { key:"hoc-phi",   label:"Tuition & support forms", desc:"Tuition fees, fee exemptions and reductions, scholarships and student support." }
 ];
 window.ULAW_FORMS = [
-  { group:"hoc-tap",    name:"Đơn xin bảo lưu kết quả học tập", status:"pending", file:null },
-  { group:"hoc-tap",    name:"Đơn đăng ký học lại/học cải thiện", status:"pending", file:null },
-  { group:"hoc-tap",    name:"Đề xuất đề tài nghiên cứu khoa học sinh viên", status:"pending", file:null },
-  { group:"hoc-tap",    name:"Mẫu đăng ký tham gia hội thảo khoa học", status:"pending", file:null },
-  { group:"tot-nghiep", name:"Đơn đăng ký khóa luận tốt nghiệp", status:"pending", file:null },
-  { group:"tot-nghiep", name:"Phiếu nhận xét giảng viên hướng dẫn (mẫu)", status:"pending", file:null },
-  { group:"thuc-tap",   name:"Giấy giới thiệu thực tập", status:"pending", file:null },
-  { group:"thuc-tap",   name:"Mẫu báo cáo thực tập", status:"pending", file:null },
-  { group:"thuc-tap",   name:"Phiếu đánh giá của đơn vị thực tập", status:"pending", file:null },
-  { group:"hoc-phi",    name:"Đơn đề nghị hỗ trợ học phí", status:"pending", file:null },
-  { group:"hoc-phi",    name:"Hồ sơ đăng ký học bổng khuyến khích học tập", status:"pending", file:null },
+  { group:"hoc-tap",    name:"Application to defer studies", status:"pending", file:null },
+  { group:"hoc-tap",    name:"Registration for module retakes/grade improvement", status:"pending", file:null },
+  { group:"hoc-tap",    name:"Student research project proposal", status:"pending", file:null },
+  { group:"hoc-tap",    name:"Academic conference registration form", status:"pending", file:null },
+  { group:"tot-nghiep", name:"Graduation thesis registration form", status:"pending", file:null },
+  { group:"tot-nghiep", name:"Supervisor’s evaluation form (template)", status:"pending", file:null },
+  { group:"thuc-tap",   name:"Internship referral letter", status:"pending", file:null },
+  { group:"thuc-tap",   name:"Internship report template", status:"pending", file:null },
+  { group:"thuc-tap",   name:"Host organisation evaluation form", status:"pending", file:null },
+  { group:"hoc-phi",    name:"Tuition support application", status:"pending", file:null },
+  { group:"hoc-phi",    name:"Merit scholarship application", status:"pending", file:null },
 ];
 
 // Học liệu catalogue (illustrative). Only the catalogue entry is public.
@@ -355,34 +355,34 @@ window.ULAW_FORMS = [
 // this site never shows a password field. null = not connected yet (buttons show "Đang chờ kết nối").
 window.ULAW_SSO_URL = null;
 window.ULAW_RESOURCE_TYPES = [
-  { key:"ctdt", label:"Chương trình đào tạo", desc:"Khung chương trình, chuẩn đầu ra, cấu trúc học phần theo khóa." },
-  { key:"de-cuong", label:"Đề cương học phần", desc:"Mục tiêu, nội dung, phương pháp đánh giá từng học phần." },
-  { key:"tai-lieu", label:"Tài liệu học phần", desc:"Bài giảng, tài liệu đọc, bài tập — dành cho sinh viên đang học." },
+  { key:"ctdt", label:"Curriculum", desc:"Programme framework, learning outcomes and module structure by cohort." },
+  { key:"de-cuong", label:"Module syllabi", desc:"Objectives, content and assessment methods for each module." },
+  { key:"tai-lieu", label:"Module materials", desc:"Lectures, readings and exercises — for current students." },
 ];
 window.ULAW_RESOURCES = (function(){
   var list = [];
   window.ULAW_PROGRAMS.forEach(function(p){
     list.push({
       type:"ctdt", program:p.slug, programName:p.name,
-      title:"Chương trình đào tạo ngành " + p.name,
-      course:null, cohort:"Khóa tuyển sinh (minh họa)", semester:null, version:"Phiên bản minh họa",
-      access:"public", file:null, source:"Khoa Quản trị (chờ xác thực)",
+      title:"Curriculum for " + p.name,
+      course:null, cohort:"Intake cohort (illustrative)", semester:null, version:"Illustrative version",
+      access:"public", file:null, source:"Faculty of Management (pending verification)",
       status:"illustrative", sourceUrl:null, updatedAt:null,
     });
     p.curriculum.slice(0, 2).forEach(function(c, i){
       list.push({
         type:"de-cuong", program:p.slug, programName:p.name,
-        title:"Đề cương học phần: " + c.title,
-        course:c.title, cohort:"Khóa tuyển sinh (minh họa)", semester:"Học kỳ " + (i + 1), version:"Phiên bản minh họa",
-        access:"public", file:null, source:"Bộ môn phụ trách (chờ xác thực)",
+        title:"Syllabus: " + c.title,
+        course:c.title, cohort:"Intake cohort (illustrative)", semester:"Semester " + (i + 1), version:"Illustrative version",
+        access:"public", file:null, source:"Responsible department (pending verification)",
         status:"illustrative", sourceUrl:null, updatedAt:null,
       });
     });
     list.push({
       type:"tai-lieu", program:p.slug, programName:p.name,
-      title:"Tài liệu học phần: " + p.curriculum[0].title,
-      course:p.curriculum[0].title, cohort:"Khóa tuyển sinh (minh họa)", semester:"Học kỳ 1", version:"Phiên bản minh họa",
-      access:"student", file:null, source:"Giảng viên phụ trách (chờ xác thực)",
+      title:"Module materials: " + p.curriculum[0].title,
+      course:p.curriculum[0].title, cohort:"Intake cohort (illustrative)", semester:"Semester 1", version:"Illustrative version",
+      access:"student", file:null, source:"Lecturer in charge (pending verification)",
       status:"illustrative", sourceUrl:null, updatedAt:null,
     });
   });
@@ -399,13 +399,13 @@ window.ULAW_RESOURCES = (function(){
 // DEMO (to show the idea): status "illustrative" items may use an animated scenes.js ULAW_HL_SCENES key (hl-event/-notice/-activity/-admissions) instead of a photo.
 // Delete these 4 items when real photos arrive; an empty list hides the slider.
 window.ULAW_HIGHLIGHTS = [
-  { order: 1, category: "Sự kiện", title: "[Demo] Ảnh sự kiện nổi bật của Khoa", date: null, image: "hl-event", alt: "Ảnh demo động: sân khấu sự kiện với đèn và pháo giấy", url: "tin-tuc/index.html#su-kien", ctaLabel: "Xem lịch sự kiện",
+  { order: 1, category: "Events", title: "[Demo] Featured photo of a Faculty event", date: null, image: "hl-event", alt: "Animated demo image: an event stage with lights and confetti", url: "tin-tuc/index.html#su-kien", ctaLabel: "View the event calendar",
     status: "illustrative", sourceUrl: null, updatedAt: null, startAt: null, endAt: null },
-  { order: 2, category: "Thông báo", title: "[Demo] Thông báo quan trọng dành cho người học", date: null, image: "hl-notice", alt: "Ảnh demo động: loa và chuông thông báo", url: "sinh-vien/index.html", ctaLabel: "Xem thông báo",
+  { order: 2, category: "Notices", title: "[Demo] Important notices for students", date: null, image: "hl-notice", alt: "Animated demo image: a megaphone and a notification bell", url: "sinh-vien/index.html", ctaLabel: "View notices",
     status: "illustrative", sourceUrl: null, updatedAt: null, startAt: null, endAt: null },
-  { order: 3, category: "Hoạt động", title: "[Demo] Hoạt động học thuật và phong trào tiêu biểu", date: null, image: "hl-activity", alt: "Ảnh demo động: biểu đồ tăng trưởng và sinh viên", url: "tin-tuc/index.html#tin-tuc", ctaLabel: "Xem tin tức",
+  { order: 3, category: "Activities", title: "[Demo] Notable academic and extracurricular activities", date: null, image: "hl-activity", alt: "Animated demo image: a growth chart and students", url: "tin-tuc/index.html#tin-tuc", ctaLabel: "View news",
     status: "illustrative", sourceUrl: null, updatedAt: null, startAt: null, endAt: null },
-  { order: 4, category: "Tuyển sinh", title: "[Demo] Thông tin tuyển sinh và tư vấn ngành học", date: null, image: "hl-admissions", alt: "Ảnh demo động: mũ tốt nghiệp trên bậc thang", url: "dao-tao/index.html", ctaLabel: "Khám phá ngành học",
+  { order: 4, category: "Admissions", title: "[Demo] Admissions information and programme advice", date: null, image: "hl-admissions", alt: "Animated demo image: a graduation cap on a staircase", url: "dao-tao/index.html", ctaLabel: "Explore programmes",
     status: "illustrative", sourceUrl: null, updatedAt: null, startAt: null, endAt: null },
 ];
 
@@ -414,27 +414,27 @@ window.ULAW_HIGHLIGHTS = [
 // site root), status, sourceUrl, startAt/endAt (ISO or null = always), order.
 window.ULAW_HERO_SLIDES = [
   {
-    order: 1, eyebrow: "Khoa Quản trị · 7 ngành đào tạo",
-    title: "Quản trị, pháp lý và công nghệ trong một hành trình học",
-    summary: "Bảy ngành đại học kết hợp năng lực quản trị, hiểu biết pháp lý và công nghệ. Tìm ngành phù hợp với định hướng của bạn.",
-    image: "hero-programs", alt: "Ảnh minh họa: toà giảng đường cùng biểu tượng Kinh doanh, Pháp lý và Công nghệ",
-    ctaLabel: "Xem 7 ngành đào tạo", url: "dao-tao/index.html",
+    order: 1, eyebrow: "Faculty of Management · 7 programmes",
+    title: "Management, law and technology in one learning journey",
+    summary: "Seven undergraduate programmes that combine management skills, legal understanding and technology. Find the programme that suits your goals.",
+    image: "hero-programs", alt: "Illustration: a lecture building with Business, Law and Technology icons",
+    ctaLabel: "View the 7 programmes", url: "dao-tao/index.html",
     status: "illustrative", sourceUrl: null, startAt: null, endAt: null,
   },
   {
-    order: 2, eyebrow: "Trải nghiệm học tập · Học liệu",
-    title: "Học liệu tập trung, dễ tìm theo ngành và học phần",
-    summary: "Danh mục chương trình đào tạo, đề cương và tài liệu học phần được sắp xếp theo ngành, khóa và học kỳ.",
-    image: "hero-learning", alt: "Ảnh minh họa: sinh viên học tập bên máy tính và kệ sách",
-    ctaLabel: "Mở thư viện Học liệu", url: "hoc-lieu/index.html",
+    order: 2, eyebrow: "Learning experience · Learning resources",
+    title: "Learning resources in one place, easy to find by programme and module",
+    summary: "A catalogue of curricula, syllabi and module materials, organised by programme, cohort and semester.",
+    image: "hero-learning", alt: "Illustration: students studying at a computer beside bookshelves",
+    ctaLabel: "Open the Learning Resources Library", url: "hoc-lieu/index.html",
     status: "illustrative", sourceUrl: null, startAt: null, endAt: null,
   },
   {
-    order: 3, eyebrow: "Tuyển sinh",
-    title: "Thông tin tuyển sinh sẽ được công bố theo đề án chính thức",
-    summary: "Phương thức, học phí và học bổng được công bố tại trang tư vấn tuyển sinh chính thức của Trường.",
-    image: "hero-admissions", alt: "Ảnh minh họa: mũ tốt nghiệp, lịch và các bậc thang hướng lên",
-    ctaLabel: "Tư vấn tuyển sinh", url: window.ULAW_ADMISSIONS_URL,
+    order: 3, eyebrow: "Admissions",
+    title: "Admissions information will be published in line with the official admissions scheme",
+    summary: "Admission methods, tuition fees and scholarships are published on the University’s official admissions advice site.",
+    image: "hero-admissions", alt: "Illustration: a graduation cap, a calendar and steps leading upwards",
+    ctaLabel: "Admissions advice", url: window.ULAW_ADMISSIONS_URL,
     status: "pending", sourceUrl: null, startAt: null, endAt: null,
   },
 ];
@@ -452,17 +452,17 @@ window.ULAW_HERO_SLIDES = [
 window.ULAW_STUDENT_POSTS = (function(){
   function day(offset){ var d = new Date(); d.setDate(d.getDate() + offset); return d.toISOString().slice(0, 10); }
   return [
-    {cat:"hoc-tap", type:"Thông báo học vụ", pinned:true, date:day(-20), org:"Phòng Đào tạo",
-     title:"[Minh họa] Quy định đăng ký học phần — thông báo quan trọng được ghim",
-     excerpt:"Ví dụ nhãn GHIM: thông báo quan trọng luôn nằm đầu danh sách, bất kể ngày đăng.",
+    {cat:"hoc-tap", type:"Academic notices", pinned:true, date:day(-20), org:"Training Office",
+     title:"[Illustrative] Module registration rules — pinned important notice",
+     excerpt:"Example of the PINNED label: important notices always stay at the top of the list, whatever their posting date.",
      status:"illustrative", sourceUrl:null, updatedAt:null},
-    {cat:"hoc-tap", type:"Lịch thi", date:day(-3), org:"Khoa Quản trị",
-     title:"[Minh họa] Lịch thi giữa kỳ vừa được đăng",
-     excerpt:"Ví dụ nhãn MỚI: tự hiện với thông báo đăng trong 14 ngày gần nhất.",
+    {cat:"hoc-tap", type:"Exam schedule", date:day(-3), org:"Faculty of Management",
+     title:"[Illustrative] Mid-term exam schedule just posted",
+     excerpt:"Example of the NEW label: appears automatically on notices posted in the last 14 days.",
      status:"illustrative", sourceUrl:null, updatedAt:null},
-    {cat:"hoc-tap", type:"Khóa luận", date:day(-30), deadline:day(12), org:"Khoa Quản trị",
-     title:"[Minh họa] Đăng ký đề tài khóa luận tốt nghiệp",
-     excerpt:"Ví dụ nhãn HẠN: hiển thị hạn chót để sinh viên không bỏ lỡ.",
+    {cat:"hoc-tap", type:"Thesis", date:day(-30), deadline:day(12), org:"Faculty of Management",
+     title:"[Illustrative] Graduation thesis topic registration",
+     excerpt:"Example of the DEADLINE label: shows the deadline so students don’t miss it.",
      status:"illustrative", sourceUrl:null, updatedAt:null}
   ];
 })();
@@ -507,34 +507,34 @@ window.ULAW_SEARCH_INDEX = (function(){
   window.ULAW_published(window.ULAW_PROGRAMS).forEach(function(p){
     idx.push({kind:"programs", kindLabel:"Programme", title:p.name, desc:p.short, url:"dao-tao/"+p.slug+".html"});
   });
-  idx.push({kind:"programs", kindLabel:"Postgraduate", title:"Master of Business Administration", desc:"Chương trình đào tạo sau đại học — thông tin đang cập nhật.", url:"dao-tao/thac-si-quan-tri-kinh-doanh.html"});
+  idx.push({kind:"programs", kindLabel:"Postgraduate", title:"Master of Business Administration", desc:"Postgraduate programme — information coming soon.", url:"dao-tao/thac-si-quan-tri-kinh-doanh.html"});
   [
-    ["Giới thiệu Khoa Quản trị", "Sứ mạng, lịch sử, cơ cấu tổ chức và liên hệ.", "gioi-thieu/index.html"],
-    ["Giảng viên & đội ngũ", "Ban Chủ nhiệm, bộ môn, giảng viên — hồ sơ đang cập nhật.", "doi-ngu/index.html"],
-    ["Research", "Lĩnh vực nghiên cứu, công bố, đề tài, hội thảo, case study.", "nghien-cuu/index.html"],
-    ["Students", "Học tập, học bổng, thực tập, tuyển dụng, cuộc sống sinh viên.", "sinh-vien/index.html"],
-    ["Academics", "Thông báo học vụ, lịch học, lịch thi, khóa luận tốt nghiệp, nghiên cứu khoa học sinh viên.", "sinh-vien/hoc-tap.html"],
-    ["Scholarships", "Học bổng khuyến khích, học bổng doanh nghiệp, học bổng trao đổi và quy trình nộp hồ sơ.", "sinh-vien/hoc-bong.html"],
-    ["Internships & Careers", "Cơ hội thực tập, tuyển dụng, Career Talk và định hướng nghề nghiệp.", "sinh-vien/thuc-tap-tuyen-dung.html"],
-    ["Student life", "Hoạt động sinh viên, câu lạc bộ, cuộc thi, hội thảo và hình ảnh.", "sinh-vien/cuoc-song.html"],
-    ["Tư vấn tuyển sinh đại học (ULAW)", "Trang tư vấn tuyển sinh chính thức của Trường Đại học Luật TP. Hồ Chí Minh.", window.ULAW_ADMISSIONS_URL],
-    ["Tuyển sinh sau đại học (ULAW)", "Thông tin tuyển sinh thạc sĩ trên cổng tuyển sinh chính thức của Trường.", window.ULAW_ADMISSIONS_POSTGRAD_URL],
-    ["Partners & Industry", "Hợp tác đào tạo, thực tập, tuyển dụng, nghiên cứu.", "doanh-nghiep/index.html"],
-    ["Learning resources", "Chương trình đào tạo, đề cương, tài liệu học phần.", "hoc-lieu/index.html"],
-    ["Event calendar", "Lịch sự kiện của Khoa — xem theo tháng trên trang Tin tức & Sự kiện.", "tin-tuc/index.html#su-kien"],
-    ["Alumni — Mạng lưới cựu sinh viên", "Mạng lưới Alumni và câu chuyện thành công của cựu sinh viên Khoa Quản trị.", "alumni/index.html"],
-    ["Forms", "Biểu mẫu hành chính cho sinh viên.", "bieu-mau/index.html"],
+    ["About the Faculty of Management", "Mission, history, organisational structure and contact details.", "gioi-thieu/index.html"],
+    ["Lecturers & staff", "Faculty Leadership, departments and lecturers — profiles being updated.", "doi-ngu/index.html"],
+    ["Research", "Research areas, publications, research projects, conferences and case studies.", "nghien-cuu/index.html"],
+    ["Students", "Academics, scholarships, internships, recruitment and student life.", "sinh-vien/index.html"],
+    ["Academics", "Academic notices, class timetables, exam schedules, graduation theses and student research.", "sinh-vien/hoc-tap.html"],
+    ["Scholarships", "Merit scholarships, corporate scholarships, exchange scholarships and the application process.", "sinh-vien/hoc-bong.html"],
+    ["Internships & Careers", "Internship and job opportunities, Career Talk and career guidance.", "sinh-vien/thuc-tap-tuyen-dung.html"],
+    ["Student life", "Student activities, clubs, competitions, seminars and photos.", "sinh-vien/cuoc-song.html"],
+    ["Undergraduate admissions advice (ULAW)", "The official admissions advice site of Ho Chi Minh City University of Law.", window.ULAW_ADMISSIONS_URL],
+    ["Postgraduate admissions (ULAW)", "Master’s admissions information on the University’s official admissions portal.", window.ULAW_ADMISSIONS_POSTGRAD_URL],
+    ["Partners & Industry", "Collaboration on training, internships, recruitment and research.", "doanh-nghiep/index.html"],
+    ["Learning resources", "Curricula, syllabi and module materials.", "hoc-lieu/index.html"],
+    ["Event calendar", "The Faculty’s event calendar — view it by month on the News & Events page.", "tin-tuc/index.html#su-kien"],
+    ["Alumni — Alumni network", "The Alumni network and success stories of Faculty of Management alumni.", "alumni/index.html"],
+    ["Forms", "Administrative forms for students.", "bieu-mau/index.html"],
   ].forEach(function(r){ idx.push({kind:"pages", kindLabel:"Page", title:r[0], desc:r[1], url:r[2]}); });
   window.ULAW_published(window.ULAW_NEWS).forEach(function(n){
     idx.push({kind:"news", kindLabel:"News", title:n.title, desc:n.excerpt, url:n.url});
   });
   window.ULAW_published(window.ULAW_RESOURCES).forEach(function(r){
     if(r.access !== "public") return;
-    idx.push({kind:"resources", kindLabel:"Learning resources", title:r.title, desc:r.programName + " · Công khai", url:"hoc-lieu/index.html?q=" + encodeURIComponent(r.title)});
+    idx.push({kind:"resources", kindLabel:"Learning resources", title:r.title, desc:r.programName + " · Public", url:"hoc-lieu/index.html?q=" + encodeURIComponent(r.title)});
   });
   window.ULAW_published(window.ULAW_FORMS).forEach(function(f){
     var g = (window.ULAW_FORM_GROUPS.filter(function(x){ return x.key === f.group; })[0] || {label:f.group});
-    idx.push({kind:"documents", kindLabel:"Forms", title:f.name, desc:g.label + " · Tệp đang cập nhật", url:"bieu-mau/index.html#" + f.group});
+    idx.push({kind:"documents", kindLabel:"Forms", title:f.name, desc:g.label + " · File being updated", url:"bieu-mau/index.html#" + f.group});
   });
   return idx;
 })();

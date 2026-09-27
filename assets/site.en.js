@@ -53,9 +53,9 @@
     return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
   }
   function statusBadge(status){
-    if(status === 'illustrative') return '<span class="badge badge-illustrative">Nội dung minh họa</span>';
-    if(status === 'pending') return '<span class="badge badge-pending">Đang cập nhật</span>';
-    if(status === 'verified') return '<span class="badge badge-verified">Đã xác thực</span>';
+    if(status === 'illustrative') return '<span class="badge badge-illustrative">Illustrative content</span>';
+    if(status === 'pending') return '<span class="badge badge-pending">Being updated</span>';
+    if(status === 'verified') return '<span class="badge badge-verified">Verified</span>';
     return '';
   }
   // Scene key (scenes.js) → inline illustration with a visible label;
@@ -70,7 +70,7 @@
     if(image && window.ULAW_HERO_SCENES && window.ULAW_HERO_SCENES[image]) svg = window.ULAW_heroSvg(image);
     else if(image && window.ULAW_SCENES && window.ULAW_SCENES[image]) svg = window.ULAW_SCENES[image];
     return '<span role="img" aria-label="' + esc(alt) + '">' + svg + '</span>' +
-      (opts.noLabel ? '' : '<span class="illus-label" aria-hidden="true">Ảnh minh họa</span>');
+      (opts.noLabel ? '' : '<span class="illus-label" aria-hidden="true">Illustration</span>');
   }
   function emptyState(o){
     var actions = (o.actions || []).map(function(a){
@@ -92,14 +92,14 @@
   function eventRow(e){
     var d = new Date(e.startAt);
     var reg = e.registerUrl
-      ? ' · <a href="' + esc(url(e.registerUrl)) + '">Đăng ký tham dự</a>'
+      ? ' · <a href="' + esc(url(e.registerUrl)) + '">Register</a>'
       : '';
     var title = e.url ? '<a href="' + esc(url(e.url)) + '">' + esc(e.title) + '</a>' : esc(e.title);
     return '<li class="event-row">' +
       '<div class="event-date" aria-hidden="true"><span class="d">' + pad(d.getDate()) + '</span><span class="m">' + MONTHS[d.getMonth()] + '</span></div>' +
       '<div><h4>' + title + '</h4>' +
       '<p class="event-info"><span class="visually-hidden">' + 'Date ' + fmtDate(d) + ', </span>' +
-      pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' · ' + esc(e.place || e.mode || 'Địa điểm đang cập nhật') + reg + '</p></div></li>';
+      pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' · ' + esc(e.place || e.mode || 'Venue to be confirmed') + reg + '</p></div></li>';
   }
   function newsDate(n){ return n.date ? fmtDate(n.date) : 'Date: not yet verified'; }
 
@@ -130,25 +130,25 @@
     // Photos come from p.learningPhotos ([{image, alt}] — image path or scene key); illustrations until then.
     function learningCollage(p){
       var slots = [
-        {cls:'lc-arch',    label:'Giảng dạy trên lớp',        tone:'#2D55A8', scene:'study_group__navy'},
+        {cls:'lc-arch',    label:'Classroom teaching',        tone:'#2D55A8', scene:'study_group__navy'},
         {cls:'lc-polaroid',label:'Case study',                 tone:'#E08A2E', scene:'research_books__purple'},
-        {cls:'lc-circle',  label:'Dự án ứng dụng',             tone:'#169C83', scene:'laptop_tech__green'},
-        {cls:'lc-tall',    label:'Trải nghiệm doanh nghiệp',   tone:'#9B57A0', scene:'handshake_business__purple'}
+        {cls:'lc-circle',  label:'Applied projects',             tone:'#169C83', scene:'laptop_tech__green'},
+        {cls:'lc-tall',    label:'Industry experience',   tone:'#9B57A0', scene:'handshake_business__purple'}
       ];
       var photos = p.learningPhotos || [];
       var frames = slots.map(function(sl, i){
         var ph = photos[i] || {};
         return '<figure class="lc-frame ' + sl.cls + '" style="--tone:' + sl.tone + '">' +
-          '<div class="lc-img">' + media(ph.image || sl.scene, ph.alt || ('Ảnh minh họa: ' + sl.label.toLowerCase()), {w:800, h:800}) + '</div>' +
+          '<div class="lc-img">' + media(ph.image || sl.scene, ph.alt || ('Illustration: ' + sl.label.toLowerCase()), {w:800, h:800}) + '</div>' +
           '<figcaption><span class="lc-num">0' + (i + 1) + '</span>' + esc(sl.label) + '</figcaption></figure>';
       }).join('');
       var methods = slots.map(function(sl){ return '<li style="--tone:' + sl.tone + '">' + esc(sl.label) + '</li>'; }).join('');
       return '<section class="section lc-sec" id="trai-nghiem"><span class="lc-word" aria-hidden="true">Learn by doing</span><div class="container lc-layout">' +
-        '<div class="lc-copy"><span class="eyebrow">Phương pháp học</span>' +
-          '<h2>Học từ lớp học đến <span>thực tiễn</span></h2>' +
-          '<p>Kết hợp giảng dạy trên lớp, case study, dự án ứng dụng và trải nghiệm cùng doanh nghiệp. Hình thức cụ thể của từng khóa được cập nhật theo kế hoạch đào tạo chính thức.</p>' +
+        '<div class="lc-copy"><span class="eyebrow">Learning approach</span>' +
+          '<h2>Learning from the classroom to <span>practice</span></h2>' +
+          '<p>Combines classroom teaching, case studies, applied projects and hands-on experience with businesses. The specific format for each cohort is updated in line with the official training plan.</p>' +
           '<ul class="lc-methods">' + methods + '</ul>' +
-          '<a class="link-arrow" href="' + esc(url('doanh-nghiep/index.html')) + '">Xem hoạt động kết nối doanh nghiệp →</a></div>' +
+          '<a class="link-arrow" href="' + esc(url('doanh-nghiep/index.html')) + '">View industry engagement activities →</a></div>' +
         '<div class="lc-collage">' + frames + '<span class="lc-tape lc-tape-1" aria-hidden="true"></span><span class="lc-tape lc-tape-2" aria-hidden="true"></span>' +
           '<span class="lc-spark" aria-hidden="true">✦</span></div>' +
       '</div></section>';
@@ -158,43 +158,43 @@
     function creditStructure(p){
       var cr = p.credits || {}, cur = p.curriculum || [];
       var blocks = [
-        {key:'coSo', label:'Khối kiến thức cơ sở', tone:'#2D55A8', desc:(cur[0] || {}).desc || 'Kiến thức nền tảng về quản trị, kinh tế và pháp luật.'},
-        {key:'chuyenNganh', label:'Khối kiến thức chuyên ngành', tone:'#9B57A0', desc:[(cur[1] || {}).desc, (cur[2] || {}).desc].filter(Boolean).join(' ') || 'Học phần chuyên sâu của ngành.'},
-        {key:'thucTap', label:'Thực tập', tone:'#169C83', desc:'Trải nghiệm thực tế tại doanh nghiệp, tổ chức theo kế hoạch đào tạo.'},
-        {key:'khoaLuan', label:'Khóa luận tốt nghiệp', tone:'#E08A2E', desc:'Công trình tổng hợp kiến thức, hoặc học phần thay thế theo quy định.'}
+        {key:'coSo', label:'Foundation knowledge', tone:'#2D55A8', desc:(cur[0] || {}).desc || 'Fundamentals of management, economics and law.'},
+        {key:'chuyenNganh', label:'Specialised knowledge', tone:'#9B57A0', desc:[(cur[1] || {}).desc, (cur[2] || {}).desc].filter(Boolean).join(' ') || 'Advanced modules specific to the programme.'},
+        {key:'thucTap', label:'Internships', tone:'#169C83', desc:'Practical experience at businesses and organisations, in line with the training plan.'},
+        {key:'khoaLuan', label:'Graduation thesis', tone:'#E08A2E', desc:'A capstone piece of work drawing together what students have learned, or replacement modules as set out in the regulations.'}
       ];
       var known = blocks.every(function(b){ return typeof cr[b.key] === 'number'; });
       var total = known ? blocks.reduce(function(t, b){ return t + cr[b.key]; }, 0) : null;
       var bar = '<div class="cs-bar' + (known ? '' : ' is-pending') + '" role="img" aria-label="' +
-          (known ? 'Cơ cấu tín chỉ: ' + blocks.map(function(b){ return b.label + ' ' + cr[b.key] + ' tín chỉ'; }).join(', ') : 'Cơ cấu tín chỉ: đang cập nhật') + '">' +
+          (known ? 'Credit structure: ' + blocks.map(function(b){ return b.label + ' ' + cr[b.key] + ' credits'; }).join(', ') : 'Credit structure: being updated') + '">' +
         blocks.map(function(b){
           var w = known ? (cr[b.key] / total * 100) : 25;
-          return '<span class="cs-seg" style="--tone:' + b.tone + ';width:' + w + '%" title="' + esc(b.label) + (known ? ': ' + cr[b.key] + ' TC' : '') + '">' +
+          return '<span class="cs-seg" style="--tone:' + b.tone + ';width:' + w + '%" title="' + esc(b.label) + (known ? ': ' + cr[b.key] + ' cr' : '') + '">' +
             (known && w >= 9 ? '<b>' + cr[b.key] + '</b>' : '') + '</span>';
         }).join('') + '</div>';
       var legend = '<ul class="cs-legend">' + blocks.map(function(b){
         return '<li><span class="cs-swatch" style="--tone:' + b.tone + '"></span>' + esc(b.label) + '</li>'; }).join('') + '</ul>';
       var law = typeof cr.luat === 'number'
-        ? '<div class="cs-law"><span class="cs-law-ico" aria-hidden="true">⚖</span><div><strong>' + cr.luat + ' tín chỉ</strong> kiến thức pháp lý' +
-            (total ? ' <span>(' + Math.round(cr.luat / total * 100) + '% chương trình)</span>' : '') + '<small>Dấu ấn riêng của một ngành học trong trường luật.</small></div></div>'
-        : '<div class="cs-law"><span class="cs-law-ico" aria-hidden="true">⚖</span><div><strong>— tín chỉ</strong> kiến thức pháp lý <span class="badge badge-pending">Đang cập nhật</span>' +
-            '<small>Số tín chỉ các học phần pháp luật trong chương trình sẽ hiển thị khi có CTĐT chính thức.</small></div></div>';
+        ? '<div class="cs-law"><span class="cs-law-ico" aria-hidden="true">⚖</span><div><strong>' + cr.luat + ' credits</strong> of legal knowledge' +
+            (total ? ' <span>(' + Math.round(cr.luat / total * 100) + '% of the programme)</span>' : '') + '<small>The hallmark of a programme taught at a law university.</small></div></div>'
+        : '<div class="cs-law"><span class="cs-law-ico" aria-hidden="true">⚖</span><div><strong>— credits</strong> of legal knowledge <span class="badge badge-pending">Being updated</span>' +
+            '<small>The number of credits from law modules in the programme will be shown once the official curriculum is available.</small></div></div>';
       var cards = '<div class="cs-blocks">' + blocks.map(function(b, i){
         var c = cr[b.key];
         return '<article class="cs-block" style="--tone:' + b.tone + '"><span class="cs-step">0' + (i + 1) + '</span>' +
-          '<div class="cs-credit"><strong>' + (typeof c === 'number' ? c : '—') + '</strong><span>tín chỉ</span></div>' +
+          '<div class="cs-credit"><strong>' + (typeof c === 'number' ? c : '—') + '</strong><span>credits</span></div>' +
           '<h3>' + esc(b.label) + '</h3><p>' + esc(b.desc) + '</p>' +
-          (typeof c === 'number' ? '' : '<span class="badge badge-pending">Đang cập nhật</span>') + '</article>';
+          (typeof c === 'number' ? '' : '<span class="badge badge-pending">Being updated</span>') + '</article>';
       }).join('') + '</div>';
-      return '<div class="cs-summary"><div class="cs-total"><strong>' + (total || '—') + '</strong><span>tổng tín chỉ</span></div>' +
+      return '<div class="cs-summary"><div class="cs-total"><strong>' + (total || '—') + '</strong><span>total credits</span></div>' +
         '<div class="cs-bar-wrap">' + bar + legend + '</div></div>' + law + cards;
     }
 
     var slug = root.getAttribute('data-slug');
     var p = published(window.ULAW_PROGRAMS).filter(function(x){ return x.slug === slug; })[0];
     if(!p){
-      root.innerHTML = '<section class="section"><div class="container">' + emptyState({title:'Không tìm thấy ngành học',
-        text:'Ngành này chưa có dữ liệu được xuất bản.', actions:[{label:'Xem tất cả ngành', href:'dao-tao/index.html'}]}) + '</div></section>';
+      root.innerHTML = '<section class="section"><div class="container">' + emptyState({title:'Programme not found',
+        text:'No data has been published for this programme yet.', actions:[{label:'View all programmes', href:'dao-tao/index.html'}]}) + '</div></section>';
       return;
     }
     var tags = document.querySelector('[data-prog-tags]');
@@ -202,22 +202,22 @@
     var visual = document.querySelector('[data-prog-visual]');
     if(visual && window.ULAW_groupScene){
       var gs = window.ULAW_groupScene(p.group);
-      visual.innerHTML = media(gs.scene + '__' + gs.bg, fill('Ảnh minh họa cho ngành {name}', {name: p.name}));
+      visual.innerHTML = media(gs.scene + '__' + gs.bg, fill('Illustration for the {name} programme', {name: p.name}));
     }
 
     var pendingCard = function(title){
       return '<div class="card"><h3>' + title + '</h3>' + statusBadge('pending') +
-        '<p>Chỉ hiển thị khi có nguồn chính thức từ cổng tuyển sinh của Trường.</p></div>';
+        '<p>Shown only once an official source from the University’s admissions portal is available.</p></div>';
     };
     var tracksHtml = '';
     if(p.tracks && p.tracks.length){
       tracksHtml = '<section class="section" id="he-dao-tao"><div class="container max-w-wide">' +
-        '<h2>Hệ đào tạo</h2><p>' + fill('Ngành {name} có hai lựa chọn. Thông tin chi tiết từng hệ được công bố theo nguồn chính thức.', {name: esc(p.name)}) + '</p>' +
+        '<h2>Study tracks</h2><p>' + fill('The {name} programme offers two tracks. Details of each track are published according to official sources.', {name: esc(p.name)}) + '</p>' +
         '<div class="track-cards">' + p.tracks.map(function(t){
           return '<article class="track-card' + (t.status === 'pending' ? ' is-pending' : '') + '" id="' + esc(t.key) + '">' +
             '<h3>' + esc(t.label) + '</h3>' + statusBadge(t.status) +
             '<p style="margin-top:10px">' + esc(t.summary) + '</p>' +
-            '<p class="event-info">Mã ngành, chỉ tiêu, học phí và chương trình chi tiết: Thông tin đang cập nhật.</p></article>';
+            '<p class="event-info">Programme code, intake quota, tuition fees and detailed curriculum: information coming soon.</p></article>';
         }).join('') + '</div></div></section>';
     }
     var faqHtml = (window.ULAW_FAQ_GENERIC || []).map(function(item){
@@ -225,29 +225,29 @@
     }).join('');
 
     root.innerHTML =
-      '<nav class="subnav subnav-prog" aria-label="Mục lục trang" style="--tone:' + ((PROGRAM_LOOK[p.slug] || {}).tone || '#2D55A8') + '"><div class="container">' +
+      '<nav class="subnav subnav-prog" aria-label="Page contents" style="--tone:' + ((PROGRAM_LOOK[p.slug] || {}).tone || '#2D55A8') + '"><div class="container">' +
         '<span class="subnav-name"><span class="subnav-dot" aria-hidden="true"></span>' + esc(p.name) + '</span>' +
-        '<a href="#tong-quan">Tổng quan</a>' + (tracksHtml ? '<a href="#he-dao-tao">Hệ đào tạo</a>' : '') +
-        '<a href="#chuong-trinh">Chương trình học</a>' +
-        '<a href="#trai-nghiem">Trải nghiệm</a><a href="#nghe-nghiep">Nghề nghiệp</a><a href="#faq">FAQ</a>' +
+        '<a href="#tong-quan">Overview</a>' + (tracksHtml ? '<a href="#he-dao-tao">Study tracks</a>' : '') +
+        '<a href="#chuong-trinh">Curriculum</a>' +
+        '<a href="#trai-nghiem">Experience</a><a href="#nghe-nghiep">Careers</a><a href="#faq">FAQ</a>' +
       '</div></nav>' +
       '<section class="section" id="tong-quan"><div class="container max-w-wide">' +
-        '<h2>Tổng quan</h2><p>' + esc(p.short) + ' Chương trình được thiết kế trên nền tảng chung quản trị – pháp lý – công nghệ của Khoa Quản trị, giúp người học vừa vững chuyên môn ngành vừa có tư duy pháp lý và năng lực công nghệ.</p>' +
-        '<div class="grid grid-2" style="margin-top:16px">' + pendingCard('Mã ngành · Chỉ tiêu · Học phí') + pendingCard('Bằng cấp · Thời lượng') + '</div>' +
+        '<h2>Overview</h2><p>' + esc(p.short) + ' The programme is built on the Faculty of Management’s shared foundation of management, law and technology, giving students solid expertise in their field together with legal thinking and technological skills.</p>' +
+        '<div class="grid grid-2" style="margin-top:16px">' + pendingCard('Programme code · Intake quota · Tuition fees') + pendingCard('Degree · Duration') + '</div>' +
       '</div></section>' +
       tracksHtml +
       '<section class="section section-soft" id="chuong-trinh"><div class="container max-w-wide">' +
-        '<h2>Cấu trúc học tập</h2><p>Chương trình gồm bốn khối; số tín chỉ theo chương trình đào tạo chính thức — xem tại <a class="link-arrow" href="' + esc(url('hoc-lieu/index.html#ctdt')) + '">Học liệu</a>.</p>' +
+        '<h2>Study structure</h2><p>The programme has four blocks; credit numbers follow the official curriculum — see <a class="link-arrow" href="' + esc(url('hoc-lieu/index.html#ctdt')) + '">Learning resources</a>.</p>' +
         creditStructure(p) +
       '</div></section>' +
       learningCollage(p) +
       '<section class="section section-soft" id="nghe-nghiep"><div class="container max-w-wide">' +
-        '<h2>Hướng nghề nghiệp</h2><p>Các hướng dưới đây mô tả khả năng phát triển, không phải cam kết việc làm.</p>' +
+        '<h2>Career paths</h2><p>The paths below describe possible directions, not a guarantee of employment.</p>' +
         '<ul class="tags">' + p.careers.map(function(c){ return '<li class="tag">' + esc(c) + '</li>'; }).join('') + '</ul>' +
       '</div></section>' +
-      '<section class="section" id="faq"><div class="container max-w"><h2>Câu hỏi thường gặp</h2>' + faqHtml + '</div></section>' +
-      '<section class="section section-deep text-center"><div class="container"><h2>' + fill('Quan tâm ngành {name}?', {name: esc(p.name)}) + '</h2>' +
-        '<div class="hero-ctas" style="justify-content:center"><a class="btn btn-cta" href="' + esc(ADMISSIONS) + '" target="_blank" rel="noopener">Tư vấn tuyển sinh<span class="visually-hidden"> (mở trang mới)</span></a></div></div></section>';
+      '<section class="section" id="faq"><div class="container max-w"><h2>Frequently asked questions</h2>' + faqHtml + '</div></section>' +
+      '<section class="section section-deep text-center"><div class="container"><h2>' + fill('Interested in the {name} programme?', {name: esc(p.name)}) + '</h2>' +
+        '<div class="hero-ctas" style="justify-content:center"><a class="btn btn-cta" href="' + esc(ADMISSIONS) + '" target="_blank" rel="noopener">Admissions advice<span class="visually-hidden"> (opens in a new tab)</span></a></div></div></section>';
 
     // Deep links such as #tich-hop point at content that only exists after render.
     if(window.location.hash){
@@ -412,19 +412,19 @@
   var ddCount = 0;
   function admissionsDropdown(label, btnClass){
     var id = 'adm-menu-' + (++ddCount);
-    var nt = '<span class="visually-hidden"> (mở trang mới)</span>';
+    var nt = '<span class="visually-hidden"> (opens in a new tab)</span>';
     return '<span class="adm-dropdown" data-dropdown data-dropdown-float>' +
       '<button type="button" class="' + esc(btnClass) + '" aria-expanded="false" aria-controls="' + id + '" data-dropdown-toggle>' + esc(label) +
         '<span class="nav-caret" aria-hidden="true"></span></button>' +
       '<ul class="cta-menu" id="' + id + '" data-dropdown-menu hidden>' +
-        '<li><a href="' + esc(ADMISSIONS) + '" target="_blank" rel="noopener"><strong>Tuyển sinh đại học</strong><span>Phòng Tư vấn tuyển sinh ULAW ↗</span>' + nt + '</a></li>' +
-        '<li><a href="' + esc(ADMISSIONS_PG) + '" target="_blank" rel="noopener"><strong>Tuyển sinh sau đại học</strong><span>Thạc sĩ · Cổng tuyển sinh ULAW ↗</span>' + nt + '</a></li>' +
+        '<li><a href="' + esc(ADMISSIONS) + '" target="_blank" rel="noopener"><strong>Undergraduate admissions</strong><span>ULAW Admissions Office ↗</span>' + nt + '</a></li>' +
+        '<li><a href="' + esc(ADMISSIONS_PG) + '" target="_blank" rel="noopener"><strong>Postgraduate admissions</strong><span>Master’s · ULAW admissions portal ↗</span>' + nt + '</a></li>' +
       '</ul></span>';
   }
   function upgradeAdmissionsCtas(root){
     Array.prototype.forEach.call((root || document).querySelectorAll('a.btn-cta[href="' + ADMISSIONS + '"]'), function(a){
       if(a.closest('.mobile-menu, [data-dropdown]')) return;
-      var label = (a.firstChild && a.firstChild.nodeType === 3 ? a.firstChild.nodeValue : a.textContent).replace(/[↗]/g, '').trim() || 'Tư vấn tuyển sinh';
+      var label = (a.firstChild && a.firstChild.nodeType === 3 ? a.firstChild.nodeValue : a.textContent).replace(/[↗]/g, '').trim() || 'Admissions advice';
       var wrap = document.createElement('span');
       wrap.innerHTML = admissionsDropdown(label, a.className);
       a.parentNode.replaceChild(wrap.firstChild, a);
@@ -502,9 +502,9 @@
       }
       var items = searchIndex(q, kind);
       results.innerHTML = items.length
-        ? '<p class="result-count">' + fill(nOf('{n} kết quả cho “{q}”', items.length), {q: esc(q)}) + '</p>' + resultsHtml(items)
+        ? '<p class="result-count">' + fill(nOf('{n} result for “{q}”|{n} results for “{q}”', items.length), {q: esc(q)}) + '</p>' + resultsHtml(items)
         : emptyState({title:'No results', icon:'⌕',
-            text:fill('Không tìm thấy nội dung khớp với “{q}”. Thử kiểm tra chính tả hoặc dùng từ khóa khác.', {q: q}),
+            text:fill('No content matches “{q}”. Check the spelling or try another keyword.', {q: q}),
             actions:[{label:'View programmes', href:'dao-tao/index.html'}, {label:'Open learning resources', href:'hoc-lieu/index.html'}]});
     }
     input.value = new URLSearchParams(window.location.search).get('q') || '';
@@ -530,7 +530,7 @@
           : '<span class="stat-num stat-pending" aria-hidden="true">?</span>') +
         '<span class="stat-label">' + esc(st.label) + '</span>' +
         (st.note ? '<span class="stat-note">' + esc(st.note) + '</span>' : '') +
-        (known ? '' : '<span class="stat-badge">Đang cập nhật</span>') +
+        (known ? '' : '<span class="stat-badge">Being updated</span>') +
       '</li>';
     }).join('');
     var nums = Array.prototype.slice.call(grid.querySelectorAll('[data-count]'));
@@ -591,14 +591,14 @@
     // Spotlight: featured (or newest) publication with image
     var f = pubs.filter(function(p){ return p.featured; })[0] || pubs[0];
     spot.innerHTML = f
-      ? '<article class="pub-spot"><div class="pub-spot-media">' + media(f.image || 'research_books__purple', 'Ảnh minh họa cho công bố ' + f.title, {w:800, h:500}) + '</div>' +
-        '<div class="pub-spot-body"><span class="pub-badge">★ Công bố mới</span><span class="pub-type">' + esc(f.type || '') + '</span>' +
+      ? '<article class="pub-spot"><div class="pub-spot-media">' + media(f.image || 'research_books__purple', 'Illustration for the publication: ' + f.title, {w:800, h:500}) + '</div>' +
+        '<div class="pub-spot-body"><span class="pub-badge">★ New publication</span><span class="pub-type">' + esc(f.type || '') + '</span>' +
         '<h3>' + esc(f.title) + '</h3><p class="pub-meta">' + esc(f.authors || '') + (f.venue ? ' · <em>' + esc(f.venue) + '</em>' : '') + '</p>' +
-        (f.url ? '<a class="link-arrow" href="' + esc(url(f.url)) + '"' + ext(f.url) + '>Xem công bố →</a>' : '') + '</div></article>'
-      : '<article class="pub-spot is-empty"><div class="pub-spot-media">' + media('research_books__purple', 'Ảnh minh họa khu vực vinh danh công bố', {w:800, h:500}) + '</div>' +
-        '<div class="pub-spot-body"><span class="pub-badge">★ Công bố mới</span><h3>Công bố nổi bật sẽ được vinh danh tại đây</h3>' +
-        '<p>Tên công trình, tác giả, tạp chí/hội thảo và hình ảnh sẽ hiển thị khi Khoa cung cấp công bố đã xác thực.</p>' +
-        '<span class="badge badge-pending">Đang cập nhật</span></div></article>';
+        (f.url ? '<a class="link-arrow" href="' + esc(url(f.url)) + '"' + ext(f.url) + '>View publication →</a>' : '') + '</div></article>'
+      : '<article class="pub-spot is-empty"><div class="pub-spot-media">' + media('research_books__purple', 'Illustration for the publication spotlight', {w:800, h:500}) + '</div>' +
+        '<div class="pub-spot-body"><span class="pub-badge">★ New publication</span><h3>Featured publications will be showcased here</h3>' +
+        '<p>The title, authors, journal/conference and images will appear once the Faculty provides verified publications.</p>' +
+        '<span class="badge badge-pending">Being updated</span></div></article>';
 
     // Quarterly chart: last 8 quarters, single series → one hue, no legend; hover tooltip per bar.
     var chart = document.getElementById('pub-chart'), total = document.getElementById('pub-total');
@@ -606,16 +606,16 @@
       total.textContent = '';
       chart.innerHTML = '<div class="pub-chart-empty"><div class="pub-chart-ghost" aria-hidden="true">' +
         [34,52,40,68,46,74,58,82].map(function(h){ return '<span style="height:' + h + '%"></span>'; }).join('') +
-        '</div><p><strong>Chưa có dữ liệu công bố xác thực.</strong><br>Biểu đồ số công bố theo quý sẽ tự tạo từ danh sách công bố.</p></div>';
+        '</div><p><strong>No verified publication data yet.</strong><br>The chart of publications per quarter will be generated automatically from the publication list.</p></div>';
     } else {
       var now = new Date(), qs = [];
       for(var k = 7; k >= 0; k--){ var d = new Date(now.getFullYear(), now.getMonth() - k * 3, 1); var key = quarter(d); if(qs.indexOf(key) < 0) qs.push(key); }
       var counts = qs.map(function(q){ return pubs.filter(function(p){ return quarter(p.date) === q; }).length; });
       var max = Math.max.apply(null, counts.concat([1]));
-      total.textContent = nOf('{n} công bố', pubs.length);
-      chart.innerHTML = '<div class="pub-bars" role="img" aria-label="Số công bố theo quý: ' + qs.map(function(q, i){ return q.replace('-', ' ') + ' ' + counts[i]; }).join(', ') + '">' +
+      total.textContent = nOf('{n} publication|{n} publications', pubs.length);
+      chart.innerHTML = '<div class="pub-bars" role="img" aria-label="Publications per quarter: ' + qs.map(function(q, i){ return q.replace('-', ' ') + ' ' + counts[i]; }).join(', ') + '">' +
         qs.map(function(q, i){
-          return '<div class="pub-bar-col" tabindex="0"><span class="pub-bar-tip">' + nOf('{n} công bố', counts[i]) + ' · ' + q.replace('-', ' ') + '</span>' +
+          return '<div class="pub-bar-col" tabindex="0"><span class="pub-bar-tip">' + nOf('{n} publication|{n} publications', counts[i]) + ' · ' + q.replace('-', ' ') + '</span>' +
             '<span class="pub-bar" style="height:' + (counts[i] / max * 100) + '%"></span><span class="pub-bar-label">' + q.split('-')[1] + '<small>' + q.slice(2, 4) + '</small></span></div>';
         }).join('') + '</div>';
     }
@@ -626,22 +626,22 @@
       ? '<ol class="pub-list">' + pubs.map(function(p){
           return '<li><span class="pub-q">' + quarter(p.date).replace('-', ' ') + '</span><div><strong>' + esc(p.title) + '</strong>' +
             '<span class="pub-meta">' + esc(p.authors || '') + (p.venue ? ' · ' + esc(p.venue) : '') + (p.type ? ' · ' + esc(p.type) : '') + '</span></div>' +
-            (p.url ? '<a class="link-arrow" href="' + esc(url(p.url)) + '"' + ext(p.url) + '>Xem →</a>' : '') + '</li>';
+            (p.url ? '<a class="link-arrow" href="' + esc(url(p.url)) + '"' + ext(p.url) + '>View →</a>' : '') + '</li>';
         }).join('') + '</ol>'
-      : '<div class="pub-list-empty"><span>Tên công trình</span><span>Tác giả</span><span>Tạp chí / Hội thảo</span><span>Quý</span>' +
-        '<p>Danh sách công bố đang được cập nhật.</p></div>';
+      : '<div class="pub-list-empty"><span>Title</span><span>Authors</span><span>Journal / Conference</span><span>Quarter</span>' +
+        '<p>The publication list is being updated.</p></div>';
 
     // Projects: name + type
     var pl = document.getElementById('proj-list');
     var projs = published(window.ULAW_PROJECTS);
     pl.innerHTML = projs.length
       ? '<div class="proj-grid">' + projs.map(function(p){
-          return '<article class="proj-card"><span class="proj-type">' + esc(p.type || 'Loại đề tài: đang cập nhật') + '</span><h3>' + esc(p.name) + '</h3>' +
+          return '<article class="proj-card"><span class="proj-type">' + esc(p.type || 'Project type: being updated') + '</span><h3>' + esc(p.name) + '</h3>' +
             '<p class="pub-meta">' + [p.lead, p.period, p.state].filter(Boolean).map(esc).join(' · ') + '</p></article>';
         }).join('') + '</div>'
-      : '<div class="proj-grid is-empty">' + ['Cấp Trường', 'Cấp Bộ', 'Hợp tác doanh nghiệp'].map(function(t){
-          return '<article class="proj-card"><span class="proj-type">' + t + '</span><h3>Tên đề tài / project</h3><p class="pub-meta">Chủ nhiệm · Thời gian · Tình trạng</p><span class="badge badge-pending">Đang cập nhật</span></article>';
-        }).join('') + '</div><p class="event-info" style="margin-top:12px">Khung trình bày mẫu — loại đề tài hiển thị ở nhãn trên cùng mỗi thẻ; danh sách thật sẽ thay thế khi có dữ liệu.</p>';
+      : '<div class="proj-grid is-empty">' + ['University level', 'Ministry level', 'Industry collaboration'].map(function(t){
+          return '<article class="proj-card"><span class="proj-type">' + t + '</span><h3>Project title</h3><p class="pub-meta">Principal investigator · Period · Status</p><span class="badge badge-pending">Being updated</span></article>';
+        }).join('') + '</div><p class="event-info" style="margin-top:12px">Sample layout — the project type is shown on the label at the top of each card; the real list will replace it once data is available.</p>';
 
     // Conferences: info (past/undated) vs upcoming
     var confs = published(window.ULAW_CONFERENCES), nowT = Date.now();
@@ -656,23 +656,23 @@
       ? '<ol class="cf2-past">' + info.map(function(c, i){
           var d = c.startAt ? new Date(c.startAt) : null;
           return '<li style="--tone:' + tones[i % tones.length] + '"><div class="cf2-past-date">' +
-              (d ? '<b>' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '</b><span>' + d.getFullYear() + '</span>' : '<b>--</b><span>Chưa rõ</span>') + '</div>' +
+              (d ? '<b>' + pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '</b><span>' + d.getFullYear() + '</span>' : '<b>--</b><span>Undated</span>') + '</div>' +
             '<div class="cf2-past-body"><h4>' + esc(c.title) + '</h4>' + (c.place ? '<p class="pub-meta">' + esc(c.place) + '</p>' : '') + (c.summary ? '<p>' + esc(c.summary) + '</p>' : '') + '</div>' +
-            (c.url ? '<a class="link-arrow" href="' + esc(url(c.url)) + '"' + ext(c.url) + '>Kỷ yếu &amp; chi tiết →</a>' : '<span></span>') + '</li>';
+            (c.url ? '<a class="link-arrow" href="' + esc(url(c.url)) + '"' + ext(c.url) + '>Proceedings and details →</a>' : '<span></span>') + '</li>';
         }).join('') + '</ol>'
       : '<ol class="cf2-past is-empty" aria-hidden="true">' + tones.slice(0, 3).map(function(t){
-          return '<li style="--tone:' + t + '"><div class="cf2-past-date"><b>--/--</b><span>Năm</span></div><div class="cf2-past-body"><h4>Tên hội thảo</h4><p class="pub-meta">Địa điểm · Chủ đề</p></div><span></span></li>';
-        }).join('') + '</ol><p class="event-info">Danh sách các hội thảo đã diễn ra sẽ cập nhật khi có nguồn chính thức.</p>';
+          return '<li style="--tone:' + t + '"><div class="cf2-past-date"><b>--/--</b><span>Year</span></div><div class="cf2-past-body"><h4>Conference name</h4><p class="pub-meta">Venue · Topic</p></div><span></span></li>';
+        }).join('') + '</ol><p class="event-info">The list of past conferences will be updated once official sources are available.</p>';
 
     // "Hội thảo tiếp theo" card with a live countdown
     var next = up[0];
     if(next){
       var d = new Date(next.startAt);
-      upEl.innerHTML = '<article class="cf2-next"><span class="cf2-next-tag"><i></i>Hội thảo tiếp theo</span>' +
+      upEl.innerHTML = '<article class="cf2-next"><span class="cf2-next-tag"><i></i>Next conference</span>' +
         '<div class="cf2-next-date"><b>' + pad(d.getDate()) + '</b><span>' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() + '</span></div>' +
-        '<h3>' + esc(next.title) + '</h3><p class="pub-meta">' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' · ' + esc(next.place || next.mode || 'Địa điểm đang cập nhật') + '</p>' +
-        '<div class="cf2-count" data-countdown="' + esc(next.startAt) + '"><div><b data-cd="d">--</b><span>ngày</span></div><div><b data-cd="h">--</b><span>giờ</span></div><div><b data-cd="m">--</b><span>phút</span></div></div>' +
-        (next.registerUrl ? '<a class="btn btn-primary" href="' + esc(url(next.registerUrl)) + '"' + ext(next.registerUrl) + '>Đăng ký tham dự</a>' : '') +
+        '<h3>' + esc(next.title) + '</h3><p class="pub-meta">' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' · ' + esc(next.place || next.mode || 'Venue to be confirmed') + '</p>' +
+        '<div class="cf2-count" data-countdown="' + esc(next.startAt) + '"><div><b data-cd="d">--</b><span>days</span></div><div><b data-cd="h">--</b><span>hours</span></div><div><b data-cd="m">--</b><span>minutes</span></div></div>' +
+        (next.registerUrl ? '<a class="btn btn-primary" href="' + esc(url(next.registerUrl)) + '"' + ext(next.registerUrl) + '>Register</a>' : '') +
         (up.length > 1 ? '<ul class="cf2-more">' + up.slice(1, 4).map(function(c){ var x = new Date(c.startAt); return '<li><b>' + pad(x.getDate()) + '/' + pad(x.getMonth() + 1) + '</b>' + esc(c.title) + '</li>'; }).join('') + '</ul>' : '') +
         '</article>';
       var cd = upEl.querySelector('[data-countdown]');
@@ -684,11 +684,11 @@
       };
       tickCd(); window.setInterval(tickCd, 30000);
     } else {
-      upEl.innerHTML = '<article class="cf2-next is-empty"><span class="cf2-next-tag"><i></i>Hội thảo tiếp theo</span>' +
-        '<div class="cf2-next-date"><b>--</b><span>Thời gian đang cập nhật</span></div>' +
-        '<h3>Hội thảo sắp tới sẽ được công bố tại đây</h3><p class="pub-meta">Kèm đếm ngược, địa điểm và liên kết đăng ký tham dự.</p>' +
-        '<div class="cf2-count"><div><b>--</b><span>ngày</span></div><div><b>--</b><span>giờ</span></div><div><b>--</b><span>phút</span></div></div>' +
-        '<a class="link-arrow" href="' + esc(url('tin-tuc/index.html#su-kien')) + '">Xem lịch sự kiện →</a></article>';
+      upEl.innerHTML = '<article class="cf2-next is-empty"><span class="cf2-next-tag"><i></i>Next conference</span>' +
+        '<div class="cf2-next-date"><b>--</b><span>Date to be announced</span></div>' +
+        '<h3>Upcoming conferences will be announced here</h3><p class="pub-meta">With a countdown, venue and registration link.</p>' +
+        '<div class="cf2-count"><div><b>--</b><span>days</span></div><div><b>--</b><span>hours</span></div><div><b>--</b><span>minutes</span></div></div>' +
+        '<a class="link-arrow" href="' + esc(url('tin-tuc/index.html#su-kien')) + '">View event calendar →</a></article>';
     }
   })();
 
@@ -699,21 +699,21 @@
     var LENS = {business:['Business','#5B8DEF'], law:['Law','#C58BE0'], tech:['Technology','#3FC2A8']};
     var cases = published(window.ULAW_CASES), sample = !cases.length;
     if(sample) cases = [
-      {lens:'business', title:'Tình huống quản trị', question:'Doanh nghiệp nên mở rộng thị trường hay tái cấu trúc vận hành?', tags:['Chiến lược','Vận hành']},
-      {lens:'law', title:'Tình huống pháp lý kinh doanh', question:'Điều khoản hợp đồng nào bảo vệ doanh nghiệp khi đối tác vi phạm?', tags:['Hợp đồng','Tuân thủ']},
-      {lens:'tech', title:'Tình huống chuyển đổi số', question:'Triển khai nền tảng số thế nào khi phải bảo vệ dữ liệu khách hàng?', tags:['Dữ liệu','Nền tảng số']}
+      {lens:'business', title:'Management case', question:'Should the company expand into new markets or restructure its operations?', tags:['Strategy','Operations']},
+      {lens:'law', title:'Business law case', question:'Which contract clauses protect the company when a partner is in breach?', tags:['Contracts','Compliance']},
+      {lens:'tech', title:'Digital transformation case', question:'How should a digital platform be rolled out when customer data must be protected?', tags:['Data','Digital platforms']}
     ];
     grid.innerHTML = cases.map(function(c, i){
       var L = LENS[c.lens] || LENS.business;
       var tags = (c.tags || []).map(function(t){ return '<span>' + esc(t) + '</span>'; }).join('');
       var inner = '<span class="case-tab">' + esc(L[0]) + '</span>' +
         '<div class="case-paper"><div class="case-top"><span class="case-no">CASE ' + (i < 9 ? '0' : '') + (i + 1) + '</span>' +
-          (sample ? '<span class="case-stamp">Mẫu trình bày</span>' : '') + '</div>' +
+          (sample ? '<span class="case-stamp">Sample layout</span>' : '') + '</div>' +
           '<h3>' + esc(c.title) + '</h3>' +
           (c.org ? '<p class="case-org">' + esc(c.org) + '</p>' : '') +
           '<p class="case-q"><span aria-hidden="true">?</span>' + esc(c.question || '') + '</p>' +
           (tags ? '<div class="case-tags">' + tags + '</div>' : '') +
-          (sample ? '<span class="case-more">Case study đang được xây dựng</span>' : '<span class="case-more">Đọc case →</span>') +
+          (sample ? '<span class="case-more">Case study in development</span>' : '<span class="case-more">Read the case →</span>') +
         '</div>';
       return c.url
         ? '<a class="case-card" style="--lens:' + L[1] + '" href="' + esc(url(c.url)) + '"' + ext(c.url) + '>' + inner + '</a>'
@@ -726,18 +726,18 @@
     var grid = document.getElementById('leader-grid');
     if(!grid) return;
     var tones = ['#2D55A8', '#9B57A0', '#169C83'];
-    var P = '<span class="pending">Đang cập nhật</span>';
+    var P = '<span class="pending">Being updated</span>';
     grid.innerHTML = (window.ULAW_LEADERSHIP || []).map(function(m, i){
       var photo = m.photo
-        ? '<img src="' + esc(url(m.photo)) + '" alt="Chân dung ' + esc(m.name || m.role) + '" width="600" height="750" loading="lazy">'
-        : '<div class="leader-ph" aria-hidden="true"><svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg><small>Ảnh chân dung</small></div>';
+        ? '<img src="' + esc(url(m.photo)) + '" alt="Portrait of ' + esc(m.name || m.role) + '" width="600" height="750" loading="lazy">'
+        : '<div class="leader-ph" aria-hidden="true"><svg viewBox="0 0 24 24" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg><small>Portrait photo</small></div>';
       function row(k, v){ return '<div><dt>' + k + '</dt><dd>' + (v ? esc(v) : P) + '</dd></div>'; }
       return '<article class="leader-card' + (i === 0 ? ' is-head' : '') + '" style="--tone:' + tones[i % tones.length] + '">' +
         '<div class="leader-photo">' + photo + '<span class="leader-role">' + esc(m.role) + '</span></div>' +
-        '<div class="leader-info"><h3>' + (m.name ? esc(m.name) : 'Họ và tên') + '</h3>' +
-          '<dl>' + row('Học hàm, học vị', m.degree) + row('Lĩnh vực', m.field) + row('Email', m.email) + '</dl></div>' +
+        '<div class="leader-info"><h3>' + (m.name ? esc(m.name) : 'Full name') + '</h3>' +
+          '<dl>' + row('Academic rank and degree', m.degree) + row('Fields', m.field) + row('Email', m.email) + '</dl></div>' +
         '<div class="leader-intro"><span class="leader-q" aria-hidden="true">“</span>' +
-          (m.intro ? '<p>' + esc(m.intro) + '</p>' : '<p class="is-pending">Đoạn giới thiệu ngắn về quá trình công tác, hướng nghiên cứu và vai trò trong Khoa sẽ được cập nhật.</p>') + '</div>' +
+          (m.intro ? '<p>' + esc(m.intro) + '</p>' : '<p class="is-pending">A short introduction to their career, research interests and role in the Faculty will be added.</p>') + '</div>' +
       '</article>';
     }).join('');
   })();
@@ -750,41 +750,41 @@
     var id = new URLSearchParams(window.location.search).get('id');
     var d = depts.filter(function(x){ return x.id === id; })[0] || depts[0];
     if(!d) return;
-    document.title = d.name + ' — Khoa Quản trị ULAW';  // EN suffix: see the title pass in the VI/EN block
+    document.title = d.name + ' — Faculty of Management, ULAW';  // EN suffix: see the title pass in the VI/EN block
     titleEl.textContent = d.name;
     document.getElementById('dept-crumb').textContent = d.name;
     document.getElementById('dept-hero').style.setProperty('--tone', d.tone);
-    document.getElementById('dept-intro').textContent = d.intro || 'Giới thiệu bộ môn, lĩnh vực giảng dạy và nghiên cứu sẽ được cập nhật theo thông tin chính thức của Khoa.';
+    document.getElementById('dept-intro').textContent = d.intro || 'An introduction to the department and its teaching and research areas will be added based on official information from the Faculty.';
     document.getElementById('dept-switch').innerHTML = depts.map(function(x){
       return '<a href="bo-mon.html?id=' + esc(x.id) + '" style="--tone:' + esc(x.tone) + '"' + (x === d ? ' aria-current="page"' : '') + '>' + esc(x.short || x.name) + '</a>';
     }).join('');
 
-    var P = '<span class="pending">Đang cập nhật</span>';
+    var P = '<span class="pending">Being updated</span>';
     function avatar(m, big){
       return m.photo
-        ? '<img src="' + esc(url(m.photo)) + '" alt="Chân dung ' + esc(m.name || 'lecturers') + '" width="' + (big ? 480 : 320) + '" height="' + (big ? 600 : 400) + '" loading="lazy">'
+        ? '<img src="' + esc(url(m.photo)) + '" alt="Portrait of ' + esc(m.name || 'lecturers') + '" width="' + (big ? 480 : 320) + '" height="' + (big ? 600 : 400) + '" loading="lazy">'
         : '<div class="lec-ph" aria-hidden="true"><svg viewBox="0 0 24 24" width="' + (big ? 64 : 44) + '" height="' + (big ? 64 : 44) + '" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg></div>';
     }
     function cvLink(m){
-      return m.cv ? '<a class="btn btn-secondary lec-cv" href="' + esc(url(m.cv)) + '"' + ext(m.cv) + '>Xem CV →</a>' : '<span class="lec-cv is-pending">CV đang cập nhật</span>';
+      return m.cv ? '<a class="btn btn-secondary lec-cv" href="' + esc(url(m.cv)) + '"' + ext(m.cv) + '>View CV →</a>' : '<span class="lec-cv is-pending">CV coming soon</span>';
     }
     var h = d.head || {};
     document.getElementById('dept-head').innerHTML =
       '<article class="dept-head-card" style="--tone:' + esc(d.tone) + '"><div class="dept-head-photo">' + avatar(h, true) + '</div>' +
-      '<div class="dept-head-info"><span class="dept-head-role">Trưởng bộ môn</span><h3>' + (h.name ? esc(h.name) : 'Họ và tên') + '</h3>' +
-        '<dl><div><dt>Học hàm, học vị</dt><dd>' + (h.degree ? esc(h.degree) : P) + '</dd></div><div><dt>Email</dt><dd>' + (h.email ? esc(h.email) : P) + '</dd></div></dl>' +
+      '<div class="dept-head-info"><span class="dept-head-role">Head of Department</span><h3>' + (h.name ? esc(h.name) : 'Full name') + '</h3>' +
+        '<dl><div><dt>Academic rank and degree</dt><dd>' + (h.degree ? esc(h.degree) : P) + '</dd></div><div><dt>Email</dt><dd>' + (h.email ? esc(h.email) : P) + '</dd></div></dl>' +
         cvLink(h) + '</div></article>';
 
     var lecs = d.lecturers || [];
-    document.getElementById('dept-count').textContent = lecs.length ? nOf('{n} giảng viên', lecs.length) : '';
+    document.getElementById('dept-count').textContent = lecs.length ? nOf('{n} lecturer|{n} lecturers', lecs.length) : '';
     document.getElementById('dept-lecturers').innerHTML = lecs.length
       ? '<ul class="lec-grid">' + lecs.map(function(m){
           return '<li class="lec-card" style="--tone:' + esc(d.tone) + '"><div class="lec-photo">' + avatar(m) + '</div><div class="lec-body"><h3>' + esc(m.name) + '</h3>' +
             (m.degree ? '<p>' + esc(m.degree) + '</p>' : '') + cvLink(m) + '</div></li>';
         }).join('') + '</ul>'
       : '<ul class="lec-grid is-empty" aria-hidden="true">' + [1,2,3,4].map(function(){
-          return '<li class="lec-card" style="--tone:' + esc(d.tone) + '"><div class="lec-photo">' + avatar({}) + '</div><div class="lec-body"><h3>Họ và tên giảng viên</h3><p>Học hàm, học vị</p><span class="lec-cv is-pending">CV đang cập nhật</span></div></li>';
-        }).join('') + '</ul><p class="event-info">Danh sách giảng viên bộ môn sẽ hiển thị khi có hồ sơ xác thực và sự đồng ý công bố.</p>';
+          return '<li class="lec-card" style="--tone:' + esc(d.tone) + '"><div class="lec-photo">' + avatar({}) + '</div><div class="lec-body"><h3>Lecturer’s full name</h3><p>Academic rank and degree</p><span class="lec-cv is-pending">CV coming soon</span></div></li>';
+        }).join('') + '</ul><p class="event-info">The department’s lecturers will be listed once verified profiles and consent to publish are available.</p>';
   })();
 
   // ---------- /doi-ngu: lecturer leisure-moments gallery (template frames) ----------
@@ -800,12 +800,12 @@
       trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/>'
     };
     var slots = [
-      {cls:'m-a', icon:'sport',  tone:'#2D55A8', label:'Giải thể thao giảng viên'},
-      {cls:'m-b', icon:'trip',   tone:'#169C83', label:'Dã ngoại cuối năm'},
-      {cls:'m-c', icon:'music',  tone:'#9B57A0', label:'Văn nghệ chào tân sinh viên'},
+      {cls:'m-a', icon:'sport',  tone:'#2D55A8', label:'Lecturers’ sports tournament'},
+      {cls:'m-b', icon:'trip',   tone:'#169C83', label:'Year-end outing'},
+      {cls:'m-c', icon:'music',  tone:'#9B57A0', label:'Welcome performance for new students'},
       {cls:'m-d', icon:'team',   tone:'#E08A2E', label:'Team building'},
-      {cls:'m-e', icon:'coffee', tone:'#1C5E97', label:'Cà phê chia sẻ'},
-      {cls:'m-f', icon:'trophy', tone:'#0E9A9A', label:'Hội thao Khoa'}
+      {cls:'m-e', icon:'coffee', tone:'#1C5E97', label:'Coffee talks'},
+      {cls:'m-f', icon:'trophy', tone:'#0E9A9A', label:'Faculty sports day'}
     ];
     var photos = window.ULAW_FACULTY_MOMENTS || [];
     el.innerHTML = slots.map(function(sl, i){
@@ -813,7 +813,7 @@
       var cap = ph && ph.caption ? ph.caption : sl.label;
       return '<figure class="moment ' + sl.cls + (ph ? '' : ' is-template') + '" style="--tone:' + sl.tone + '">' +
         (ph ? '<img src="' + esc(url(ph.image)) + '" alt="' + esc(cap) + '" width="800" height="600" loading="lazy">'
-            : '<div class="moment-ph" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + I[sl.icon] + '</svg><small>Ảnh sẽ cập nhật</small></div>') +
+            : '<div class="moment-ph" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + I[sl.icon] + '</svg><small>Photo coming soon</small></div>') +
         '<figcaption>' + esc(cap) + '</figcaption></figure>';
     }).join('');
   })();
@@ -827,18 +827,18 @@
     var tones = ['#2D55A8', '#9B57A0', '#E08A2E', '#169C83', '#1C5E97', '#0E9A9A'];
     function card(m, i){
       var photo = m.photo
-        ? '<img src="' + esc(url(m.photo)) + '" alt="Chân dung ' + esc(m.name || 'chuyên gia') + '" width="160" height="160" loading="lazy">'
+        ? '<img src="' + esc(url(m.photo)) + '" alt="Portrait of ' + esc(m.name || 'expert') + '" width="160" height="160" loading="lazy">'
         : '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg>';
       return '<li class="ex-card" style="--tone:' + tones[i % tones.length] + '"><div class="ex-photo">' + photo + '</div><div class="ex-info">' +
-        '<span class="ex-title">' + (m.title ? esc(m.title) : 'Học hàm · học vị') + '</span>' +
-        '<strong class="ex-name">' + (m.name ? esc(m.name) : 'Họ và tên') + '</strong>' +
-        '<span class="ex-pos">' + (m.position ? esc(m.position) : 'Chức vụ') + '</span>' +
-        '<span class="ex-org">' + (m.org ? esc(m.org) : 'Đơn vị công tác') + '</span></div></li>';
+        '<span class="ex-title">' + (m.title ? esc(m.title) : 'Academic rank · degree') + '</span>' +
+        '<strong class="ex-name">' + (m.name ? esc(m.name) : 'Full name') + '</strong>' +
+        '<span class="ex-pos">' + (m.position ? esc(m.position) : 'Position') + '</span>' +
+        '<span class="ex-org">' + (m.org ? esc(m.org) : 'Organisation') + '</span></div></li>';
     }
     var items = list.map(card).join('');
     box.innerHTML = '<ul class="ex-track ex-grid' + (sample ? ' is-sample' : '') + '">' + items + '</ul>';
     var note = document.getElementById('experts-note');
-    if(note) note.textContent = sample ? 'Khung mẫu — danh sách chuyên gia, giảng viên thỉnh giảng sẽ hiển thị khi có hồ sơ xác thực và sự đồng ý công bố.' : nOf('{n} chuyên gia & giảng viên thỉnh giảng', list.length);
+    if(note) note.textContent = sample ? 'Template — experts and visiting lecturers will be listed once verified profiles and consent to publish are available.' : nOf('{n} expert or visiting lecturer|{n} experts and visiting lecturers', list.length);
   })();
 
   // ---------- Thạc sĩ QTKD class photos ([data-ths-photos], optional data-limit) ----------
@@ -849,9 +849,9 @@
     for(var i = 0; i < n; i++){
       var ph = photos[i];
       html += ph
-        ? '<figure class="ths-photo"><img src="' + esc(url(ph.image)) + '" alt="' + esc(ph.caption || 'Lớp học thạc sĩ') + '" width="600" height="450" loading="lazy">' +
+        ? '<figure class="ths-photo"><img src="' + esc(url(ph.image)) + '" alt="' + esc(ph.caption || 'Master’s class') + '" width="600" height="450" loading="lazy">' +
             (ph.caption ? '<figcaption>' + esc(ph.caption) + '</figcaption>' : '') + '</figure>'
-        : '<figure class="ths-photo is-template" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg><small>Ảnh lớp học</small></figure>';
+        : '<figure class="ths-photo is-template" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg><small>Class photo</small></figure>';
     }
     el.innerHTML = html;
   });
@@ -867,12 +867,12 @@
             var d = new Date(n.date), isNew = d.getTime() >= fresh;
             var inner = '<span class="notice-date"><b>' + pad(d.getDate()) + '</b>' + MONTHS[d.getMonth()] + '</span>' +
               '<span class="notice-txt">' + (n.tag ? '<small>' + esc(n.tag) + '</small>' : '') + '<strong>' + esc(n.title) + '</strong></span>' +
-              (isNew ? '<span class="notice-new">Mới</span>' : '') + (n.url ? '<span class="notice-arrow" aria-hidden="true">→</span>' : '');
+              (isNew ? '<span class="notice-new">New</span>' : '') + (n.url ? '<span class="notice-arrow" aria-hidden="true">→</span>' : '');
             return '<li>' + (n.url ? '<a href="' + esc(url(n.url)) + '"' + ext(n.url) + '>' + inner + '</a>' : '<div>' + inner + '</div>') + '</li>';
           }).join('') + '</ol>'
-        : '<ol class="notice-list is-empty" aria-hidden="true">' + ['Tuyển sinh','Học vụ','Lịch thi'].map(function(t){
-            return '<li><div><span class="notice-date"><b>--</b>Th--</span><span class="notice-txt"><small>' + t + '</small><strong>Tiêu đề thông báo</strong></span></div></li>';
-          }).join('') + '</ol><p class="notice-empty">Chưa có thông báo đăng tại đây — xem thông báo mới nhất trên website Phòng Đào tạo Sau đại học.</p>';
+        : '<ol class="notice-list is-empty" aria-hidden="true">' + ['Admissions','Academic affairs','Exam schedule'].map(function(t){
+            return '<li><div><span class="notice-date"><b>--</b>---</span><span class="notice-txt"><small>' + t + '</small><strong>Notice title</strong></span></div></li>';
+          }).join('') + '</ol><p class="notice-empty">No notices have been posted here yet — see the latest notices on the Postgraduate Training Office website.</p>';
     }
     var grid = document.getElementById('ths-posts');
     if(!grid) return;
@@ -882,17 +882,17 @@
       grid.innerHTML = list.length
         ? list.map(function(p, i){
             var d = p.date ? new Date(p.date) : null;
-            var img = p.image ? media(p.image, p.title, {w:800, h:533, noLabel:!/__|^hero-/.test(p.image)}) : media('study_group__navy', 'Ảnh minh họa', {w:800, h:533});
-            var body = '<div class="post-media">' + img + '<span class="post-type is-' + esc(p.type || 'news') + '">' + (p.type === 'event' ? 'Sự kiện' : 'News') + '</span></div>' +
+            var img = p.image ? media(p.image, p.title, {w:800, h:533, noLabel:!/__|^hero-/.test(p.image)}) : media('study_group__navy', 'Illustration', {w:800, h:533});
+            var body = '<div class="post-media">' + img + '<span class="post-type is-' + esc(p.type || 'news') + '">' + (p.type === 'event' ? 'Events' : 'News') + '</span></div>' +
               '<div class="post-body">' + (d ? '<span class="post-date">' + fmtDate(d) + '</span>' : '') +
-              '<h3>' + esc(p.title) + '</h3>' + (p.excerpt ? '<p>' + esc(p.excerpt) + '</p>' : '') + (p.url ? '<span class="link-arrow">Đọc tiếp →</span>' : '') + '</div>';
+              '<h3>' + esc(p.title) + '</h3>' + (p.excerpt ? '<p>' + esc(p.excerpt) + '</p>' : '') + (p.url ? '<span class="link-arrow">Read more →</span>' : '') + '</div>';
             return p.url ? '<a class="post-card' + (i === 0 && kind === 'all' ? ' is-feature' : '') + '" href="' + esc(url(p.url)) + '"' + ext(p.url) + '>' + body + '</a>'
                          : '<article class="post-card' + (i === 0 && kind === 'all' ? ' is-feature' : '') + '">' + body + '</article>';
           }).join('')
         : [1,2,3].map(function(i){
-            return '<article class="post-card is-template' + (i === 1 ? ' is-feature' : '') + '" aria-hidden="true"><div class="post-media"><span class="post-ph"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Ảnh bài viết</span>' +
-              '<span class="post-type is-' + (i === 2 ? 'event' : 'news') + '">' + (i === 2 ? 'Sự kiện' : 'News') + '</span></div><div class="post-body"><span class="post-date">Ngày đăng</span><h3>Tiêu đề bài viết</h3><p>Tóm tắt ngắn về hoạt động của chương trình thạc sĩ.</p></div></article>';
-          }).join('') + '<p class="event-info ths-posts-note">Chưa có bài viết — tin, ảnh và sự kiện của chương trình sẽ hiển thị tại đây khi được đăng.</p>';
+            return '<article class="post-card is-template' + (i === 1 ? ' is-feature' : '') + '" aria-hidden="true"><div class="post-media"><span class="post-ph"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>Post image</span>' +
+              '<span class="post-type is-' + (i === 2 ? 'event' : 'news') + '">' + (i === 2 ? 'Events' : 'News') + '</span></div><div class="post-body"><span class="post-date">Date posted</span><h3>Post title</h3><p>A short summary of a Master’s programme activity.</p></div></article>';
+          }).join('') + '<p class="event-info ths-posts-note">No posts yet — the programme’s news, photos and events will appear here once published.</p>';
     }
     bindChips(Array.prototype.slice.call(document.querySelectorAll('[data-ths-filter]')), 'data-ths-filter', render);
     render('all');
@@ -1004,7 +1004,7 @@
       var pct = req.length ? Math.round(done / req.length * 100) : 0;
       bar.style.setProperty('--p', pct + '%');
       var out = bar.querySelector('[data-form-progress-label]');
-      if(out) out.textContent = fill('{done}/{total} mục bắt buộc', {done: done, total: req.length});
+      if(out) out.textContent = fill('{done}/{total} required fields', {done: done, total: req.length});
     }
     form.addEventListener('input', progress);
     form.addEventListener('change', progress);
@@ -1067,7 +1067,7 @@
         if(ok) visible++;
       });
       if(empty) empty.hidden = visible !== 0;
-      if(count) count.textContent = nOf('{n} mục phù hợp', visible);
+      if(count) count.textContent = nOf('{n} matching item|{n} matching items', visible);
     }
     selects.forEach(function(sel){ sel.addEventListener('change', apply); });
     apply();
@@ -1095,13 +1095,13 @@
   (function(){
     var box = document.querySelector('[data-ticker]');
     if(!box) return;
-    var items = published(window.ULAW_TICKER).map(function(t){ return {tag:t.tag || 'Thông báo', text:t.text, href:t.href, date:t.date}; });
+    var items = published(window.ULAW_TICKER).map(function(t){ return {tag:t.tag || 'Notices', text:t.text, href:t.href, date:t.date}; });
     if(!items.length){
       var pool = [];
       published(window.ULAW_STUDENT_POSTS).forEach(function(p){ pool.push({tag:p.type || 'Students', text:p.title, href:p.href || 'sinh-vien/hoc-tap.html#thong-bao', date:p.date}); });
       published(window.ULAW_NEWS).forEach(function(n){ pool.push({tag:'News', text:n.title, href:n.url, date:n.date}); });
-      published(window.ULAW_JOBS).forEach(function(j){ pool.push({tag:'Tuyển dụng', text:j.title + (j.company ? ' — ' + j.company : ''), href:j.href || 'doanh-nghiep/index.html#tuyen-dung', date:j.date}); });
-      published(window.ULAW_INTERNSHIPS).forEach(function(j){ pool.push({tag:'Thực tập', text:j.title + (j.company ? ' — ' + j.company : ''), href:j.href || 'doanh-nghiep/index.html#thuc-tap', date:j.date}); });
+      published(window.ULAW_JOBS).forEach(function(j){ pool.push({tag:'Jobs', text:j.title + (j.company ? ' — ' + j.company : ''), href:j.href || 'doanh-nghiep/index.html#tuyen-dung', date:j.date}); });
+      published(window.ULAW_INTERNSHIPS).forEach(function(j){ pool.push({tag:'Internships', text:j.title + (j.company ? ' — ' + j.company : ''), href:j.href || 'doanh-nghiep/index.html#thuc-tap', date:j.date}); });
       items = pool.sort(function(a, b){ return String(b.date || '').localeCompare(String(a.date || '')); }).slice(0, 8);
     }
     if(!items.length) return;
@@ -1140,12 +1140,12 @@
     box.innerHTML = '<div class="hl-track">' + items.map(function(s, i){
         return '<article class="hl-slide' + (i ? '' : ' is-active') + '" role="group" aria-roledescription="slide" aria-label="' + (i + 1) + ' / ' + n + '"' + (i ? ' aria-hidden="true"' : '') + '>' +
           '<div class="hl-media">' + (window.ULAW_HL_SCENES && window.ULAW_HL_SCENES[s.image] ? '<span role="img" aria-label="' + esc(s.alt || s.title) + '">' + window.ULAW_HL_SCENES[s.image] + '</span>' : media(s.image, s.alt || s.title, {eager: !i, w:1920, h:1080, noLabel:true})) + '</div>' +
-          '<div class="hl-cap"><p class="hl-meta"><span class="hl-cat">' + esc(s.category || 'Nổi bật') + '</span>' + (s.date ? '<span>' + esc(fmtDate(s.date)) + '</span>' : '') + statusBadge(s.status) + '</p>' +
+          '<div class="hl-cap"><p class="hl-meta"><span class="hl-cat">' + esc(s.category || 'Featured') + '</span>' + (s.date ? '<span>' + esc(fmtDate(s.date)) + '</span>' : '') + statusBadge(s.status) + '</p>' +
           '<p class="hl-title">' + (s.url ? '<a href="' + esc(url(s.url)) + '"' + ext(s.url) + (i ? ' tabindex="-1"' : '') + '>' + esc(s.title) + '</a>' : esc(s.title)) + '</p>' +
-          (s.url ? '<span class="hl-more" aria-hidden="true">' + esc(s.ctaLabel || 'Xem chi tiết') + ' →</span>' : '') + '</div></article>';
+          (s.url ? '<span class="hl-more" aria-hidden="true">' + esc(s.ctaLabel || 'View details') + ' →</span>' : '') + '</div></article>';
       }).join('') + '</div>' +
-      (n > 1 ? '<button type="button" class="hl-arrow hl-prev" aria-label="Ảnh trước">‹</button><button type="button" class="hl-arrow hl-next" aria-label="Ảnh sau">›</button>' +
-        '<div class="hl-bar"><div class="hl-dots">' + items.map(function(s, i){ return '<button type="button" aria-label="Ảnh ' + (i + 1) + ': ' + esc(s.title) + '"' + (i ? '' : ' aria-current="true"') + '><i></i></button>'; }).join('') + '</div>' +
+      (n > 1 ? '<button type="button" class="hl-arrow hl-prev" aria-label="Previous photo">‹</button><button type="button" class="hl-arrow hl-next" aria-label="Next photo">›</button>' +
+        '<div class="hl-bar"><div class="hl-dots">' + items.map(function(s, i){ return '<button type="button" aria-label="Photo ' + (i + 1) + ': ' + esc(s.title) + '"' + (i ? '' : ' aria-current="true"') + '><i></i></button>'; }).join('') + '</div>' +
         '<button type="button" class="hl-pause"></button><span class="hl-count" aria-live="polite"></span></div>' : '');
     if(n < 2) return;
     var slides = box.querySelectorAll('.hl-slide'), dots = box.querySelectorAll('.hl-dots button'), pause = box.querySelector('.hl-pause'), count = box.querySelector('.hl-count');
@@ -1251,7 +1251,7 @@
     if(slides.length < 2){ if(controls) controls.hidden = true; return; }
 
     dotsWrap.innerHTML = slides.map(function(s, i){
-      return '<button type="button" aria-label="Chuyển đến slide ' + (i + 1) + ': ' + esc(s.title) + '"' + (i === 0 ? ' aria-current="true"' : '') + '></button>';
+      return '<button type="button" aria-label="Go to slide ' + (i + 1) + ': ' + esc(s.title) + '"' + (i === 0 ? ' aria-current="true"' : '') + '></button>';
     }).join('');
 
     var slideEls = track.querySelectorAll('.hb-slide');
@@ -1310,16 +1310,16 @@
   function programCard(p){
     var tracks = (p.tracks || []).map(function(t){
       return '<a href="' + esc(url('dao-tao/' + p.slug + '.html#' + t.key)) + '">' + esc(t.label) +
-        (t.status === 'pending' ? ' <span class="mini-badge">Đang cập nhật</span>' : '') + '</a>';
+        (t.status === 'pending' ? ' <span class="mini-badge">Being updated</span>' : '') + '</a>';
     }).join('');
     var look = PROGRAM_LOOK[p.slug] || {scene: window.ULAW_groupScene ? (function(g){ return g.scene + '__' + g.bg; })(window.ULAW_groupScene(p.group)) : '', tone:'#2D55A8'};
     return '<article class="card program-card has-tone" data-prog-group="' + esc(p.group) + '" style="--tone:' + look.tone + '">' +
-      '<div class="pc-media">' + media(look.scene, fill('Ảnh minh họa ngành {name}', {name: p.name}), {w:800, h:450}) + '</div>' +
+      '<div class="pc-media">' + media(look.scene, fill('Illustration for the {name} programme', {name: p.name}), {w:800, h:450}) + '</div>' +
       '<span class="card-kicker">' + esc(p.groupLabel) + '</span>' +
       '<h3><a href="' + esc(url('dao-tao/' + p.slug + '.html')) + '">' + esc(p.name) + '</a></h3>' +
       '<p>' + esc(p.short) + '</p>' +
-      (tracks ? '<div class="track-links" role="group" aria-label="' + fill('Hệ đào tạo ngành {name}', {name: esc(p.name)}) + '">' + tracks + '</div>' : '') +
-      '<a class="card-link" href="' + esc(url('dao-tao/' + p.slug + '.html')) + '" aria-label="' + fill('Xem chi tiết ngành {name}', {name: esc(p.name)}) + '">Xem chi tiết →</a>' +
+      (tracks ? '<div class="track-links" role="group" aria-label="' + fill('{name} programme tracks', {name: esc(p.name)}) + '">' + tracks + '</div>' : '') +
+      '<a class="card-link" href="' + esc(url('dao-tao/' + p.slug + '.html')) + '" aria-label="' + fill('View details of the {name} programme', {name: esc(p.name)}) + '">View details →</a>' +
     '</article>';
   }
   document.querySelectorAll('[data-program-cards]').forEach(function(el){
@@ -1329,7 +1329,7 @@
     el.innerHTML = published(window.ULAW_PROGRAMS).map(function(p){
       return '<a class="card program-card" data-prog-group="' + esc(p.group) + '" href="' + esc(url('dao-tao/' + p.slug + '.html')) + '">' +
         '<span class="card-kicker">' + esc(p.groupLabel) + '</span><h3 style="font-size:1.0625rem">' + esc(p.name) + '</h3>' +
-        '<span class="card-link">Xem ngành →</span></a>';
+        '<span class="card-link">View programme →</span></a>';
     }).join('');
   });
 
@@ -1346,7 +1346,7 @@
       '<div class="post-media">' + (p.type ? '<span class="post-type">' + esc(p.type) + '</span>' : '') + media(p.image || 'study_group__navy', p.title, {w:600, h:400}) + '</div>' +
       '<div class="post-body">' + (meta ? '<span class="post-date">' + esc(meta) + '</span>' : '') +
       '<h3>' + esc(p.title) + '</h3>' + (p.excerpt ? '<p>' + esc(p.excerpt) + '</p>' : '') +
-      '<div class="sv-post-foot">' + (p.deadline ? '<span class="sv-deadline">Hạn: ' + esc(viDate(p.deadline)) + '</span>' : '') + statusBadge(p.status) + '</div></div></' + tag + '>';
+      '<div class="sv-post-foot">' + (p.deadline ? '<span class="sv-deadline">Deadline: ' + esc(viDate(p.deadline)) + '</span>' : '') + statusBadge(p.status) + '</div></div></' + tag + '>';
   }
   document.querySelectorAll('[data-sv-posts]').forEach(function(el){
     var cat = el.getAttribute('data-sv-posts');
@@ -1356,7 +1356,7 @@
       .sort(function(a, b){ return String(b.date || '').localeCompare(String(a.date || '')); });
     var chips = '';
     if(all.length && types.length > 1 && cat !== 'all'){
-      chips = '<div class="sv-chips" role="group" aria-label="Lọc theo loại">' + ['Tất cả'].concat(types).map(function(t, i){
+      chips = '<div class="sv-chips" role="group" aria-label="Filter by type">' + ['All'].concat(types).map(function(t, i){
         return '<button type="button" class="tab-chip' + (i ? '' : ' is-active') + '" aria-pressed="' + (i ? 'false' : 'true') + '" data-type="' + esc(i ? t : 'all') + '">' + esc(t) + '</button>';
       }).join('') + '</div>';
     }
@@ -1366,18 +1366,18 @@
       var list = all.filter(function(p){ return type === 'all' || p.type === type; });
       if(limit) list = list.slice(0, limit);
       if(list.length){ grid.innerHTML = list.map(svPost).join(''); return; }
-      var labels = types.length ? types : ['Thông báo', 'Thông báo', 'Thông báo'];
+      var labels = types.length ? types : ['Notices', 'Notices', 'Notices'];
       grid.innerHTML = labels.slice(0, 3).map(function(t){
-        return '<div class="post-card is-template" aria-hidden="true"><div class="post-media"><span class="post-type">' + esc(t) + '</span><div class="post-ph">' + PH_ICON + 'Ảnh / thông tin sẽ cập nhật</div></div>' +
-          '<div class="post-body"><span class="post-date">Ngày đăng · Đơn vị</span><h3>Tiêu đề thông báo</h3><p>Nội dung tóm tắt sẽ hiển thị khi Khoa công bố thông tin chính thức.</p></div></div>';
-      }).join('') + '<p class="sv-note">Thông tin đang cập nhật — các thẻ trên là khung mẫu.</p>';
+        return '<div class="post-card is-template" aria-hidden="true"><div class="post-media"><span class="post-type">' + esc(t) + '</span><div class="post-ph">' + PH_ICON + 'Photo / information coming soon</div></div>' +
+          '<div class="post-body"><span class="post-date">Date posted · Organisation</span><h3>Notice title</h3><p>A summary will appear once the Faculty publishes official information.</p></div></div>';
+      }).join('') + '<p class="sv-note">Information coming soon — the cards above are templates.</p>';
     }
     render('all');
     bindChips(Array.prototype.slice.call(el.querySelectorAll('.tab-chip')), 'data-type', render);
   });
   // [data-sv-notices="cat|all"] data-types="A|B" data-limit — notice board rows (date tile, tag, title, Mới/Ghim, deadline)
   var SV_CAT = {'hoc-tap':['Academics','sinh-vien/hoc-tap.html'], 'hoc-bong':['Scholarships','sinh-vien/hoc-bong.html'],
-    'thuc-tap':['Thực tập','sinh-vien/thuc-tap-tuyen-dung.html'], 'cuoc-song':['Hoạt động','sinh-vien/cuoc-song.html']};
+    'thuc-tap':['Internships','sinh-vien/thuc-tap-tuyen-dung.html'], 'cuoc-song':['Activities','sinh-vien/cuoc-song.html']};
   document.querySelectorAll('[data-sv-notices]').forEach(function(el){
     var cat = el.getAttribute('data-sv-notices');
     var types = (el.getAttribute('data-types') || '').split('|').filter(Boolean);
@@ -1388,7 +1388,7 @@
     var key = cat === 'all' ? 'data-cat' : 'data-type';
     var chipList = cat === 'all' ? Object.keys(SV_CAT).map(function(c){ return [c, SV_CAT[c][0]]; }) : types.map(function(t){ return [t, t]; });
     if(only) chipList = [];
-    var chips = chipList.length > 1 ? '<div class="sv-chips" role="group" aria-label="Lọc thông báo">' + [['all', 'Tất cả']].concat(chipList).map(function(c, i){
+    var chips = chipList.length > 1 ? '<div class="sv-chips" role="group" aria-label="Filter notices">' + [['all', 'All']].concat(chipList).map(function(c, i){
       return '<button type="button" class="tab-chip' + (i ? '' : ' is-active') + '" aria-pressed="' + (i ? 'false' : 'true') + '" ' + key + '="' + esc(c[0]) + '">' + esc(c[1]) + '</button>';
     }).join('') + '</div>' : '';
     el.innerHTML = chips + '<ul class="nb-list"></ul>';
@@ -1400,8 +1400,8 @@
       var inner = '<span class="nb-date">' + (d ? '<b>' + pad(d.getDate()) + '</b>' + MONTHS[d.getMonth()] + '/' + String(d.getFullYear()).slice(2) : '<b>–</b>') + '</span>' +
         '<span class="nb-txt"><small class="nb-tag nb-' + esc(p.cat || '') + '">' + esc(tag) + '</small><strong>' + esc(p.title) + '</strong>' +
         (p.excerpt || p.org ? '<span>' + esc([p.org, p.excerpt].filter(Boolean).join(' — ')) + '</span>' : '') + '</span>' +
-        '<span class="nb-side">' + (p.pinned ? '<span class="nb-flag is-pin">Ghim</span>' : fresh ? '<span class="nb-flag">Mới</span>' : '') +
-        (p.deadline ? '<span class="sv-deadline">Hạn ' + esc(viDate(p.deadline)) + '</span>' : '') + statusBadge(p.status) + '</span>';
+        '<span class="nb-side">' + (p.pinned ? '<span class="nb-flag is-pin">Pinned</span>' : fresh ? '<span class="nb-flag">New</span>' : '') +
+        (p.deadline ? '<span class="sv-deadline">Deadline ' + esc(viDate(p.deadline)) + '</span>' : '') + statusBadge(p.status) + '</span>';
       return '<li>' + (p.href ? '<a class="nb-row" href="' + esc(url(p.href)) + '"' + ext(p.href) + '>' + inner + '<span class="nb-arrow" aria-hidden="true">→</span></a>' : '<div class="nb-row">' + inner + '</div>') + '</li>';
     }
     function render(v){
@@ -1410,33 +1410,33 @@
       if(l.length){ ul.innerHTML = l.map(row).join(''); ul.classList.remove('is-empty'); return; }
       ul.classList.add('is-empty');
       ul.innerHTML = [0, 1, 2, 3].map(function(i){
-        var tag = cat === 'all' ? chipList[i % chipList.length][1] : (types[i % (types.length || 1)] || 'Thông báo');
-        return '<li aria-hidden="true"><div class="nb-row"><span class="nb-date"><b>––</b>Ngày</span><span class="nb-txt"><small class="nb-tag">' + esc(tag) + '</small><strong>Tiêu đề thông báo</strong><span>Nội dung tóm tắt sẽ hiển thị khi có thông báo chính thức.</span></span></div></li>';
-      }).join('') + '<li class="sv-note">' + (all.length ? 'Chưa có thông báo thuộc mục này.' : 'Thông tin đang cập nhật — các dòng trên là khung mẫu.') + '</li>';
+        var tag = cat === 'all' ? chipList[i % chipList.length][1] : (types[i % (types.length || 1)] || 'Notices');
+        return '<li aria-hidden="true"><div class="nb-row"><span class="nb-date"><b>––</b>Date</span><span class="nb-txt"><small class="nb-tag">' + esc(tag) + '</small><strong>Notice title</strong><span>A summary will appear once an official notice is published.</span></span></div></li>';
+      }).join('') + '<li class="sv-note">' + (all.length ? 'No notices in this category yet.' : 'Information coming soon — the rows above are templates.') + '</li>';
     }
     render('all');
     bindChips(Array.prototype.slice.call(el.querySelectorAll('.tab-chip')), key, render);
   });
   document.querySelectorAll('[data-sv-photos]').forEach(function(el){
     var cat = el.getAttribute('data-sv-photos');
-    var slots = (el.getAttribute('data-slots') || 'Hình ảnh').split('|');
+    var slots = (el.getAttribute('data-slots') || 'Photos').split('|');
     var photos = published(window.ULAW_STUDENT_PHOTOS).filter(function(p){ return p.cat === cat; });
     var n = Math.max(slots.length, photos.length), html = '';
     for(var i = 0; i < n; i++){
       var ph = photos[i], cap = ph && ph.caption ? ph.caption : (slots[i] || '');
       html += '<figure class="sv-photo' + (ph ? '' : ' is-template') + '">' +
-        (ph ? media(ph.image, cap, {w:900, h:600, noLabel:true}) : '<div class="sv-photo-ph" aria-hidden="true">' + PH_ICON + '<small>Ảnh sẽ cập nhật</small></div>') +
+        (ph ? media(ph.image, cap, {w:900, h:600, noLabel:true}) : '<div class="sv-photo-ph" aria-hidden="true">' + PH_ICON + '<small>Photo coming soon</small></div>') +
         (cap ? '<figcaption>' + esc(cap) + '</figcaption>' : '') + '</figure>';
     }
     el.innerHTML = html;
   });
   document.querySelectorAll('[data-sv-clubs]').forEach(function(el){
     var clubs = published(window.ULAW_STUDENT_CLUBS), sample = !clubs.length;
-    if(sample) clubs = (el.getAttribute('data-slots') || 'Học thuật|Kỹ năng|Văn nghệ|Thể thao').split('|').map(function(f){ return {field:f}; });
+    if(sample) clubs = (el.getAttribute('data-slots') || 'Academic|Skills|Performing arts|Sport').split('|').map(function(f){ return {field:f}; });
     el.innerHTML = clubs.map(function(c){
       var logo = c.logo ? '<img src="' + esc(url(c.logo)) + '" alt="Logo ' + esc(c.name) + '" width="96" height="96" loading="lazy">' : '<span aria-hidden="true">' + esc((c.name || c.field || '?').charAt(0)) + '</span>';
       var inner = '<div class="club-logo">' + logo + '</div><span class="club-field">' + esc(c.field || '') + '</span>' +
-        '<h3>' + (c.name ? esc(c.name) : 'Tên câu lạc bộ') + '</h3><p>' + (c.desc ? esc(c.desc) : 'Giới thiệu, lĩnh vực hoạt động và cách tham gia — đang cập nhật.') + '</p>' + (sample ? '' : statusBadge(c.status));
+        '<h3>' + (c.name ? esc(c.name) : 'Club name') + '</h3><p>' + (c.desc ? esc(c.desc) : 'Overview, areas of activity and how to join — coming soon.') + '</p>' + (sample ? '' : statusBadge(c.status));
       return c.href ? '<a class="club-card" href="' + esc(url(c.href)) + '"' + ext(c.href) + '>' + inner + '</a>'
                     : '<article class="club-card' + (sample ? ' is-template' : '') + '">' + inner + '</article>';
     }).join('');
@@ -1448,9 +1448,9 @@
     var list = published(window.ULAW_PARTNERS), n = Math.max(+el.getAttribute('data-slots') || 6, list.length);
     // Logo only; the partner name stays as alt text / accessible name.
     function card(p){
-      var logo = p && p.logo ? '<img src="' + esc(url(p.logo)) + '" alt="' + esc(p.name || 'Logo đối tác') + '" width="240" height="120" loading="lazy">'
+      var logo = p && p.logo ? '<img src="' + esc(url(p.logo)) + '" alt="' + esc(p.name || 'Partner logo') + '" width="240" height="120" loading="lazy">'
         : p ? '<span class="logo-name">' + esc(p.name) + '</span>'
-        : '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 14l3-3 3 3 2-2 2 2"/></svg><small>Logo đối tác</small>';
+        : '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 14l3-3 3 3 2-2 2 2"/></svg><small>Partner logo</small>';
       if(p && p.href) return '<a class="logo-card" href="' + esc(url(p.href)) + '"' + ext(p.href) + ' title="' + esc(p.name || '') + '">' + logo + '</a>';
       return '<div class="logo-card' + (p ? '' : ' is-template') + '"' + (p ? ' title="' + esc(p.name || '') + '"' : '') + '>' + logo + '</div>';
     }
@@ -1487,26 +1487,26 @@
     for(var i = 0; i < 3; i++){
       var it = top[i];
       if(!it){
-        html += '<div class="in-shot is-template" aria-hidden="true"><div class="in-img">' + PH + '<small>Ảnh tuyển dụng của doanh nghiệp</small></div>' +
-          '<div class="in-cap"><span class="job-logo">?</span><span><small>Tên doanh nghiệp</small><strong>Vị trí thực tập</strong></span></div></div>';
+        html += '<div class="in-shot is-template" aria-hidden="true"><div class="in-img">' + PH + '<small>Company recruitment image</small></div>' +
+          '<div class="in-cap"><span class="job-logo">?</span><span><small>Company name</small><strong>Internship position</strong></span></div></div>';
         continue;
       }
-      var img = it.image ? media(it.image, 'Ảnh tuyển thực tập: ' + (it.company || ''), {w:900, h:600, noLabel:true}) : '<div class="in-img-ph">' + PH + '</div>';
-      html += wrap(it, 'in-shot', '<div class="in-img">' + img + (it.deadline ? '<span class="in-dl">Hạn ' + esc(viDate(it.deadline)) + '</span>' : '') + '</div>' +
+      var img = it.image ? media(it.image, 'Internship recruitment image: ' + (it.company || ''), {w:900, h:600, noLabel:true}) : '<div class="in-img-ph">' + PH + '</div>';
+      html += wrap(it, 'in-shot', '<div class="in-img">' + img + (it.deadline ? '<span class="in-dl">Deadline ' + esc(viDate(it.deadline)) + '</span>' : '') + '</div>' +
         '<div class="in-cap"><span class="job-logo">' + logoOf(it) + '</span><span><small>' + esc(it.company || '') + '</small><strong>' + esc(it.title || '') + '</strong>' +
-        '<em>' + esc([it.slots != null ? it.slots + ' vị trí' : '', it.duration, it.location].filter(Boolean).join(' · ')) + '</em></span>' + statusBadge(it.status) + '</div>');
+        '<em>' + esc([it.slots != null ? nOf('{n} position|{n} positions', it.slots) : '', it.duration, it.location].filter(Boolean).join(' · ')) + '</em></span>' + statusBadge(it.status) + '</div>');
     }
     feat.innerHTML = html;
     var newest = newestTwo(list);
     side.innerHTML = list.length ? list.map(function(it){
       var d = it.date ? viDate(it.date) : '';
       return '<li>' + wrap(it, 'in-upd', '<span class="job-logo">' + logoOf(it) + '</span><span class="in-upd-txt"><strong>' + esc(it.company || '') + (newest.indexOf(it) > -1 ? ' <span class="new-tag">New</span>' : '') + '</strong><span>' + esc(it.title || '') + '</span>' +
-        '<small>' + esc([d ? 'Cập nhật ' + d : '', it.deadline ? 'Hạn ' + viDate(it.deadline) : ''].filter(Boolean).join(' · ')) + '</small></span>') + '</li>';
+        '<small>' + esc([d ? 'Updated ' + d : '', it.deadline ? 'Deadline ' + viDate(it.deadline) : ''].filter(Boolean).join(' · ')) + '</small></span>') + '</li>';
     }).join('') : [1, 2, 3, 4, 5].map(function(n){
-      return '<li aria-hidden="true"><div class="in-upd is-template"><span class="job-logo">?</span><span class="in-upd-txt"><strong>Tên doanh nghiệp' + (n < 3 ? ' <span class="new-tag">New</span>' : '') + '</strong><span>Vị trí thực tập</span><small>Ngày cập nhật · Hạn nộp</small></span></div></li>';
-    }).join('') + '<li class="sv-note">Thông tin đang cập nhật.</li>';
+      return '<li aria-hidden="true"><div class="in-upd is-template"><span class="job-logo">?</span><span class="in-upd-txt"><strong>Company name' + (n < 3 ? ' <span class="new-tag">New</span>' : '') + '</strong><span>Internship position</span><small>Date updated · Deadline</small></span></div></li>';
+    }).join('') + '<li class="sv-note">Information coming soon.</li>';
     var count = el.querySelector('[data-in-count]');
-    if(count) count.textContent = nOf('{n} tin', list.length);
+    if(count) count.textContent = nOf('{n} post|{n} posts', list.length);
   });
 
   // ---------- /doanh-nghiep: job board ([data-jobs], chips filter by type) ----------
@@ -1517,17 +1517,17 @@
     function row(j){
       var logo = j.logo ? '<img src="' + esc(url(j.logo)) + '" alt="" width="112" height="112" loading="lazy">' : esc((j.company || '?').charAt(0));
       var inner = '<span class="job-logo">' + logo + '</span><div class="job-main"><h3>' + esc(j.title) + (newest.indexOf(j) > -1 ? ' <span class="new-tag">New</span>' : '') + '</h3><span>' + esc([j.company, j.location].filter(Boolean).join(' · ')) + '</span></div>' +
-        '<div class="job-tags"><span class="job-type' + (j.type === 'Thực tập' ? ' is-intern' : '') + '">' + esc(j.type || 'Tuyển dụng') + '</span>' + statusBadge(j.status) + '</div>' +
-        '<span class="job-dl">' + (j.deadline ? 'Hạn: ' + esc(viDate(j.deadline)) : '') + '</span>';
+        '<div class="job-tags"><span class="job-type' + (j.type === 'Internships' ? ' is-intern' : '') + '">' + esc(j.type || 'Jobs') + '</span>' + statusBadge(j.status) + '</div>' +
+        '<span class="job-dl">' + (j.deadline ? 'Deadline: ' + esc(viDate(j.deadline)) : '') + '</span>';
       return '<li>' + (j.href ? '<a class="job-row" href="' + esc(url(j.href)) + '"' + ext(j.href) + '>' + inner + '</a>' : '<div class="job-row">' + inner + '</div>') + '</li>';
     }
     function render(type){
       var l = jobs.filter(function(j){ return type === 'all' || j.type === type; });
       if(l.length){ list.innerHTML = l.map(row).join(''); return; }
       list.innerHTML = [1, 2, 3].map(function(n){
-        return '<li aria-hidden="true"><div class="job-row is-template"><span class="job-logo">?</span><div class="job-main"><h3>Vị trí tuyển dụng' + (n < 3 ? ' <span class="new-tag">New</span>' : '') + '</h3><span>Tên doanh nghiệp · Địa điểm</span></div>' +
-          '<div class="job-tags"><span class="job-type">Hình thức</span></div><span class="job-dl">Hạn nộp</span></div></li>';
-      }).join('') + '<li class="sv-note">' + (jobs.length ? 'Chưa có tin thuộc loại này.' : 'Thông tin đang cập nhật — tin tuyển dụng từ doanh nghiệp đối tác sẽ hiển thị tại đây.') + '</li>';
+        return '<li aria-hidden="true"><div class="job-row is-template"><span class="job-logo">?</span><div class="job-main"><h3>Job title' + (n < 3 ? ' <span class="new-tag">New</span>' : '') + '</h3><span>Company name · Location</span></div>' +
+          '<div class="job-tags"><span class="job-type">Job type</span></div><span class="job-dl">Deadline</span></div></li>';
+      }).join('') + '<li class="sv-note">' + (jobs.length ? 'No listings of this type yet.' : 'Information coming soon — job listings from partner companies will appear here.') + '</li>';
     }
     render('all');
     bindChips(Array.prototype.slice.call(el.querySelectorAll('.tab-chip')), 'data-type', render);
@@ -1598,14 +1598,14 @@
       var tone = TONES[i % TONES.length];
       var bg = a && a.image ? media(a.image, '', {w: big ? 1200 : 700, h: big ? 1200 : 700, noLabel:true})
         : '<span class="am-scene" aria-hidden="true">' + media(SCENES[i % SCENES.length], '', {noLabel:true}) + '</span>';
-      var meta = a ? [a.cohort, a.program].filter(Boolean).join(' · ') : 'Khóa · Ngành';
-      var title = a ? esc(a.name) : (big ? 'Câu chuyện nổi bật' : 'Tên cựu sinh viên');
+      var meta = a ? [a.cohort, a.program].filter(Boolean).join(' · ') : 'Cohort · Programme';
+      var title = a ? esc(a.name) : (big ? 'Featured story' : 'Graduate’s name');
       var inner = '<div class="am-bg">' + bg + '</div><div class="am-body">' +
-        (big ? '<span class="am-kicker">' + esc(a && a.topic ? a.topic : 'Câu chuyện nổi bật') + '</span>' : '') +
+        (big ? '<span class="am-kicker">' + esc(a && a.topic ? a.topic : 'Featured story') + '</span>' : '') +
         '<h3 class="am-title">' + title + '</h3>' +
-        (big ? '<p class="am-text">' + esc(a ? (a.headline || a.excerpt || '') : 'Hành trình của cựu sinh viên Khoa Quản trị sẽ được đăng tại đây khi có sự đồng ý và đã được Khoa xác thực.') + '</p>' : '') +
+        (big ? '<p class="am-text">' + esc(a ? (a.headline || a.excerpt || '') : 'The journeys of Faculty of Management alumni will be published here with their consent, once verified by the Faculty.') + '</p>' : '') +
         '<span class="am-meta">' + esc(a && a.role ? a.role + (a.org ? ' · ' + a.org : '') : meta) + '</span>' +
-        (big ? '<span class="am-btn">' + (a ? 'Đọc câu chuyện' : 'Sắp ra mắt') + ' <span aria-hidden="true">▸</span></span>' : '<span class="am-link">' + (a ? 'Xem câu chuyện' : 'Being updated') + '</span>') +
+        (big ? '<span class="am-btn">' + (a ? 'Read the story' : 'Coming soon') + ' <span aria-hidden="true">▸</span></span>' : '<span class="am-link">' + (a ? 'View story' : 'Being updated') + '</span>') +
         (a ? statusBadge(a.status) : '') + '</div>';
       var cls = 'am-tile' + (big ? ' is-big' : '') + (a ? '' : ' is-template');
       return a && a.href
@@ -1616,9 +1616,9 @@
       var feat = list.filter(function(a){ return a.featured; }), rest = list.filter(function(a){ return !a.featured; });
       var order = feat.concat(rest), big = [order[0], order[1]], small = order.slice(2, 9);
       if(sample){ big = [null, null]; small = [null, null, null, null, null, null, null]; }
-      var ctl = '<div class="am-tile am-ctl"><p class="am-ctl-title">Khám phá câu chuyện</p><button type="button" class="am-shuffle"' + (list.length > 1 ? '' : ' disabled') + '>' +
-        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg> Xáo trộn</button>' +
-        (sample ? '<small class="am-hint">Xáo trộn hoạt động khi có câu chuyện</small>' : '') + '</div>';
+      var ctl = '<div class="am-tile am-ctl"><p class="am-ctl-title">Explore the stories</p><button type="button" class="am-shuffle"' + (list.length > 1 ? '' : ' disabled') + '>' +
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg> Shuffle</button>' +
+        (sample ? '<small class="am-hint">Shuffle works once stories are available</small>' : '') + '</div>';
       var html = ctl, s = 0;
       html += small[s] !== undefined ? tile(small[s], 1) : ''; s++;
       html += big[0] !== undefined ? tile(big[0], 0, true) : '';
@@ -1649,7 +1649,7 @@
 
   // ---------- page illustrations ([data-scene="key"][data-alt]) ----------
   document.querySelectorAll('[data-scene]').forEach(function(el){
-    el.innerHTML = media(el.getAttribute('data-scene'), el.getAttribute('data-alt') || 'Ảnh minh họa');
+    el.innerHTML = media(el.getAttribute('data-scene'), el.getAttribute('data-alt') || 'Illustration');
   });
 
   // News split view: left = 3 newest as image+text rows, right = every item newest → oldest.
@@ -1661,25 +1661,25 @@
         '<div class="ns-body"><div class="news-meta"><span class="news-cat">' + esc(n.category) + '</span><span>' + esc(newsDate(n)) + '</span></div>' +
         '<h4>' + esc(n.title) + '</h4><p>' + esc(n.excerpt) + '</p>' + statusBadge(n.status) + '</div></a>';
     });
-    for(var i = rows.length; i < 3; i++) rows.push('<div class="ns-row is-template" aria-hidden="true"><div class="ns-media ns-ph">Ảnh</div><div class="ns-body"><div class="news-meta"><span>Ngày đăng</span></div><h4>Tiêu đề tin tức</h4><p>Tin tức sẽ được đăng khi có nội dung chính thức.</p></div></div>');
+    for(var i = rows.length; i < 3; i++) rows.push('<div class="ns-row is-template" aria-hidden="true"><div class="ns-media ns-ph">Photo</div><div class="ns-body"><div class="news-meta"><span>Date posted</span></div><h4>News headline</h4><p>News will be posted once official content is available.</p></div></div>');
     function item(n){
       var d = n.date ? new Date(n.date) : null;
-      return '<li><a class="nl-item" href="' + esc(url(n.url)) + '"><span class="nl-date">' + (d ? '<b>' + pad(d.getDate()) + '</b>' + MONTHS[d.getMonth()] + '/' + String(d.getFullYear()).slice(2) : '<b>–</b>Chưa rõ') + '</span>' +
+      return '<li><a class="nl-item" href="' + esc(url(n.url)) + '"><span class="nl-date">' + (d ? '<b>' + pad(d.getDate()) + '</b>' + MONTHS[d.getMonth()] + '/' + String(d.getFullYear()).slice(2) : '<b>–</b>Undated') + '</span>' +
         '<span class="nl-txt"><small>' + esc(n.category) + '</small><strong>' + esc(n.title) + '</strong></span></a></li>';
     }
     var list = '';
     if(byYear){
       // one group per year, newest year first; undated items last
       var groups = {}, years = [];
-      sorted.forEach(function(n){ var y = n.date ? String(new Date(n.date).getFullYear()) : 'Chưa xác định năm'; if(!groups[y]){ groups[y] = []; years.push(y); } groups[y].push(n); });
+      sorted.forEach(function(n){ var y = n.date ? String(new Date(n.date).getFullYear()) : 'Undated'; if(!groups[y]){ groups[y] = []; years.push(y); } groups[y].push(n); });
       list = years.map(function(y){
-        return '<li class="nl-year"><span class="nl-year-label">' + esc(y) + '</span><span class="nl-year-count">' + nOf('{n} tin', groups[y].length) + '</span></li>' + groups[y].map(item).join('');
+        return '<li class="nl-year"><span class="nl-year-label">' + esc(y) + '</span><span class="nl-year-count">' + nOf('{n} post|{n} posts', groups[y].length) + '</span></li>' + groups[y].map(item).join('');
       }).join('');
     } else list = sorted.map(item).join('');
     el.innerHTML = '<div class="ns-feature">' + rows.join('') + '</div>' +
-      '<aside class="ns-side" aria-label="Tất cả tin theo thời gian"><div class="ns-side-head"><h4>' + (byYear ? 'Tất cả tin theo năm' : 'Tin theo thời gian') + '</h4><span class="in-count">' + nOf('{n} tin', sorted.length) + '</span></div>' +
-      (list ? '<ol class="nl-list">' + list + '</ol>' : '<p class="sv-note">Chưa có tin tức.</p>') +
-      '<p class="nl-foot">Mới nhất ở trên cùng. Tin chưa xác thực ngày đăng xếp cuối.</p></aside>';
+      '<aside class="ns-side" aria-label="All news by date"><div class="ns-side-head"><h4>' + (byYear ? 'All news by year' : 'News by date') + '</h4><span class="in-count">' + nOf('{n} post|{n} posts', sorted.length) + '</span></div>' +
+      (list ? '<ol class="nl-list">' + list + '</ol>' : '<p class="sv-note">No news yet.</p>') +
+      '<p class="nl-foot">Newest at the top. News without a verified posting date is listed last.</p></aside>';
   }
 
   // ---------- home: SECTION 9 — news (3 picture cards) + events (month calendar + event info) ----------
@@ -1741,7 +1741,7 @@
       allBtn.hidden = !selected;
       pList.innerHTML = list.length ? list.map(info).join('')
         : '<div class="ev-empty"><strong>' + 'No events yet' + '</strong><p>' + (events.length ? 'No events in this period. Choose another month on the calendar.' : 'The event calendar will be updated once the Faculty announces it officially.') + '</p>' +
-          '<a class="link-arrow" href="' + esc(url('tin-tuc/index.html')) + '">' + 'Xem tin tức →' + '</a></div>';
+          '<a class="link-arrow" href="' + esc(url('tin-tuc/index.html')) + '">' + 'View news →' + '</a></div>';
     }
     function render(){
       var y = view.getFullYear(), m = view.getMonth();
@@ -1861,9 +1861,9 @@
     var events = upcoming(window.ULAW_EVENTS, 50);
     el.innerHTML = events.length
       ? '<ul class="event-list">' + events.map(eventRow).join('') + '</ul>'
-      : emptyState({title:'Chưa có sự kiện sắp diễn ra', icon:'📅',
-          text:'Khoa chưa công bố lịch sự kiện đã xác thực. Sự kiện sẽ xuất hiện tại đây theo thứ tự thời gian, kèm giờ, địa điểm và liên kết đăng ký khi có.',
-          actions:[{label:'Xem tin tức', href:'tin-tuc/index.html'}]});
+      : emptyState({title:'No upcoming events yet', icon:'📅',
+          text:'The Faculty has not yet published a verified event calendar. Events will appear here in chronological order, with times, venues and registration links when available.',
+          actions:[{label:'View news', href:'tin-tuc/index.html'}]});
   })();
 
   // ---------- /tin-tuc listing: search + category filter over the split view ----------
@@ -1880,7 +1880,7 @@
       var items = all.filter(function(n){
         return (c === 'all' || n.category === c) && (!qn || norm(n.title + ' ' + n.excerpt).indexOf(qn) > -1);
       });
-      if(count) count.textContent = nOf('{n} bài viết', items.length);
+      if(count) count.textContent = nOf('{n} article|{n} articles', items.length);
       var empty = document.getElementById('news-empty');
       if(empty) empty.hidden = items.length > 0 || !all.length;
       box.hidden = !items.length && all.length > 0;
@@ -1910,8 +1910,8 @@
     locked.forEach(function(el){ el.hidden = !ok; });
     var gate = document.querySelector('[data-login-gate]');
     if(gate && ok){
-      gate.querySelector('.lg-card').innerHTML = '<p class="lg-card-title">Đã đăng nhập</p><p class="lg-status">Bạn đang xem Học liệu bằng tài khoản sinh viên ULAW.</p>' +
-        '<a class="btn btn-secondary btn-block" href="?signed_out=1">Đăng xuất</a>';
+      gate.querySelector('.lg-card').innerHTML = '<p class="lg-card-title">Signed in</p><p class="lg-status">You are viewing Learning resources with your ULAW student account.</p>' +
+        '<a class="btn btn-secondary btn-block" href="?signed_out=1">Sign out</a>';
     }
   })();
 
@@ -1923,7 +1923,7 @@
       var ret = location.href.split('#')[0];
       a.href = sso + (sso.indexOf('?') > -1 ? '&' : '?') + 'redirect_uri=' + encodeURIComponent(ret);
       a.removeAttribute('aria-disabled');
-      if(st) st.textContent = 'Bạn sẽ được chuyển tới trang đăng nhập chính thức của ULAW.';
+      if(st) st.textContent = 'You will be redirected to the official ULAW sign-in page.';
     } else {
       a.addEventListener('click', function(e){
         e.preventDefault();
@@ -1955,7 +1955,7 @@
 
     function fillSelect(sel, values){
       if(!sel) return;
-      sel.innerHTML = '<option value="all">Tất cả</option>' + values.map(function(v){
+      sel.innerHTML = '<option value="all">All</option>' + values.map(function(v){
         return '<option value="' + esc(v[0]) + '">' + esc(v[1]) + '</option>';
       }).join('');
     }
@@ -1970,22 +1970,22 @@
     fillSelect(f.semester, uniq('semester'));
     fillSelect(f.course, uniq('course'));
     fillSelect(f.version, uniq('version'));
-    fillSelect(f.access, [['public', 'Công khai'], ['student', 'Dành cho sinh viên']]);
+    fillSelect(f.access, [['public', 'Public'], ['student', 'For students']]);
 
     function signedIn(){ try { return sessionStorage.getItem('ulaw-signed-in') === '1'; } catch(e){ return false; } }
     function card(r){
       var access = r.access === 'public'
-        ? '<span class="badge badge-public">Công khai</span>'
-        : '<span class="badge badge-student">Dành cho sinh viên</span>';
+        ? '<span class="badge badge-public">Public</span>'
+        : '<span class="badge badge-student">For students</span>';
       var action = r.access === 'public'
-        ? (r.file ? '<a class="btn btn-secondary" href="' + esc(url(r.file)) + '">Xem tài liệu</a>' : '<span>Tệp đang cập nhật</span>')
+        ? (r.file ? '<a class="btn btn-secondary" href="' + esc(url(r.file)) + '">View document</a>' : '<span>File being updated</span>')
         : (signedIn()
-            ? '<span class="lib-open">🔓 Đã mở khóa</span><span>Tệp đang cập nhật</span>'
-            : '<span class="lib-locked">🔒 Cần đăng nhập</span><a class="btn btn-primary" href="#dang-nhap">Đăng nhập để xem</a>');
+            ? '<span class="lib-open">🔓 Unlocked</span><span>File being updated</span>'
+            : '<span class="lib-locked">🔒 Sign-in required</span><a class="btn btn-primary" href="#dang-nhap">Sign in to view</a>');
       var meta = [
-        ['Loại', typeLabel[r.type]], ['Ngành', r.programName], ['Học phần', r.course], ['Khóa', r.cohort],
-        ['Học kỳ', r.semester], ['Phiên bản', r.version], ['Nguồn', r.source],
-        ['Cập nhật', r.updatedAt ? fmtDate(r.updatedAt) : 'chưa xác thực'],
+        ['Type', typeLabel[r.type]], ['Programme', r.programName], ['Module', r.course], ['Cohort', r.cohort],
+        ['Semester', r.semester], ['Version', r.version], ['Source', r.source],
+        ['Updated', r.updatedAt ? fmtDate(r.updatedAt) : 'not yet verified'],
       ].filter(function(m){ return m[1]; }).map(function(m){ return '<span>' + m[0] + ': <b>' + esc(m[1]) + '</b></span>'; }).join('');
       return '<li class="resource-card"><div><div class="news-meta">' + access + statusBadge(r.status) + '</div>' +
         '<h3>' + esc(r.title) + '</h3><p class="resource-meta">' + meta + '</p></div>' +
@@ -2004,9 +2004,9 @@
           (val(f.access) === 'all' || r.access === val(f.access)) &&
           (!qn || norm(r.title + ' ' + r.programName + ' ' + (r.course || '')).indexOf(qn) > -1);
       });
-      count.textContent = fill('{shown} / {total} mục học liệu', {shown: items.length, total: data.length});
+      count.textContent = fill('{shown} of {total} resources', {shown: items.length, total: data.length});
       results.innerHTML = items.length ? '<ul class="resource-list">' + items.map(card).join('') + '</ul>'
-        : emptyState({title:'Không có học liệu phù hợp', icon:'⌕', text:'Thử bỏ bớt bộ lọc hoặc dùng từ khóa khác.'});
+        : emptyState({title:'No matching learning resources', icon:'⌕', text:'Try removing some filters or using a different keyword.'});
     }
     function fromHash(){
       var h = window.location.hash.slice(1);

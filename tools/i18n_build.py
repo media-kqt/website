@@ -117,7 +117,9 @@ def check_pair(key, en, kind):
         if "<" in rest and re.search(r"<[a-zA-Z/!]", rest):
             out.append("raw tags other than <br>/<wbr>")
     elif kind == "js":
-        tags = lambda s: sorted(re.findall(r"<[^<>]+>", s))
+        # Complete tags must survive unchanged, except for the text attributes inside them (aria-label …).
+        tags = lambda s: sorted(re.sub(r'(\s(?:%s)=")[^"]*(")' % "|".join(TEXT_ATTRS), r"\1\2", t)
+                                for t in re.findall(r"<[^<>]+>", s))
         if tags(key) != tags(en):
             out.append("HTML tags differ")
         for ch in '"<>=':
@@ -230,9 +232,16 @@ def parse(src):
     return p.root, p.problems
 
 
-def skipped(n):
+def no_translate(n):
+    """Marked to stay as it is: data-i18n="off" or lang="vi" (the page's own <html lang> aside)."""
     return n.tag not in ("#text", "#comment", "#root") and (
-        n.tag in OPAQUE or n.attr("data-i18n") == "off" or (n.attr("lang") == "vi" and n.tag != "html"))
+        n.attr("data-i18n") == "off" or (n.attr("lang") == "vi" and n.tag != "html"))
+
+
+def skipped(n):
+    """No text units inside: marked elements, and elements whose content is not page text
+    (script, style, svg, textarea…). Their attributes are still translated unless no_translate."""
+    return n.tag not in ("#text", "#comment", "#root") and (n.tag in OPAQUE or no_translate(n))
 
 
 def text_of(n, src):
@@ -458,20 +467,20 @@ def translate_js_value(val, cat, where, plural=False):
         return None
     left, core, right = split_edges(norm_text(val))
     if "|" in core and "<" not in core:
-        parts = core.split("|")
-        out = []
-        for p in parts:
+        out, complete = [], True
+        for p in core.split("|"):
             p = p.strip()
             if p == "all" or not LETTER.search(p):
                 out.append(p)
                 continue
             en = cat.get(p, where, core, required=looks_vi(p))
-            if en is None:
-                return None
+            if en is None:  # keep looking, so every missing item is reported at once
+                complete = False
+                continue
             for e in check_pair(p, en, "part"):
                 cat.errors.append("%s: %r -> %r: %s" % (where, p, en, e))
             out.append(en)
-        return left + "|".join(out) + right
+        return left + "|".join(out) + right if complete else None
     en = cat.get(core, where, "", required=looks_vi(core))
     if en is None:
         return None
@@ -550,19 +559,20 @@ def translate_attr_text(val, cat, where, required=True):
 
 
 def translate_list(val, cat, where):
-    out = []
+    out, complete = [], True
     for p in val.split("|"):
         q = p.strip()
         if q == "all" or not LETTER.search(q):
             out.append(p)
             continue
         en = cat.get(norm_text(q), where, val)
-        if en is None:
-            return None
+        if en is None:  # keep looking, so every missing item is reported at once
+            complete = False
+            continue
         for e in check_pair(q, en, "part"):
             cat.errors.append("%s: %r -> %r: %s" % (where, q, en, e))
         out.append(en)
-    return "|".join(out)
+    return "|".join(out) if complete else None
 
 
 def translate_search_query(u, cat, where):
@@ -590,7 +600,7 @@ def encode_attr(val, quote):
 def rewrite_tag(n, raw, rel, cat, lang_links, body_roots):
     """New start-tag text for the English page (attributes only; the tag name stays)."""
     where = EN_DIR + "/" + rel
-    in_skip = any(skipped(p) for p in ancestors(n))
+    in_skip = no_translate(n) or any(no_translate(p) for p in ancestors(n))
 
     def repl(m):
         space, name, eq, qv = m.groups()
@@ -610,7 +620,7 @@ def rewrite_tag(n, raw, rel, cat, lang_links, body_roots):
                 new = lang_links[n.attr("data-lang")]
             else:
                 new = translate_search_query(rewrite_url(val), cat, where)
-        elif in_skip or skipped(n):
+        elif in_skip:
             new = None
         elif lname in TEXT_ATTRS or (n.tag == "meta" and lname == "content" and (n.attr("name") or "") == "description"):
             new = translate_attr_text(val, cat, where)
@@ -717,23 +727,23 @@ def en_leftovers(text, cat):
     allowed = {k for k, v in cat.data.items() if k == v}
     found = []
 
-    def walk(n, skip):
+    def walk(n, skip_text, skip_attr):
         for k in n.kids:
             if k.tag == "#text":
                 t = norm_text(text_of(k, text)).strip()
-                if not skip and VI_RE.search(t) and t not in allowed:
+                if not skip_text and VI_RE.search(t) and t not in allowed:
                     found.append(t[:80])
             elif k.tag != "#comment":
-                s = skip or skipped(k)
+                st, sa = skip_text or skipped(k), skip_attr or no_translate(k)
                 if k.tag == "script" and not k.attr("src"):
                     found.extend(js_leftovers(text[k.b:k.c], "inline script"))
                     continue
-                if not s:
+                if not sa:
                     for a, v in k.attrs.items():
                         if v and a not in URL_ATTRS and VI_RE.search(v) and norm_text(v).strip() not in allowed:
                             found.append("%s=%s" % (a, v[:60]))
-                walk(k, s)
-    walk(root, False)
+                walk(k, st, sa)
+    walk(root, False, False)
     return found
 
 

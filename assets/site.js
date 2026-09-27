@@ -1493,7 +1493,7 @@
       var img = it.image ? media(it.image, 'Ảnh tuyển thực tập: ' + (it.company || ''), {w:900, h:600, noLabel:true}) : '<div class="in-img-ph">' + PH + '</div>';
       html += wrap(it, 'in-shot', '<div class="in-img">' + img + (it.deadline ? '<span class="in-dl">Hạn ' + esc(viDate(it.deadline)) + '</span>' : '') + '</div>' +
         '<div class="in-cap"><span class="job-logo">' + logoOf(it) + '</span><span><small>' + esc(it.company || '') + '</small><strong>' + esc(it.title || '') + '</strong>' +
-        '<em>' + esc([it.slots != null ? it.slots + ' vị trí' : '', it.duration, it.location].filter(Boolean).join(' · ')) + '</em></span>' + statusBadge(it.status) + '</div>');
+        '<em>' + esc([it.slots != null ? nOf('{n} vị trí', it.slots) : '', it.duration, it.location].filter(Boolean).join(' · ')) + '</em></span>' + statusBadge(it.status) + '</div>');
     }
     feat.innerHTML = html;
     var newest = newestTwo(list);
