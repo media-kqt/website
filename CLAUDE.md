@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A static, multi-page prototype website for **Khoa Quản trị (Faculty of Management), Trường Đại học Luật TP. Hồ Chí Minh (ULAW)**. All content is in Vietnamese. There is no framework, bundler or package manager: plain HTML + one CSS file + vanilla ES5-style JS (IIFEs, `var`, no modules).
 
-The original requirements spec (removed from the repo on 2026-09-27; recoverable from git history) has been reshaped by many user edit requests, which [SESSION.md](SESSION.md) lists; the rules below are the current source of truth. [README.md](README.md) lists what is illustrative and what ULAW still has to supply.
+The original requirements spec (removed from the repo on 2026-09-27; recoverable from git history) has been reshaped by many user edit requests, which [SESSION.md](SESSION.md) lists; the rules below are the current source of truth.
 
 ## Commands
 

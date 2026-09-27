@@ -9,6 +9,7 @@ Update at the end of every request (newest first, keep under ~80 lines; git log 
 - Work happens on local branch `development`; the Stop hook auto-commits every finished request there. Nothing is pushed; `main` = initial commit only.
 
 ## Recent changes (newest first)
+- 2026-09-27: user trimmed README.md to Running + view-on-other-devices (Editing, Routes, QA, ULAW-to-supply sections removed); CLAUDE.md pointer to README's to-supply list dropped.
 - 2026-09-27: removed personal GitHub account names/Pages URLs from CLAUDE.md, README.md, SESSION.md (generic `<owner>/<repo>` wording).
 - 2026-09-27: removed `Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md` (spec; in git history); CLAUDE.md/README references updated — CLAUDE.md rules are now the source of truth.
 - 2026-09-27: CLAUDE.md tidied (/init review): directory→section map, palette/override wording de-historied, VI/EN details condensed (full notes stay in site.js).
