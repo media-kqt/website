@@ -2683,3 +2683,12 @@ a.nb-row:hover strong{color:var(--primary)}
 @media(max-width:599px){.hl-track{max-height:none}}
 /* Phones without JS sizing yet: slider fills the first screen minus bars and the ~320px hero banner */
 @media(max-width:599px){.hl-track{aspect-ratio:auto;height:max(75vw,calc(100svh - var(--utility-h) - var(--header-h) - 300px))}}
+
+/* ---------- VI/EN brand swap (html.is-translated is set by site.js in EN mode) ---------- */
+[data-lang-en]{display:none}
+html.is-translated [data-lang-vi]{display:none}
+html.is-translated span[data-lang-en]{display:inline}
+html.is-translated .brand-text[data-lang-en]{display:flex}
+/* The EN wordmark is ~60px wider than the VI one; on desktop (sub-line hidden) it stacks on two lines so the header still fits */
+.brand-br{display:none}
+@media(min-width:1280px){.brand-br{display:inline}html.is-translated .brand-text[data-lang-en] .brand-main{line-height:1.1;font-size:1rem}}
