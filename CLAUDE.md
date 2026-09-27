@@ -21,7 +21,7 @@ Hooks in `.claude/settings.json`: **Stop** → `tools/auto_commit.sh` auto-commi
 
 There is no test suite. `--check` is the only automated gate: run it after any change to pages, partials or data.
 
-**Cache busting / deploy.** GitHub Pages (`hotrucvi.github.io/website`, built from `main`) serves every file with `max-age=600`, so pages reference `assets/{styles.css,scenes.js,data.js,site.js}` as `…?v=<sha1[:10]>`. After editing any of those four files, run `build_layout.py` (never hand-edit the `?v=`); `--check` fails on a stale hash. `development` auto-commits are not live until merged into `main`.
+**Cache busting / deploy.** GitHub Pages (built from `main`) serves every file with `max-age=600`, so pages reference `assets/{styles.css,scenes.js,data.js,site.js}` as `…?v=<sha1[:10]>`. After editing any of those four files, run `build_layout.py` (never hand-edit the `?v=`); `--check` fails on a stale hash. `development` auto-commits are not live until merged into `main`.
 
 ## Architecture
 

@@ -9,6 +9,7 @@ Update at the end of every request (newest first, keep under ~80 lines; git log 
 - Work happens on local branch `development`; the Stop hook auto-commits every finished request there. Nothing is pushed; `main` = initial commit only.
 
 ## Recent changes (newest first)
+- 2026-09-27: removed personal GitHub account names/Pages URLs from CLAUDE.md, README.md, SESSION.md (generic `<owner>/<repo>` wording).
 - 2026-09-27: removed `Prompt_website_Khoa_Quan_tri_ULAW_hop_nhat.md` (spec; in git history); CLAUDE.md/README references updated — CLAUDE.md rules are now the source of truth.
 - 2026-09-27: CLAUDE.md tidied (/init review): directory→section map, palette/override wording de-historied, VI/EN details condensed (full notes stay in site.js).
 - 2026-09-27: restored `.claude/settings.json` (SessionStart/PreToolUse/Stop hooks, sudo denied) in the `website_new` checkout; `guard_paths.sh` derives the memory dir from the repo path; working on `development`.
@@ -129,7 +130,7 @@ Update at the end of every request (newest first, keep under ~80 lines; git log 
 - 2026-09-27 — All mega-menu headings are now links: Đào tạo đại học → dao-tao#dai-hoc (new id), Đào tạo sau đại học → dao-tao#sau-dai-hoc, Thạc sĩ → ThS page; Nghiên cứu → nghien-cuu, Hoạt động học thuật → #cong-bo, Chia sẻ tri thức → #hoi-thao; Giảng viên/Sinh viên/Đối tác/Tin tức & Sự kiện titles → their index pages.
 - 2026-09-27 — Sinh viên mega menu: group headings (Học tập, Học bổng, Thực tập & Tuyển dụng, Cuộc sống sinh viên, Học liệu) are now links to their sections (sinh-vien #hoc-tap/#hoc-bong/#thuc-tap/#cuoc-song, hoc-lieu/).
 - 2026-09-27 — Đội ngũ › Giảng viên gallery heading renamed "Ngoài giờ lên lớp" → "Hoạt động đoàn thể".
-- 2026-09-27 — Hosting: chose GitHub Pages (repo duchuy0411/ulawsite, branch development, already pushed); user must enable Pages in repo Settings. 404.html now uses a runtime <base> (works under /ulawsite/). README documents LAN + Pages viewing. Claude artifacts ruled out (ULAW branding).
+- 2026-09-27 — Hosting: chose GitHub Pages (branch development, already pushed); user must enable Pages in repo Settings. 404.html now uses a runtime <base> (works under /<repo>/). README documents LAN + Pages viewing. Claude artifacts ruled out (ULAW branding).
 - 2026-09-27 — Guest-expert cards restyled to a refined academic layout: large portrait on top (square 1:1 since 2026-09-27), small-caps title with gold hairline, serif name, divider, position, uppercase workplace; 4-column grid (4 template cards when empty).
 - 2026-09-27 — Guest experts: auto-scroll removed; now a static responsive grid (3/2/1 columns) of the same cards (photo + học hàm, họ tên, chức vụ, đơn vị).
 - 2026-09-27 — Chuyên gia/GV thỉnh giảng restyled to match Case Studies: ink-navy + ruled lines, single orange accent, outlined "EXPERTS" watermark, headline "Người làm thật. / Kinh nghiệm thật.", cream folder-style cards with colour tabs (marquee unchanged).
@@ -174,7 +175,7 @@ Update at the end of every request (newest first, keep under ~80 lines; git log 
 
 ## Open questions waiting on the user
 - ThS QTKD: class photos (ULAW_THS_PHOTOS), notices (ULAW_THS_NOTICES)).
-- Enable GitHub Pages (Settings → Pages → development / root), then verify https://duchuy0411.github.io/ulawsite/.
+- Enable GitHub Pages (Settings → Pages → development / root), then verify the Pages URL.
 - Guest experts list with consent (title, name, position, org, photo) for ULAW_GUEST_EXPERTS.
 - Lecturer leisure photos (with consent) for ULAW_FACULTY_MOMENTS.
 - Bộ môn: confirm department names; provide heads + lecturers with photos and CV links (ULAW_DEPARTMENTS).

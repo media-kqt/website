@@ -13,7 +13,7 @@ Opening `index.html` directly (`file://`) also works: all links, including searc
 ## Xem trên thiết bị khác (view on other devices)
 
 - **Same Wi-Fi/LAN:** `python3 -m http.server 8000 --bind 0.0.0.0`, then open `http://<this-computer-IP>:8000/` on the phone (find the IP with `hostname -I`). Works only while the computer and server are running.
-- **Anywhere – GitHub Pages:** repo `duchuy0411/ulawsite` → Settings → Pages → *Deploy from a branch* → `development` / `/ (root)`. The site is then at `https://duchuy0411.github.io/ulawsite/` and updates on every push. The free plan requires a public repo.
+- **Anywhere – GitHub Pages:** the GitHub repo → Settings → Pages → *Deploy from a branch* → `development` / `/ (root)`. The site is then at `https://<owner>.github.io/<repo>/` and updates on every push. The free plan requires a public repo.
 - `404.html` sets its `<base>` at runtime (site root, or `/<repo>/` on `*.github.io`), so it works under the Pages sub-path too.
 
 ## Editing
